@@ -1,6 +1,6 @@
 import React, { lazy } from 'react'
 import { Router, Redirect, Route, Switch } from 'react-router-dom'
-import { ResetCSS } from '@pancakeswap/uikit'
+import { ResetCSS } from '@sparkpointio/sparkswap-uikit'
 import BigNumber from 'bignumber.js'
 import useEagerConnect from 'hooks/useEagerConnect'
 import { useFetchPriceList, useFetchProfile, useFetchPublicData } from 'state/hooks'
