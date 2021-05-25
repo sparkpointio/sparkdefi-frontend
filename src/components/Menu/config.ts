@@ -9,7 +9,7 @@ const config: MenuEntry[] = [
   {
     label: "Farm",
     icon: "FarmIcon",
-    href: "/",
+    href: "/farms",
   },
   {
     label: "Pool",

@@ -4,6 +4,7 @@ import { ResetCSS } from '@sparkpointio/sparkswap-uikit'
 import BigNumber from 'bignumber.js'
 import useEagerConnect from 'hooks/useEagerConnect'
 import { useFetchPriceList, useFetchProfile, useFetchPublicData } from 'state/hooks'
+import RedirectToFarms from 'views/Farms/Redirects'
 import GlobalStyle from './style/Global'
 import Menu from './components/Menu'
 import SuspenseWithChunkError from './components/SuspenseWithChunkError'
@@ -12,6 +13,7 @@ import PageLoader from './components/PageLoader'
 import EasterEgg from './components/EasterEgg'
 import Pools from './views/Pools'
 import history from './routerHistory'
+
 
 // Route-based code splitting
 // Only pool is included in the main bundle because of it's the most visited page
@@ -46,9 +48,9 @@ const App: React.FC = () => {
       <Menu>
         <SuspenseWithChunkError fallback={<PageLoader />}>
           <Switch>
-            <Route path="/" exact>
+            {/* <Route path="/" exact>
               <Home />
-            </Route>
+            </Route> */}
             <Route path="/farms">
               <Farms />
             </Route>
@@ -89,6 +91,7 @@ const App: React.FC = () => {
             <Route path="/nft">
               <Redirect to="/collectibles" />
             </Route>
+            <Route path="/" component={RedirectToFarms} />
             {/* 404 */}
             <Route component={NotFound} />
           </Switch>
