@@ -1,44 +1,44 @@
 import { PageMeta } from './types'
 
 export const DEFAULT_META: PageMeta = {
-  title: 'PancakeSwap',
+  title: 'SparkDefi',
   description:
-    'The most popular AMM on BSC by user count! Earn CAKE through yield farming or win it in the Lottery, then stake it in Syrup Pools to earn more tokens! Initial Farm Offerings (new token launch model pioneered by PancakeSwap), NFTs, and more, on a platform you can trust.',
+    'Refuel your rocket with SFUEL and travel to the moon with SparkSwap, the prodigious decentralized exchange on Binance Smart Chain.',
   image: 'https://pancakeswap.finance/images/hero.png',
 }
 
 export const customMeta: { [key: string]: PageMeta } = {
   '/': {
-    title: 'Home | PancakeSwap',
+    title: 'Home | SparkDefi',
   },
   '/competition': {
-    title: 'Trading Battle | PancakeSwap',
+    title: 'Trading Battle | SparkDefi',
   },
   '/prediction': {
-    title: 'Prediction | PancakeSwap',
+    title: 'Prediction | SparkDefi',
   },
   '/farms': {
-    title: 'Farms | PancakeSwap',
+    title: 'Farms | SparkDefi',
   },
   '/pools': {
-    title: 'Pools | PancakeSwap',
+    title: 'Pools | SparkDefi',
   },
   '/lottery': {
-    title: 'Lottery | PancakeSwap',
+    title: 'Lottery | SparkDefi',
   },
   '/collectibles': {
-    title: 'Collectibles | PancakeSwap',
+    title: 'Collectibles | SparkDefi',
   },
   '/ifo': {
-    title: 'Initial Farm Offering | PancakeSwap',
+    title: 'Initial Farm Offering | SparkDefi',
   },
   '/teams': {
-    title: 'Leaderboard | PancakeSwap',
+    title: 'Leaderboard | SparkDefi',
   },
   '/profile/tasks': {
-    title: 'Task Center | PancakeSwap',
+    title: 'Task Center | SparkDefi',
   },
   '/profile': {
-    title: 'Your Profile | PancakeSwap',
+    title: 'Your Profile | SparkDefi',
   },
 }
