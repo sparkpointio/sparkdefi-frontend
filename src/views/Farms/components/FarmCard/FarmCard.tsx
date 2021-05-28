@@ -46,7 +46,7 @@ const StyledCardAccent = styled.div`
 const FCard = styled.div<{ isPromotedFarm: boolean }>`
   align-self: baseline;
   background: ${(props) => props.theme.card.background};
-  border-radius: ${({ theme, isPromotedFarm }) => (isPromotedFarm ? '31px' : theme.radii.card)};
+  // border-radius: ${({ theme, isPromotedFarm }) => (isPromotedFarm ? '31px' : theme.radii.card)};
   box-shadow: 0px 1px 4px rgba(25, 19, 38, 0.15);
   display: flex;
   flex-direction: column;

@@ -3,7 +3,8 @@ import { Route, useRouteMatch, useLocation } from 'react-router-dom'
 import { useAppDispatch } from 'state'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
-import { Image, Heading, RowType, Toggle, Text } from '@pancakeswap/uikit'
+import { Image, Heading, RowType, Toggle } from '@pancakeswap/uikit'
+import { Text } from '@sparkpointio/sparkswap-uikit'
 import styled from 'styled-components'
 import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
@@ -29,6 +30,7 @@ import SearchInput from './components/SearchInput'
 import { RowProps } from './components/FarmTable/Row'
 import ToggleView from './components/ToggleView/ToggleView'
 import { DesktopColumnSchema, ViewMode } from './components/types'
+import { StyledHr } from './components/Divider'
 
 const ControlContainer = styled.div`
   display: flex;
@@ -309,58 +311,89 @@ const Farms: React.FC = () => {
     return row
   })
 
-  const renderContent = (): JSX.Element => {
-    if (viewMode === ViewMode.TABLE && rowData.length) {
-      const columnSchema = DesktopColumnSchema
 
-      const columns = columnSchema.map((column) => ({
-        id: column.id,
-        name: column.name,
-        label: column.label,
-        sort: (a: RowType<RowProps>, b: RowType<RowProps>) => {
-          switch (column.name) {
-            case 'farm':
-              return b.id - a.id
-            case 'apr':
-              if (a.original.apr.value && b.original.apr.value) {
-                return Number(a.original.apr.value) - Number(b.original.apr.value)
-              }
+  const renderActiveContent = (): JSX.Element => {
+    // if (viewMode === ViewMode.TABLE && rowData.length) {
+    //   const columnSchema = DesktopColumnSchema
 
-              return 0
-            case 'earned':
-              return a.original.earned.earnings - b.original.earned.earnings
-            default:
-              return 1
-          }
-        },
-        sortable: column.sortable,
-      }))
+    //   const columns = columnSchema.map((column) => ({
+    //     id: column.id,
+    //     name: column.name,
+    //     label: column.label,
+    //     sort: (a: RowType<RowProps>, b: RowType<RowProps>) => {
+    //       switch (column.name) {
+    //         case 'farm':
+    //           return b.id - a.id
+    //         case 'apr':
+    //           if (a.original.apr.value && b.original.apr.value) {
+    //             return Number(a.original.apr.value) - Number(b.original.apr.value)
+    //           }
 
-      return <Table data={rowData} columns={columns} userDataReady={userDataReady} />
-    }
+    //           return 0
+    //         case 'earned':
+    //           return a.original.earned.earnings - b.original.earned.earnings
+    //         default:
+    //           return 1
+    //       }
+    //     },
+    //     sortable: column.sortable,
+    //   }))
+
+    //   return <Table data={rowData} columns={columns} userDataReady={userDataReady} />
+    // }
 
     return (
       <div>
+          <div style={{margin: '20px'}}>
+            <Text fontSize="24px" bold> Active Liquidity Pools </Text>
+            <Text fontSize="16px">Stake LP tokens to earn</Text>
+          </div>
+
         <FlexLayout>
-          <Route exact path={`${path}`}>
-            {farmsStakedMemoized.map((farm) => (
+          {/* <Route exact path={`${path}`}> */}
+        
+            {activeFarms.map((farm) => (
               <FarmCard key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} />
             ))}
-          </Route>
-          <Route exact path={`${path}/history`}>
+          {/* </Route> */}
+          {/* <Route exact path={`${path}/history`}> */}
+          
+            {/* {farmsStakedMemoized.map((farm) => (
+              <FarmCard key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed />
+            ))} */}
+            
+          {/* </Route> */}
+
+          {/* For future Use */}
+          {/* <Route exact path={`${path}/archived`}>
             {farmsStakedMemoized.map((farm) => (
               <FarmCard key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed />
             ))}
-          </Route>
-          <Route exact path={`${path}/archived`}>
-            {farmsStakedMemoized.map((farm) => (
-              <FarmCard key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed />
-            ))}
-          </Route>
+
+          </Route> */}
+         
         </FlexLayout>
       </div>
     )
   }
+
+  const renderInactiveContent = (): JSX.Element => {
+
+    return (
+      <div>
+          <div style={{margin: '20px'}}>
+            <Text fontSize="24px" bold> Inactive Liquidity Pools </Text>
+          </div>
+
+        <FlexLayout>
+            {inactiveFarms.map((farm) => (
+              <FarmCard key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed/>
+            ))}
+        </FlexLayout>
+      </div>
+    )
+  }
+
 
   const handleSortOptionChange = (option: OptionProps): void => {
     setSortOption(option.value)
@@ -368,16 +401,8 @@ const Farms: React.FC = () => {
 
   return (
     <>
-      <PageHeader>
-        <Heading as="h1" scale="xxl" color="secondary" mb="24px">
-          {t('Farms')}
-        </Heading>
-        <Heading scale="lg" color="text">
-          {t('Stake Liquidity Pool (LP) tokens to earn.')}
-        </Heading>
-      </PageHeader>
       <Page>
-        <ControlContainer>
+        {/* <ControlContainer>
           <ViewControls>
             <ToggleView viewMode={viewMode} onToggle={(mode: ViewMode) => setViewMode(mode)} />
             <ToggleWrapper>
@@ -420,10 +445,13 @@ const Farms: React.FC = () => {
               <SearchInput onChange={handleChangeQuery} />
             </LabelWrapper>
           </FilterContainer>
-        </ControlContainer>
-        {renderContent()}
+        </ControlContainer> */}
+        {renderActiveContent()}
+        <StyledHr />
+        {renderInactiveContent()}
+     
         <div ref={loadMoreRef} />
-        <StyledImage src="/images/3dpan.png" alt="Pancake illustration" width={120} height={103} />
+        {/* <StyledImage src="/images/3dpan.png" alt="Pancake illustration" width={120} height={103} /> */}
       </Page>
     </>
   )
