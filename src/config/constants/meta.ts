@@ -4,7 +4,7 @@ export const DEFAULT_META: PageMeta = {
   title: 'SparkDefi',
   description:
     'Refuel your rocket with SFUEL and travel to the moon with SparkSwap, the prodigious decentralized exchange on Binance Smart Chain.',
-  image: 'https://pancakeswap.finance/images/hero.png',
+  image: 'https://sparkswap.finance//images/192x192_App_Icon.png',
 }
 
 export const customMeta: { [key: string]: PageMeta } = {
