@@ -2171,10 +2171,10 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
-"@sparkpointio/sparkswap-uikit@^1.0.8":
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/@sparkpointio/sparkswap-uikit/-/sparkswap-uikit-1.0.8.tgz#4f98278402698cdd9f12896145d05003f160fb97"
-  integrity sha512-Cm515MEE9E9A3fwYIvKBtGifPJZhyUk/p+6nU8DjvToID4AWOilc9qHRb99JfrCXkY7Phql9ueM8Cto9gVuC/g==
+"@sparkpointio/sparkswap-uikit@^1.0.10":
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/@sparkpointio/sparkswap-uikit/-/sparkswap-uikit-1.0.10.tgz#d2ecb6152c2d609fca847d6be3dbfa884341a980"
+  integrity sha512-mdV7gE26K4sbsF3Y+1uf+thyhoj3K89ZqId9VzwOD4xGJ9fAvIpIZw3ETS9YOCFDCxbYstLJlP3VKimh47kPvw==
   dependencies:
     "@types/lodash" "^4.14.162"
     "@types/styled-system" "^5.1.10"
@@ -2524,9 +2524,9 @@
   integrity sha1-7ihweulOEdK4J7y+UnC86n8+ce4=
 
 "@types/lodash@^4.14.162":
-  version "4.14.169"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.169.tgz#83c217688f07a4d9ef8f28a3ebd1d318f6ff4cbb"
-  integrity sha512-DvmZHoHTFJ8zhVYwCLWbQ7uAbYQEk52Ev2/ZiQ7Y7gQGeV9pjBqjnQpECMHfKS1rCYAhMI7LHVxwyZLZinJgdw==
+  version "4.14.170"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.170.tgz#0d67711d4bf7f4ca5147e9091b847479b87925d6"
+  integrity sha512-bpcvu/MKHHeYX+qeEN8GE7DIravODWdACVA1ctevD8CN24RhPZIKMn9ntfAsrvLfSX3cR5RrBKAbYm9bGs0A+Q==
 
 "@types/lodash@^4.14.168":
   version "4.14.168"

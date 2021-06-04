@@ -9,7 +9,7 @@ const UnlockButton = (props) => {
   const { onPresentConnectModal } = useWalletModal(login, logout)
 
   return (
-    <Button onClick={onPresentConnectModal} {...props}>
+    <Button onClick={onPresentConnectModal} {...props} fullWidth>
       {t('Unlock Wallet')}
     </Button>
   )

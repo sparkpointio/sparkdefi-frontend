@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import BigNumber from 'bignumber.js'
-import styled, { keyframes } from 'styled-components'
+import styled, { keyframes, ThemeContext } from 'styled-components'
 import { Flex, Text, Skeleton } from '@pancakeswap/uikit'
 import { Farm } from 'state/types'
 import { provider as ProviderType } from 'web3-core'
@@ -101,7 +101,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
   const addLiquidityUrl = `${BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`
   const lpAddress = farm.lpAddresses[process.env.REACT_APP_CHAIN_ID]
   const isPromotedFarm = farm.token.symbol === 'CAKE'
-
+  const theme = useContext(ThemeContext)
   return (
     <FCard isPromotedFarm={isPromotedFarm}>
       {isPromotedFarm && <StyledCardAccent />}
@@ -112,7 +112,8 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
         farmImage={farmImage}
         tokenSymbol={farm.token.symbol}
       />
-      {!removed && (
+      <hr style={{width: '100%', border: 'none', backgroundColor: theme.colors.primary, height: '2px'}}/>
+      {/* {!removed && (
         <Flex justifyContent="space-between" alignItems="center">
           <Text>{t('APR')}:</Text>
           <Text bold style={{ display: 'flex', alignItems: 'center' }}>
@@ -126,7 +127,8 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
             )}
           </Text>
         </Flex>
-      )}
+      )} */}
+      
       <Flex justifyContent="space-between">
         <Text>{t('Earn')}:</Text>
         <Text bold>{earnLabel}</Text>
