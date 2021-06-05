@@ -31,7 +31,7 @@ const AccentGradient = keyframes`
 `
 
 const StyledCardAccent = styled.div`
-  background: ${({ theme }) => `linear-gradient(180deg, ${theme.colors.primaryBright}, ${theme.colors.secondary})`};
+  // background: ${({ theme }) => `linear-gradient(180deg, ${theme.colors.primaryBright}, ${theme.colors.secondary})`};
   background-size: 400% 400%;
   animation: ${AccentGradient} 2s linear infinite;
   border-radius: 32px;
@@ -46,6 +46,7 @@ const StyledCardAccent = styled.div`
 const FCard = styled.div<{ isPromotedFarm: boolean }>`
   align-self: baseline;
   background: ${(props) => props.theme.card.background};
+  border: 5px solid ${(props) => props.theme.colors.primary};
   // border-radius: ${({ theme, isPromotedFarm }) => (isPromotedFarm ? '31px' : theme.radii.card)};
   box-shadow: 0px 1px 4px rgba(25, 19, 38, 0.15);
   display: flex;
@@ -130,11 +131,23 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
       )} */}
       
       <Flex justifyContent="space-between">
-        <Text>{t('Earn')}:</Text>
+        <Text>{t('Total Deposits')}:</Text>
+        <Text bold>{earnLabel}</Text>
+      </Flex>
+      <Flex justifyContent="space-between">
+        <Text>{t('Pool Rate')}:</Text>
+        <Text bold>{earnLabel}</Text>
+      </Flex>
+      <Flex justifyContent="space-between">
+        <Text>{t('Your Rate')}:</Text>
+        <Text bold>{earnLabel}</Text>
+      </Flex>
+      <Flex justifyContent="space-between">
+        <Text>{t('Duration')}:</Text>
         <Text bold>{earnLabel}</Text>
       </Flex>
       <CardActionsContainer farm={farm} account={account} addLiquidityUrl={addLiquidityUrl} />
-      <Divider />
+      {/* <Divider />
       <ExpandableSectionButton
         onClick={() => setShowExpandableSection(!showExpandableSection)}
         expanded={showExpandableSection}
@@ -148,7 +161,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
           lpLabel={lpLabel}
           addLiquidityUrl={addLiquidityUrl}
         />
-      </ExpandingWrapper>
+      </ExpandingWrapper> */}
     </FCard>
   )
 }
