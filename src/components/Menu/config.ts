@@ -14,7 +14,7 @@ const config: MenuEntry[] = [
   {
     label: "Pool",
     icon: "PoolIcon",
-    href: "https://app.srk.finance/#/pool",
+    href: "/pools",
   },
   {
     label: "Bridge",

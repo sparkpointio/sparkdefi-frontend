@@ -27,7 +27,7 @@ const StyledTokenInput = styled.div<InputProps>`
   flex-direction: column;
   background-color: ${({ theme }) => theme.colors.input};
   border-radius: 16px;
-  box-shadow: ${getBoxShadow};
+  // box-shadow: ${getBoxShadow};
   color: ${({ theme }) => theme.colors.text};
   padding: 8px 16px 8px 0;
   width: 100%;
