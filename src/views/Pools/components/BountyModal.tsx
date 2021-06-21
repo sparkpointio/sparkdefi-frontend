@@ -21,7 +21,7 @@ interface BountyModalProps {
 }
 
 const Divider = styled.div`
-  background-color: ${({ theme }) => theme.colors.backgroundDisabled};
+  // background-color: ${({ theme }) => theme.colors.backgroundDisabled};
   height: 1px;
   margin: 16px auto;
   width: 100%;
@@ -107,7 +107,7 @@ const BountyModal: React.FC<BountyModalProps> = ({
       {account ? (
         <Button
           isLoading={pendingTx}
-          endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
+          endIcon={pendingTx ? <AutoRenewIcon spin/> : null}
           onClick={handleConfirmClick}
           mb="28px"
         >

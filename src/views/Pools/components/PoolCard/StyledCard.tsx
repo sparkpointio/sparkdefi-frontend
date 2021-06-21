@@ -1,5 +1,5 @@
 import styled, { css, keyframes } from 'styled-components'
-import { Card, Box } from '@pancakeswap/uikit'
+import { Card } from '@sparkpointio/sparkswap-uikit'
 
 const PromotedGradient = keyframes`
   0% {
@@ -14,33 +14,27 @@ const PromotedGradient = keyframes`
 `
 
 export const StyledCard = styled(Card)<{ isPromotedPool?: boolean; isFinished?: boolean }>`
+  border: 5px solid ${(props) => props.theme.colors.primary};
   max-width: 352px;
+  padding: 24px;
   margin: 0 8px 24px;
   display: flex;
   flex-direction: column;
   align-self: baseline;
   position: relative;
+  justify-content: space-around;
+  background: ${(props) => props.theme.card.background};
+  text-align: center;
   color: ${({ isFinished, theme }) => theme.colors[isFinished ? 'textDisabled' : 'secondary']};
-  box-shadow: 0px 1px 4px rgba(25, 19, 38, 0.15);
-
-  ${({ isPromotedPool, theme }) =>
-    isPromotedPool
-      ? css`
-          background: linear-gradient(180deg, ${theme.colors.primaryBright}, ${theme.colors.secondary});
-          padding: 1px 1px 3px 1px;
-          background-size: 400% 400%;
-          animation: ${PromotedGradient} 3s ease infinite;
-        `
-      : `background: ${(props) => props.theme.card.background};`}
-
   ${({ theme }) => theme.mediaQueries.sm} {
     margin: 0 12px 46px;
   }
 `
 
-export const StyledCardInner = styled(Box)<{ isPromotedPool?: boolean }>`
+export const StyledCardInner = styled.div<{ isPromotedPool?: boolean }>`
   background: ${({ theme }) => theme.card.background};
-  border-radius: ${({ isPromotedPool, theme }) => (isPromotedPool ? '31px' : theme.radii.card)};
+
+  // border-radius: ${({ isPromotedPool, theme }) => (isPromotedPool ? '31px' : theme.radii.card)};
 `
 
 export default StyledCard

@@ -3,6 +3,7 @@ import { Route, useRouteMatch } from 'react-router-dom'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
 import { Heading, Flex, Image } from '@pancakeswap/uikit'
+import { Text } from '@sparkpointio/sparkswap-uikit'
 import orderBy from 'lodash/orderBy'
 import partition from 'lodash/partition'
 import { useTranslation } from 'contexts/Localization'
@@ -11,10 +12,12 @@ import { usePools, useFetchCakeVault } from 'state/hooks'
 import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
 import PageHeader from 'components/PageHeader'
+import { StyledHr } from 'views/Farms/components/Divider'
 import PoolCard from './components/PoolCard'
 import CakeVaultCard from './components/CakeVaultCard'
 import PoolTabButtons from './components/PoolTabButtons'
 import BountyCard from './components/BountyCard'
+
 
 const NUMBER_OF_POOLS_VISIBLE = 12
 
@@ -63,62 +66,93 @@ const Pools: React.FC = () => {
 
   return (
     <>
-      <PageHeader>
+      {/* <PageHeader>
         <Flex justifyContent="space-between" flexDirection={['column', null, 'row']}>
           <Flex flexDirection="column" mr={['8px', 0]}>
-            <Heading as="h1" scale="xxl" color="secondary" mb="24px">
-              {t('Syrup Pools')}
+            <Heading scale="md" color="text">
+              {t('Active Pools')}
             </Heading>
             <Heading scale="md" color="text">
-              {t('Simply stake tokens to earn.')}
-            </Heading>
-            <Heading scale="md" color="text">
-              {t('High APR, low risk.')}
+              {t('Stake LP tokens to earn')}
             </Heading>
           </Flex>
           <Flex height="fit-content" justifyContent="center" alignItems="center" mt={['24px', null, '0']}>
             <BountyCard />
           </Flex>
         </Flex>
-      </PageHeader>
+      </PageHeader> */}
       <Page>
-        <PoolTabButtons
+        {/* <PoolTabButtons
           stakedOnly={stakedOnly}
           setStakedOnly={setStakedOnly}
           hasStakeInFinishedPools={hasStakeInFinishedPools}
-        />
-        <FlexLayout>
-          <Route exact path={`${path}`}>
+        /> */}
+        <div>
+          <Flex justifyContent="space-between" style={{ margin: '20px' }}>
+            <Flex flexDirection="column" mr={['8px', 0]}>
+              <Text color="text" fontSize="24px" bold>
+                {t('Active Pools')}
+              </Text>
+              <Text color="text" fontSize="16px">
+                {t('Stake LP tokens to earn')}
+              </Text>
+            </Flex>
+          </Flex>
+
+          <FlexLayout>
+            {/* <Route exact path={`${path}`}> */}
             <>
-              <CakeVaultCard pool={cakePoolData} showStakedOnly={stakedOnly} />
-              {stakedOnly
+              {/* <CakeVaultCard pool={cakePoolData} showStakedOnly={stakedOnly} /> */}
+
+              {/* {stakedOnly
                 ? orderBy(stakedOnlyOpenPools, ['sortOrder'])
                     .slice(0, numberOfPoolsVisible)
-                    .map((pool) => <PoolCard key={pool.sousId} pool={pool} account={account} />)
-                : orderBy(openPools, ['sortOrder'])
-                    .slice(0, numberOfPoolsVisible)
-                    .map((pool) => <PoolCard key={pool.sousId} pool={pool} account={account} />)}
+                    .map((pool) => <PoolCard key={pool.sousId} pool={pool} account={account} />) */}
+              {orderBy(openPools, ['sortOrder'])
+                .slice(0, numberOfPoolsVisible)
+                .map((pool) => (
+                  <PoolCard key={pool.sousId} pool={pool} account={account} />
+                ))}
             </>
-          </Route>
-          <Route path={`${path}/history`}>
-            {stakedOnly
-              ? orderBy(stakedOnlyFinishedPools, ['sortOrder'])
-                  .slice(0, numberOfPoolsVisible)
-                  .map((pool) => <PoolCard key={pool.sousId} pool={pool} account={account} />)
-              : orderBy(finishedPools, ['sortOrder'])
-                  .slice(0, numberOfPoolsVisible)
-                  .map((pool) => <PoolCard key={pool.sousId} pool={pool} account={account} />)}
-          </Route>
-        </FlexLayout>
+            {/* </Route> */}
+          </FlexLayout>
+        </div>
+
+        <StyledHr />
+
+        {/* ENDED  */}
+        <div style={{margin: '25px 0px', padding: '25px 0px'}}>
+          <Flex justifyContent="space-between" style={{ margin: '20px' }}>
+            <Flex flexDirection="column" mr={['8px', 0]}>
+              <Heading scale="md" color="text">
+                {t('Inactive Pools')}
+              </Heading>
+            </Flex>
+          </Flex>
+
+          <FlexLayout>
+            {/* <Route path={`${path}/history`}> */}
+            {/* {stakedOnly
+            ? orderBy(stakedOnlyFinishedPools, ['sortOrder'])
+                .slice(0, numberOfPoolsVisible)
+                .map((pool) => <PoolCard key={pool.sousId} pool={pool} account={account} />) */}
+            {orderBy(finishedPools, ['sortOrder'])
+              .slice(0, numberOfPoolsVisible)
+              .map((pool) => (
+                <PoolCard key={pool.sousId} pool={pool} account={account} />
+              ))}
+            {/* </Route> */}
+          </FlexLayout>
+        </div>
         <div ref={loadMoreRef} />
-        <Image
+        {/* <Image
           mx="auto"
           mt="12px"
           src="/images/3d-syrup-bunnies.png"
           alt="Pancake illustration"
           width={192}
           height={184.5}
-        />
+        /> */}
       </Page>
     </>
   )
