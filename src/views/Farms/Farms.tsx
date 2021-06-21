@@ -351,7 +351,7 @@ const Farms: React.FC = () => {
 
         <FlexLayout>
           {/* <Route exact path={`${path}`}> */}
-        
+  
             {activeFarms.map((farm) => (
               <FarmCard key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} />
             ))}
@@ -449,7 +449,6 @@ const Farms: React.FC = () => {
         {renderActiveContent()}
         <StyledHr />
         {renderInactiveContent()}
-     
         <div ref={loadMoreRef} />
         {/* <StyledImage src="/images/3dpan.png" alt="Pancake illustration" width={120} height={103} /> */}
       </Page>

@@ -1,12 +1,13 @@
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import BigNumber from 'bignumber.js'
-import { Button, Flex, Heading, IconButton, AddIcon, MinusIcon, useModal } from '@pancakeswap/uikit'
+import { Button, Flex, Heading, IconButton, AddIcon, MinusIcon, useModal } from '@sparkpointio/sparkswap-uikit'
 import { useLocation } from 'react-router-dom'
 import { useTranslation } from 'contexts/Localization'
 import useStake from 'hooks/useStake'
 import useUnstake from 'hooks/useUnstake'
 import { getBalanceNumber, getFullDisplayBalance } from 'utils/formatBalance'
+import { Farm } from 'state/types'
 import DepositModal from '../DepositModal'
 import WithdrawModal from '../WithdrawModal'
 
@@ -16,6 +17,8 @@ interface FarmCardActionsProps {
   tokenName?: string
   pid?: number
   addLiquidityUrl?: string
+  addTokenUrl?: string
+  farm?: Farm
 }
 
 const IconButtonWrapper = styled.div`
@@ -31,6 +34,8 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
   tokenName,
   pid,
   addLiquidityUrl,
+  addTokenUrl,
+  farm,
 }) => {
   const { t } = useTranslation()
   const { onStake } = useStake(pid)
@@ -46,7 +51,18 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
   }, [stakedBalance])
 
   const [onPresentDeposit] = useModal(
-    <DepositModal max={tokenBalance} onConfirm={onStake} tokenName={tokenName} addLiquidityUrl={addLiquidityUrl} />,
+    <DepositModal 
+    max={tokenBalance} 
+    onConfirm={onStake} 
+    tokenName={tokenName} 
+    addLiquidityUrl={addLiquidityUrl} 
+    addTokenUrl={addTokenUrl} 
+    tokenReward={farm.quoteToken.symbol} 
+    tokenRewardAddress={farm.quoteToken.address[97]}
+    tokenBalance={farm.userData.tokenBalance} 
+    stakedBalance={farm.userData.stakedBalance} 
+    tokenEarnings={farm.userData.earnings}
+    />,
   )
   const [onPresentWithdraw] = useModal(
     <WithdrawModal max={stakedBalance} onConfirm={onUnstake} tokenName={tokenName} />,
@@ -57,8 +73,9 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
       <Button
         onClick={onPresentDeposit}
         disabled={['history', 'archived'].some((item) => location.pathname.includes(item))}
+        fullWidth
       >
-        {t('Stake LP')}
+        {t('Deposit')}
       </Button>
     ) : (
       <IconButtonWrapper>
@@ -78,7 +95,7 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
 
   return (
     <Flex justifyContent="space-between" alignItems="center">
-      <Heading color={stakedBalance.eq(0) ? 'textDisabled' : 'text'}>{displayBalance()}</Heading>
+      {/* <Heading color={stakedBalance.eq(0) ? 'textDisabled' : 'text'}>{displayBalance()}</Heading> */}
       {renderStakingButtons()}
     </Flex>
   )

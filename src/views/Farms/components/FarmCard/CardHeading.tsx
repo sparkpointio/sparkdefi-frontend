@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Tag, Flex, Heading, Image } from '@pancakeswap/uikit'
+import { Tag, Flex, Heading, Image } from '@sparkpointio/sparkswap-uikit'
 import { CommunityTag, CoreTag } from 'components/Tags'
 
 export interface ExpandableSectionProps {
@@ -8,7 +8,9 @@ export interface ExpandableSectionProps {
   multiplier?: string
   isCommunityFarm?: boolean
   farmImage?: string
+  farmSymbol?: string
   tokenSymbol?: string
+  rewardToken?:string
 }
 
 const Wrapper = styled(Flex)`
@@ -27,15 +29,14 @@ const CardHeading: React.FC<ExpandableSectionProps> = ({
   isCommunityFarm,
   farmImage,
   tokenSymbol,
+  farmSymbol,
+  rewardToken,
 }) => {
+
   return (
     <Wrapper justifyContent="space-between" alignItems="center" mb="12px">
       <Flex flexDirection="column" alignItems="flex-end">
-        <Heading mb="4px">Stake {lpLabel.split(' ')[0]}</Heading>
-        <Flex justifyContent="center">
-          {/* {isCommunityFarm ? <CommunityTag /> : <CoreTag />}
-          <MultiplierTag variant="secondary">{multiplier}</MultiplierTag> */}
-        </Flex>
+        <Heading  mb="4px" style={{textAlign: 'left'}}>Stake {lpLabel.split(' ')[0]} <br /> {farmSymbol} <br /> to earn {rewardToken}</Heading>
       </Flex>
       <Image src={`/images/farms/${farmImage}.svg`} alt={tokenSymbol} width={64} height={64} />
     </Wrapper>

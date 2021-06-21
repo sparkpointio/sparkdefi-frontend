@@ -6,7 +6,7 @@ import { Farm } from 'state/types'
 import { provider as ProviderType } from 'web3-core'
 import { useTranslation } from 'contexts/Localization'
 import ExpandableSectionButton from 'components/ExpandableSectionButton'
-import { BASE_ADD_LIQUIDITY_URL } from 'config'
+import { BASE_ADD_LIQUIDITY_URL, BASE_EXCHANGE_URL } from 'config'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
 import DetailsSection from './DetailsSection'
 import CardHeading from './CardHeading'
@@ -79,27 +79,26 @@ interface FarmCardProps {
 
 const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }) => {
   const { t } = useTranslation()
-
   const [showExpandableSection, setShowExpandableSection] = useState(false)
 
   // We assume the token name is coin pair + lp e.g. CAKE-BNB LP, LINK-BNB LP,
   // NAR-CAKE LP. The images should be cake-bnb.svg, link-bnb.svg, nar-cake.svg
   const farmImage = farm.lpSymbol.split(' ')[0].toLocaleLowerCase()
-
   const totalValueFormatted = farm.liquidity
     ? `$${farm.liquidity.toNumber().toLocaleString(undefined, { maximumFractionDigits: 0 })}`
     : '-'
 
   const lpLabel = farm.lpSymbol && farm.lpSymbol.toUpperCase().replace('PANCAKE', '')
   const earnLabel = farm.dual ? farm.dual.earnLabel : 'CAKE'
-
   const farmAPR = farm.apr && farm.apr.toLocaleString('en-US', { maximumFractionDigits: 2 })
 
   const liquidityUrlPathParts = getLiquidityUrlPathParts({
     quoteTokenAddress: farm.quoteToken.address,
     tokenAddress: farm.token.address,
   })
+
   const addLiquidityUrl = `${BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`
+  const AddTokenUrl = `${BASE_EXCHANGE_URL}/#/swap/${farm.token.address[56]}`
   const lpAddress = farm.lpAddresses[process.env.REACT_APP_CHAIN_ID]
   const isPromotedFarm = farm.token.symbol === 'CAKE'
   const theme = useContext(ThemeContext)
@@ -111,7 +110,9 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
         multiplier={farm.multiplier}
         isCommunityFarm={farm.isCommunity}
         farmImage={farmImage}
+        farmSymbol={farm.lpSymbol}
         tokenSymbol={farm.token.symbol}
+        rewardToken={farm.quoteToken.symbol}
       />
       <hr style={{width: '100%', border: 'none', backgroundColor: theme.colors.primary, height: '2px'}}/>
       {/* {!removed && (
@@ -129,26 +130,25 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
           </Text>
         </Flex>
       )} */}
-      
-      <Flex justifyContent="space-between">
+      <Flex justifyContent="space-between" style={{textAlign: 'left'}}>
         <Text>{t('Total Deposits')}:</Text>
-        <Text bold>{earnLabel}</Text>
+        <Text color="textSubtle">{totalValueFormatted}</Text>
       </Flex>
       <Flex justifyContent="space-between">
         <Text>{t('Pool Rate')}:</Text>
-        <Text bold>{earnLabel}</Text>
+        <Text color="textSubtle">{earnLabel}</Text>
       </Flex>
       <Flex justifyContent="space-between">
         <Text>{t('Your Rate')}:</Text>
-        <Text bold>{earnLabel}</Text>
+        <Text color="textSubtle">{farm.userData.earnings}</Text>
       </Flex>
       <Flex justifyContent="space-between">
         <Text>{t('Duration')}:</Text>
-        <Text bold>{earnLabel}</Text>
+        <Text color="textSubtle">{earnLabel}</Text>
       </Flex>
-      <CardActionsContainer farm={farm} account={account} addLiquidityUrl={addLiquidityUrl} />
-      {/* <Divider />
-      <ExpandableSectionButton
+      <CardActionsContainer farm={farm} account={account} addLiquidityUrl={addLiquidityUrl} addTokenUrl={AddTokenUrl} />
+      {/* <Divider /> */}
+      {/* <ExpandableSectionButton
         onClick={() => setShowExpandableSection(!showExpandableSection)}
         expanded={showExpandableSection}
       />
@@ -162,6 +162,10 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
           addLiquidityUrl={addLiquidityUrl}
         />
       </ExpandingWrapper> */}
+       <Flex justifyContent="center">
+         {Object.prototype.hasOwnProperty.call(farm.lpAddresses, '56') && (<Text color="textSubtle" fontSize="14px">{t('This will only work on Binance Smart Chain')}</Text>)}
+         {Object.prototype.hasOwnProperty.call(farm.lpAddresses, '1') && (<Text color="textSubtle" fontSize="14px">{t('This will only work on Ethereum Blockchain')}</Text>)}
+      </Flex>
     </FCard>
   )
 }

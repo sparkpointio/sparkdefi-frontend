@@ -4,7 +4,7 @@ import { provider as ProviderType } from 'web3-core'
 import BigNumber from 'bignumber.js'
 import { getAddress } from 'utils/addressHelpers'
 import { getBep20Contract } from 'utils/contractHelpers'
-import { Button, Flex, Text } from '@pancakeswap/uikit'
+import { Button, Flex, Text } from '@sparkpointio/sparkswap-uikit'
 import { Farm } from 'state/types'
 import { useTranslation } from 'contexts/Localization'
 import useWeb3 from 'hooks/useWeb3'
@@ -25,9 +25,10 @@ interface FarmCardActionsProps {
   provider?: ProviderType
   account?: string
   addLiquidityUrl?: string
+  addTokenUrl?: string
 }
 
-const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidityUrl }) => {
+const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidityUrl, addTokenUrl }) => {
   const { t } = useTranslation()
   const [requestedApproval, setRequestedApproval] = useState(false)
   const { pid, lpAddresses } = farm
@@ -43,7 +44,8 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidi
   const earnings = new BigNumber(earningsAsString)
   const lpAddress = getAddress(lpAddresses)
   const lpName = farm.lpSymbol.toUpperCase()
-  const isApproved = account && allowance && allowance.isGreaterThan(0)
+  const isApproved = account && allowance 
+  // && allowance.isGreaterThan(0)
   const web3 = useWeb3()
 
   const lpContract = getBep20Contract(lpAddress, web3)
@@ -59,7 +61,6 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidi
       console.error(e)
     }
   }, [onApprove])
-
   const renderApprovalOrStakeButton = () => {
     return isApproved ? (
       <StakeAction
@@ -68,9 +69,11 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidi
         tokenName={lpName}
         pid={pid}
         addLiquidityUrl={addLiquidityUrl}
+        addTokenUrl={addTokenUrl}
+        farm={farm}
       />
     ) : (
-      <Button mt="8px" width="100%" disabled={requestedApproval} onClick={handleApprove}>
+      <Button mt="8px" fullWidth disabled={requestedApproval} onClick={handleApprove}>
         {t('Approve Contract')}
       </Button>
     )
