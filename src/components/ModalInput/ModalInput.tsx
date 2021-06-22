@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { Text, Button, Input, InputProps, Flex, Link } from '@sparkpointio/sparkswap-uikit'
 import { useTranslation } from 'contexts/Localization'
+import { BigNumber } from 'bignumber.js'
 
 interface ModalInputProps {
   max: string
@@ -12,6 +13,7 @@ interface ModalInputProps {
   value: string
   addLiquidityUrl?: string
   inputTitle?: string
+  decimals?: number
 }
 
 const getBoxShadow = ({ isWarning = false, theme }) => {
@@ -68,6 +70,7 @@ const ModalInput: React.FC<ModalInputProps> = ({
   value,
   addLiquidityUrl,
   inputTitle,
+  decimals = 18,
 }) => {
   const { t } = useTranslation()
   const isBalanceZero = max === '0' || !max
@@ -76,11 +79,11 @@ const ModalInput: React.FC<ModalInputProps> = ({
     if (isBalanceZero) {
       return '0'
     }
-    const balanceNumber = Number(balance)
-    if (balanceNumber > 0 && balanceNumber < 0.0001) {
-      return balanceNumber.toLocaleString(undefined, { maximumFractionDigits: 20 })
+    const balanceBigNumber = new BigNumber(balance)
+    if (balanceBigNumber.gt(0) && balanceBigNumber.lt(0.0001)) {
+      return balanceBigNumber.toLocaleString()
     }
-    return balanceNumber.toLocaleString()
+    return balanceBigNumber.toFixed(3, BigNumber.ROUND_DOWN)
   }
 
   return (
@@ -91,7 +94,7 @@ const ModalInput: React.FC<ModalInputProps> = ({
         </Flex> */}
         <Flex alignItems="flex-end" justifyContent="space-around">
           <StyledInput
-            pattern="^[0-9]*[.,]?[0-9]*$"
+            pattern={`^[0-9]*[.,]?[0-9]{0,${decimals}}$`}
             inputMode="decimal"
             step="any"
             min="0"
@@ -112,9 +115,9 @@ const ModalInput: React.FC<ModalInputProps> = ({
         </Flex>
       {/* {isBalanceZero && (
         <StyledErrorMessage fontSize="14px" color="failure">
-          No tokens to stake:{' '}
+          {t('No tokens to stake')}:{' '}
           <Link fontSize="14px" bold={false} href={addLiquidityUrl} external color="failure">
-            {t('get')} {symbol}
+            {t('Get %symbol%', { symbol })}
           </Link>
         </StyledErrorMessage>
       )} */}

@@ -1,8 +1,10 @@
 import React from 'react'
+import { useTranslation } from 'contexts/Localization'
 import { Card, CardBody, CardHeader, Text, useTooltip, HelpIcon, Flex } from '@pancakeswap/uikit'
 import { Ifo, PoolIds } from 'config/constants/types'
 import { useProfile } from 'state/hooks'
 import { PublicIfoData, WalletIfoData } from 'hooks/ifo/types'
+import { EnableStatus } from '../types'
 import IfoCardTokens from './IfoCardTokens'
 import IfoCardActions from './IfoCardActions'
 import IfoCardDetails from './IfoCardDetails'
@@ -12,6 +14,8 @@ interface IfoCardProps {
   ifo: Ifo
   publicIfoData: PublicIfoData
   walletIfoData: WalletIfoData
+  onApprove: () => Promise<any>
+  enableStatus: EnableStatus
 }
 
 interface CardConfig {
@@ -35,10 +39,11 @@ const cardConfig: CardConfig = {
   },
 }
 
-const SmallCard: React.FC<IfoCardProps> = ({ poolId, ifo, publicIfoData, walletIfoData }) => {
+const SmallCard: React.FC<IfoCardProps> = ({ poolId, ifo, publicIfoData, walletIfoData, onApprove, enableStatus }) => {
+  const { t } = useTranslation()
   const config = cardConfig[poolId]
   const { hasProfile, isLoading: isProfileLoading } = useProfile()
-  const { targetRef, tooltip, tooltipVisible } = useTooltip(config.tooltip, { placement: 'bottom' })
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(t(config.tooltip), { placement: 'bottom' })
 
   const isLoading = isProfileLoading || publicIfoData.status === 'idle'
 
@@ -49,7 +54,7 @@ const SmallCard: React.FC<IfoCardProps> = ({ poolId, ifo, publicIfoData, walletI
         <CardHeader variant={config.variant}>
           <Flex justifyContent="space-between" alignItems="center">
             <Text bold fontSize="20px">
-              {config.title}
+              {t(config.title)}
             </Text>
             <div ref={targetRef}>
               <HelpIcon />
@@ -64,6 +69,8 @@ const SmallCard: React.FC<IfoCardProps> = ({ poolId, ifo, publicIfoData, walletI
             walletIfoData={walletIfoData}
             hasProfile={hasProfile}
             isLoading={isLoading}
+            onApprove={onApprove}
+            enableStatus={enableStatus}
           />
           <IfoCardActions
             poolId={poolId}

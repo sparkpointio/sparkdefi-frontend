@@ -3,7 +3,7 @@ import { Router, Redirect, Route, Switch } from 'react-router-dom'
 import { ResetCSS } from '@sparkpointio/sparkswap-uikit'
 import BigNumber from 'bignumber.js'
 import useEagerConnect from 'hooks/useEagerConnect'
-import { useFetchPriceList, useFetchProfile, useFetchPublicData } from 'state/hooks'
+import { usePollCoreFarmData, useFetchProfile, usePollBlockNumber } from 'state/hooks'
 import RedirectToFarms from 'views/Farms/Redirects'
 import GlobalStyle from './style/Global'
 import Menu from './components/Menu'
@@ -36,10 +36,10 @@ BigNumber.config({
 })
 
 const App: React.FC = () => {
+  usePollBlockNumber()
   useEagerConnect()
-  useFetchPublicData()
   useFetchProfile()
-  useFetchPriceList()
+  usePollCoreFarmData()
 
   return (
     <Router history={history}>

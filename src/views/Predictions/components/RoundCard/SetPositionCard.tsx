@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import {
   ArrowBackIcon,
   CardBody,
@@ -25,6 +25,7 @@ import useToast from 'hooks/useToast'
 import { BetPosition } from 'state/types'
 import { getDecimalAmount } from 'utils/formatBalance'
 import UnlockButton from 'components/UnlockButton'
+import { BIG_NINE, BIG_TEN } from 'utils/bigNumber'
 import PositionTag from '../PositionTag'
 import { getBnbAmount } from '../../helpers'
 import useSwiper from '../../hooks/useSwiper'
@@ -38,34 +39,30 @@ interface SetPositionCardProps {
   onSuccess: (decimalValue: BigNumber, hash: string) => Promise<void>
 }
 
+// /!\ TEMPORARY /!\
+// Set default gasPrice (6 gwei) when calling BetBull/BetBear before new contract is released fixing this 'issue'.
+// TODO: Remove on beta-v2 smart contract release.
+const gasPrice = new BigNumber(6).times(BIG_TEN.pow(BIG_NINE)).toString()
+
 const dust = new BigNumber(0.01).times(DEFAULT_TOKEN_DECIMAL)
 const percentShortcuts = [10, 25, 50, 75]
 
-const getPercentDisplay = (percentage: number) => {
-  if (Number.isNaN(percentage)) {
-    return ''
+const getButtonProps = (value: BigNumber, bnbBalance: BigNumber, minBetAmountBalance: BigNumber) => {
+  const hasSufficientBalance = () => {
+    if (value.gt(0)) {
+      return value.lte(bnbBalance)
+    }
+    return bnbBalance.gt(0)
   }
 
-  if (percentage > 100) {
-    return ''
-  }
-
-  if (percentage < 0) {
-    return ''
-  }
-
-  return `${percentage.toLocaleString(undefined, { maximumFractionDigits: 1 })}%`
-}
-
-const getButtonProps = (value: BigNumber, bnbBalance: BigNumber, minBetAmountBalance: number) => {
-  if (bnbBalance.eq(0)) {
-    return { id: 999, fallback: 'Insufficient BNB balance', disabled: true }
+  if (!hasSufficientBalance()) {
+    return { key: 'Insufficient BNB balance', disabled: true }
   }
 
   if (value.eq(0) || value.isNaN()) {
-    return { id: 999, fallback: 'Enter an amount', disabled: true }
+    return { key: 'Enter an amount', disabled: true }
   }
-  return { id: 464, fallback: 'Confirm', disabled: value.lt(minBetAmountBalance) }
+  return { key: 'Confirm', disabled: value.lt(minBetAmountBalance) }
 }
 
 const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosition, onBack, onSuccess }) => {
@@ -80,30 +77,46 @@ const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosit
   const { toastError } = useToast()
   const predictionsContract = usePredictionsContract()
 
-  const balanceDisplay = getBnbAmount(bnbBalance).toNumber()
-  const maxBalance = getBnbAmount(bnbBalance.gt(dust) ? bnbBalance.minus(dust) : bnbBalance).toNumber()
+  const balanceDisplay = useMemo(() => {
+    return getBnbAmount(bnbBalance).toString()
+  }, [bnbBalance])
+  const maxBalance = useMemo(() => {
+    return getBnbAmount(bnbBalance.gt(dust) ? bnbBalance.minus(dust) : bnbBalance)
+  }, [bnbBalance])
+  const minBetAmountBalance = useMemo(() => {
+    return getBnbAmount(minBetAmount)
+  }, [minBetAmount])
+
   const valueAsBn = new BigNumber(value)
 
-  const percentageOfMaxBalance = valueAsBn.div(maxBalance).times(100).toNumber()
-  const percentageDisplay = getPercentDisplay(percentageOfMaxBalance)
   const showFieldWarning = account && valueAsBn.gt(0) && errorMessage !== null
-  const minBetAmountBalance = getBnbAmount(minBetAmount).toNumber()
 
-  const handleChange = (input) => {
+  const [percent, setPercent] = useState(0)
+
+  const handleInputChange = (input: string) => {
+    if (input) {
+      const percentage = Math.floor(new BigNumber(input).dividedBy(maxBalance).multipliedBy(100).toNumber())
+      setPercent(Math.min(percentage, 100))
+    } else {
+      setPercent(0)
+    }
     setValue(input)
   }
 
-  const handleSliderChange = (newValue: number) => {
-    setValue(newValue.toString())
-  }
-
-  const setMax = () => {
-    setValue(maxBalance.toString())
+  const handlePercentChange = (sliderPercent: number) => {
+    if (sliderPercent > 0) {
+      const percentageOfStakingMax = maxBalance.dividedBy(100).multipliedBy(sliderPercent)
+      setValue(percentageOfStakingMax.toFormat(18))
+    } else {
+      setValue('')
+    }
+    setPercent(sliderPercent)
   }
 
   // Clear value
   const handleGoBack = () => {
     setValue('')
+    setPercent(0)
     onBack()
   }
 
@@ -120,14 +133,14 @@ const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosit
     swiper.attachEvents()
   }
 
-  const { fallback, disabled } = getButtonProps(valueAsBn, bnbBalance, minBetAmountBalance)
+  const { key, disabled } = getButtonProps(valueAsBn, maxBalance, minBetAmountBalance)
 
   const handleEnterPosition = () => {
     const betMethod = position === BetPosition.BULL ? 'betBull' : 'betBear'
     const decimalValue = getDecimalAmount(valueAsBn)
 
     predictionsContract.methods[betMethod]()
-      .send({ from: account, value: decimalValue })
+      .send({ from: account, value: decimalValue, gasPrice })
       .once('sending', () => {
         setIsTxPending(true)
       })
@@ -138,7 +151,7 @@ const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosit
       .once('error', (error) => {
         const errorMsg = t('An error occurred, unable to enter your position')
 
-        toastError('Error!', error?.message)
+        toastError(t('Error'), error?.message)
         setIsTxPending(false)
         console.error(errorMsg, error)
       })
@@ -150,10 +163,10 @@ const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosit
     const hasSufficientBalance = bnValue.gt(0) && bnValue.lte(maxBalance)
 
     if (!hasSufficientBalance) {
-      setErrorMessage({ id: 999, fallback: 'Insufficient BNB balance' })
+      setErrorMessage({ key: 'Insufficient BNB balance' })
     } else if (bnValue.gt(0) && bnValue.lt(minBetAmountBalance)) {
       setErrorMessage({
-        fallback: 'A minimum amount of %num% %token% is required',
+        key: 'A minimum amount of %num% %token% is required',
         data: { num: minBetAmountBalance, token: 'BNB' },
       })
     } else {
@@ -190,49 +203,55 @@ const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosit
         </Flex>
         <BalanceInput
           value={value}
-          onUserInput={handleChange}
+          onUserInput={handleInputChange}
           isWarning={showFieldWarning}
           inputProps={{ disabled: !account || isTxPending }}
         />
         {showFieldWarning && (
           <Text color="failure" fontSize="12px" mt="4px" textAlign="right">
-            {t(errorMessage.fallback, errorMessage.data)}
+            {t(errorMessage.key, errorMessage.data)}
           </Text>
         )}
         <Text textAlign="right" mb="16px" color="textSubtle" fontSize="12px" style={{ height: '18px' }}>
-          {account && t(`Balance: ${balanceDisplay}`, { num: balanceDisplay })}
+          {account && t('Balance: %balance%', { balance: balanceDisplay })}
         </Text>
         <Slider
           name="balance"
           min={0}
-          max={maxBalance}
-          value={valueAsBn.lte(maxBalance) ? valueAsBn.toNumber() : 0}
-          onValueChanged={handleSliderChange}
-          step={0.000000000000001}
-          valueLabel={account ? percentageDisplay : ''}
+          max={100}
+          value={percent}
+          onValueChanged={handlePercentChange}
+          valueLabel={account ? `${percent}%` : ''}
+          step={0.1}
           disabled={!account || isTxPending}
           mb="4px"
+          className={!account || isTxPending ? '' : 'swiper-no-swiping'}
         />
         <Flex alignItems="center" justifyContent="space-between" mb="16px">
-          {percentShortcuts.map((percent) => {
+          {percentShortcuts.map((percentShortcut) => {
             const handleClick = () => {
-              setValue(((percent / 100) * maxBalance).toString())
+              handlePercentChange(percentShortcut)
             }
 
             return (
               <Button
-                key={percent}
+                key={percentShortcut}
                 scale="xs"
                 variant="tertiary"
                 onClick={handleClick}
                 disabled={!account || isTxPending}
                 style={{ flex: 1 }}
               >
-                {`${percent}%`}
+                {`${percentShortcut}%`}
               </Button>
             )
           })}
-          <Button scale="xs" variant="tertiary" onClick={setMax} disabled={!account || isTxPending}>
+          <Button
+            scale="xs"
+            variant="tertiary"
+            onClick={() => handlePercentChange(100)}
+            disabled={!account || isTxPending}
+          >
             {t('Max')}
           </Button>
         </Flex>
@@ -245,14 +264,14 @@ const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosit
               isLoading={isTxPending}
               endIcon={isTxPending ? <AutoRenewIcon color="currentColor" spin /> : null}
             >
-              {t(fallback)}
+              {t(key)}
             </Button>
           ) : (
             <UnlockButton width="100%" />
           )}
         </Box>
         <Text as="p" fontSize="12px" lineHeight={1} color="textSubtle">
-          {t("You won't be able to remove or change your position once you enter it.")}
+          {t('You won’t be able to remove or change your position once you enter it.')}
         </Text>
       </CardBody>
     </Card>

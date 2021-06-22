@@ -4,9 +4,7 @@ import { CardBody, Flex, Text } from '@sparkpointio/sparkswap-uikit'
 import { ThemeContext } from 'styled-components'
 import UnlockButton from 'components/UnlockButton'
 import { useTranslation } from 'contexts/Localization'
-import { getAddress } from 'utils/addressHelpers'
 import { BIG_ZERO } from 'utils/bigNumber'
-import { useGetApiPrice } from 'state/hooks'
 import { Pool } from 'state/types'
 
 import AprRow from './AprRow'
@@ -21,17 +19,16 @@ const PoolCard: React.FC<{ pool: Pool; account: string }> = ({ pool, account }) 
   const { t } = useTranslation()
   const stakedBalance = userData?.stakedBalance ? new BigNumber(userData.stakedBalance) : BIG_ZERO
   const accountHasStakedBalance = stakedBalance.gt(0)
-  const stakingTokenPrice = useGetApiPrice(stakingToken.address ? getAddress(stakingToken.address) : '')
   const theme = useContext(ThemeContext)
+  
   return (
     <StyledCard
       isFinished={isFinished && sousId !== 0}
-      // ribbon={isFinished && <CardRibbon variantColor="textDisabled" text={`${t('Finished')}`} />}
     >
         <StyledCardHeader
           isStaking={accountHasStakedBalance}
-          earningTokenSymbol={earningToken.symbol}
-          stakingTokenSymbol={stakingToken.symbol}
+          earningToken={earningToken}
+          stakingToken={stakingToken}
           isFinished={isFinished && sousId !== 0}
         />
          <hr style={{width: '100%', border: 'none', backgroundColor: theme.colors.primary, height: '2px'}}/>
@@ -51,7 +48,7 @@ const PoolCard: React.FC<{ pool: Pool; account: string }> = ({ pool, account }) 
           </Flex>
           <Flex mt="24px" flexDirection="column">
             {account ? (
-              <CardActions pool={pool} stakedBalance={stakedBalance} stakingTokenPrice={stakingTokenPrice} />
+              <CardActions pool={pool} stakedBalance={stakedBalance} />
             ) : (
               <>
                 <UnlockButton />

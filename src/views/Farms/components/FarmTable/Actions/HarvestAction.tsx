@@ -1,14 +1,18 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { Button, Skeleton } from '@pancakeswap/uikit'
+import React, { useState } from 'react'
+import { Button, Skeleton, Text } from '@pancakeswap/uikit'
 import BigNumber from 'bignumber.js'
+import { useWeb3React } from '@web3-react/core'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
-import { getBalanceNumber } from 'utils/formatBalance'
+import Balance from 'components/Balance'
+import { BIG_ZERO } from 'utils/bigNumber'
+import { getBalanceAmount } from 'utils/formatBalance'
+import { useAppDispatch } from 'state'
+import { fetchFarmUserDataAsync } from 'state/farms'
+import { usePriceCakeBusd } from 'state/hooks'
 import { useHarvest } from 'hooks/useHarvest'
 import { useTranslation } from 'contexts/Localization'
-import { usePriceCakeBusd } from 'state/hooks'
-import { useCountUp } from 'react-countup'
 
-import { ActionContainer, ActionTitles, Title, Subtle, ActionContent, Earned, Staked } from './styles'
+import { ActionContainer, ActionTitles, ActionContent, Earned } from './styles'
 
 interface HarvestActionProps extends FarmWithStakedValue {
   userDataReady: boolean
@@ -17,50 +21,47 @@ interface HarvestActionProps extends FarmWithStakedValue {
 const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({ pid, userData, userDataReady }) => {
   const earningsBigNumber = new BigNumber(userData.earnings)
   const cakePrice = usePriceCakeBusd()
-  let earnings = 0
+  let earnings = BIG_ZERO
   let earningsBusd = 0
   let displayBalance = userDataReady ? earnings.toLocaleString() : <Skeleton width={60} />
 
   // If user didn't connect wallet default balance will be 0
   if (!earningsBigNumber.isZero()) {
-    earnings = getBalanceNumber(earningsBigNumber)
-    earningsBusd = new BigNumber(earnings).multipliedBy(cakePrice).toNumber()
-    displayBalance = earnings.toLocaleString()
+    earnings = getBalanceAmount(earningsBigNumber)
+    earningsBusd = earnings.multipliedBy(cakePrice).toNumber()
+    displayBalance = earnings.toFixed(3, BigNumber.ROUND_DOWN)
   }
 
   const [pendingTx, setPendingTx] = useState(false)
   const { onReward } = useHarvest(pid)
   const { t } = useTranslation()
-
-  const { countUp, update } = useCountUp({
-    start: 0,
-    end: earningsBusd,
-    duration: 1,
-    separator: ',',
-    decimals: 3,
-  })
-  const updateValue = useRef(update)
-
-  useEffect(() => {
-    updateValue.current(earningsBusd)
-  }, [earningsBusd, updateValue])
+  const dispatch = useAppDispatch()
+  const { account } = useWeb3React()
 
   return (
     <ActionContainer>
       <ActionTitles>
-        <Title>CAKE </Title>
-        <Subtle>{t('EARNED')}</Subtle>
+        <Text bold textTransform="uppercase" color="secondary" fontSize="12px" pr="4px">
+          CAKE
+        </Text>
+        <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px">
+          {t('Earned')}
+        </Text>
       </ActionTitles>
       <ActionContent>
         <div>
           <Earned>{displayBalance}</Earned>
-          {countUp > 0 && <Staked>~{countUp}USD</Staked>}
+          {earningsBusd > 0 && (
+            <Balance fontSize="12px" color="textSubtle" decimals={2} value={earningsBusd} unit=" USD" prefix="~" />
+          )}
         </div>
         <Button
-          disabled={!earnings || pendingTx || !userDataReady}
+          disabled={earnings.eq(0) || pendingTx || !userDataReady}
           onClick={async () => {
             setPendingTx(true)
             await onReward()
+            dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
+
             setPendingTx(false)
           }}
           ml="4px"

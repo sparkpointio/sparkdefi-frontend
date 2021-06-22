@@ -4,6 +4,7 @@ import { useTranslation } from 'contexts/Localization'
 import { LinkExternal, Text } from '@pancakeswap/uikit'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
+import { getBscScanAddressUrl } from 'utils/bscscan'
 import { CommunityTag, CoreTag, DualTag } from 'components/Tags'
 
 import HarvestAction from './HarvestAction'
@@ -147,8 +148,8 @@ const ActionPanel: React.FunctionComponent<ActionPanelProps> = ({
     tokenAddress: token.address,
   })
   const lpAddress = farm.lpAddresses[process.env.REACT_APP_CHAIN_ID]
-  const bsc = `https://bscscan.com/address/${lpAddress}`
-  const info = `https://pancakeswap.info/pair/${lpAddress}`
+  const bsc = getBscScanAddressUrl(lpAddress)
+  const info = `https://pancakeswap.info/pool/${lpAddress}`
 
   return (
     <Container expanded={expanded}>
@@ -156,7 +157,7 @@ const ActionPanel: React.FunctionComponent<ActionPanelProps> = ({
         {isActive && (
           <StakeContainer>
             <StyledLinkExternal href={`https://exchange.pancakeswap.finance/#/add/${liquidityUrlPathParts}`}>
-              {t(`Get ${lpLabel}`, { name: lpLabel })}
+              {t('Get %symbol%', { symbol: lpLabel })}
             </StyledLinkExternal>
           </StakeContainer>
         )}

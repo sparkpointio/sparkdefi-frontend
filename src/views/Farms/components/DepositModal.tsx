@@ -47,8 +47,8 @@ const DepositModal: React.FC<DepositModalProps> = ({
     return getFullDisplayBalance(max)
   }, [max])
 
-  const RewardTokenBalance = useTokenBalance(tokenRewardAddress)
-  const formatTokenBalance = getBalanceNumber(RewardTokenBalance)
+  // const RewardTokenBalance = useTokenBalance(tokenRewardAddress)
+  // const formatTokenBalance = getBalanceNumber(RewardTokenBalance)
   
   
   // const valNumber = new BigNumber(val)
@@ -102,7 +102,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
       <Container>
         <DetailsCont>
           <Text bold fontSize="24px">
-          {formatTokenBalance === 0? '0.0000': formatTokenBalance}
+          {/* {formatTokenBalance === 0? '0.0000': formatTokenBalance} */}
           </Text>
           <Text color="textSubtle" fontSize="14px">
             {tokenReward}

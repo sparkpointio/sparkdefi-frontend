@@ -24,17 +24,7 @@ export const ActionContainer = styled.div`
 `
 
 export const ActionTitles = styled.div`
-  font-weight: 600;
-  font-size: 12px;
-  margin-bottom: 8px;
-`
-
-export const Title = styled.span`
-  color: ${({ theme }) => theme.colors.secondary};
-`
-
-export const Subtle = styled.span`
-  color: ${({ theme }) => theme.colors.textSubtle};
+  display: flex;
 `
 
 export const ActionContent = styled.div`
@@ -46,9 +36,4 @@ export const Earned = styled.div`
   font-weight: 600;
   font-size: 20px;
   color: ${({ theme }) => theme.colors.text};
-`
-
-export const Staked = styled.div`
-  font-size: 12px;
-  color: ${({ theme }) => theme.colors.textSubtle};
 `

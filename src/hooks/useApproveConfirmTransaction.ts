@@ -2,6 +2,7 @@ import { useEffect, useReducer, useRef } from 'react'
 import { noop } from 'lodash'
 import { useWeb3React } from '@web3-react/core'
 import useToast from 'hooks/useToast'
+import { useTranslation } from 'contexts/Localization'
 
 type Web3Payload = Record<string, unknown> | null
 
@@ -87,6 +88,7 @@ interface ApproveConfirmTransaction {
   onConfirm: ContractHandler
   onRequiresApproval?: () => Promise<boolean>
   onSuccess: (state: State) => void
+  onApproveSuccess?: (state: State) => void
 }
 
 const useApproveConfirmTransaction = ({
@@ -94,7 +96,9 @@ const useApproveConfirmTransaction = ({
   onConfirm,
   onRequiresApproval,
   onSuccess = noop,
+  onApproveSuccess = noop,
 }: ApproveConfirmTransaction) => {
+  const { t } = useTranslation()
   const { account } = useWeb3React()
   const [state, dispatch] = useReducer(reducer, initialState)
   const handlePreApprove = useRef(onRequiresApproval)
@@ -127,11 +131,12 @@ const useApproveConfirmTransaction = ({
         })
         .on('receipt', (payload: Web3Payload) => {
           dispatch({ type: 'approve_receipt', payload })
+          onApproveSuccess(state)
         })
         .on('error', (error: Web3Payload) => {
           dispatch({ type: 'approve_error', payload: error })
           console.error('An error occurred approving transaction:', error)
-          toastError('An error occurred approving transaction')
+          toastError(t('An error occurred approving transaction'))
         })
     },
     handleConfirm: () => {
@@ -146,7 +151,7 @@ const useApproveConfirmTransaction = ({
         .on('error', (error: Web3Payload) => {
           dispatch({ type: 'confirm_error', payload: error })
           console.error('An error occurred confirming transaction:', error)
-          toastError('An error occurred confirming transaction')
+          toastError(t('An error occurred confirming transaction'))
         })
     },
   }

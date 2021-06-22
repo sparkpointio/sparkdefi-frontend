@@ -14,6 +14,7 @@ import {
   getCakeAddress,
   getLotteryAddress,
   getLotteryTicketAddress,
+  getLotteryV2Address,
   getMasterChefAddress,
   getPointCenterIfoAddress,
   getClaimRefundAddress,
@@ -22,6 +23,7 @@ import {
   getCakeVaultAddress,
   getPredictionsAddress,
   getChainlinkOracleAddress,
+  getMulticallAddress,
 } from 'utils/addressHelpers'
 
 // ABI
@@ -38,6 +40,7 @@ import ifoV2Abi from 'config/abi/ifoV2.json'
 import pointCenterIfo from 'config/abi/pointCenterIfo.json'
 import lotteryAbi from 'config/abi/lottery.json'
 import lotteryTicketAbi from 'config/abi/lotteryNft.json'
+import lotteryV2Abi from 'config/abi/lotteryV2.json'
 import masterChef from 'config/abi/masterchef.json'
 import sousChef from 'config/abi/sousChef.json'
 import sousChefV2 from 'config/abi/sousChefV2.json'
@@ -48,10 +51,25 @@ import easterNftAbi from 'config/abi/easterNft.json'
 import cakeVaultAbi from 'config/abi/cakeVault.json'
 import predictionsAbi from 'config/abi/predictions.json'
 import chainlinkOracleAbi from 'config/abi/chainlinkOracle.json'
+import MultiCallAbi from 'config/abi/Multicall.json'
+import { DEFAULT_GAS_PRICE, TESTNET_CHAIN_ID } from 'config'
+import { getSettings, getGasPriceInWei } from './settings'
 
-const getContract = (abi: any, address: string, web3?: Web3) => {
+export const getDefaultGasPrice = () => {
+  const chainId = process.env.REACT_APP_CHAIN_ID
+  if (chainId === TESTNET_CHAIN_ID) {
+    return 10
+  }
+  return DEFAULT_GAS_PRICE
+}
+
+const getContract = (abi: any, address: string, web3?: Web3, account?: string) => {
   const _web3 = web3 ?? web3NoAccount
-  return new _web3.eth.Contract(abi as unknown as AbiItem, address)
+  const gasPrice = account ? getSettings(account).gasPrice : getDefaultGasPrice()
+
+  return new _web3.eth.Contract(abi as unknown as AbiItem, address, {
+    gasPrice: getGasPriceInWei(gasPrice).toString(),
+  })
 }
 
 export const getBep20Contract = (address: string, web3?: Web3) => {
@@ -102,6 +120,9 @@ export const getLotteryContract = (web3?: Web3) => {
 export const getLotteryTicketContract = (web3?: Web3) => {
   return getContract(lotteryTicketAbi, getLotteryTicketAddress(), web3)
 }
+export const getLotteryV2Contract = (web3?: Web3) => {
+  return getContract(lotteryV2Abi, getLotteryV2Address(), web3)
+}
 export const getMasterchefContract = (web3?: Web3) => {
   return getContract(masterChef, getMasterChefAddress(), web3)
 }
@@ -122,4 +143,7 @@ export const getPredictionsContract = (web3?: Web3) => {
 }
 export const getChainlinkOracleContract = (web3?: Web3) => {
   return getContract(chainlinkOracleAbi, getChainlinkOracleAddress(), web3)
+}
+export const getMulticallContract = (web3?: Web3) => {
+  return getContract(MultiCallAbi, getMulticallAddress(), web3)
 }

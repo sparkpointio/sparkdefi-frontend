@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js'
 import styled, { keyframes, ThemeContext } from 'styled-components'
 import { Flex, Text, Skeleton } from '@pancakeswap/uikit'
 import { Farm } from 'state/types'
-import { provider as ProviderType } from 'web3-core'
+import { getBscScanAddressUrl } from 'utils/bscscan'
 import { useTranslation } from 'contexts/Localization'
 import ExpandableSectionButton from 'components/ExpandableSectionButton'
 import { BASE_ADD_LIQUIDITY_URL, BASE_EXCHANGE_URL } from 'config'
@@ -58,7 +58,7 @@ const FCard = styled.div<{ isPromotedFarm: boolean }>`
 `
 
 const Divider = styled.div`
-  background-color: ${({ theme }) => theme.colors.borderColor};
+  background-color: ${({ theme }) => theme.colors.cardBorder};
   height: 1px;
   margin: 28px auto;
   width: 100%;
@@ -73,7 +73,6 @@ interface FarmCardProps {
   farm: FarmWithStakedValue
   removed: boolean
   cakePrice?: BigNumber
-  provider?: ProviderType
   account?: string
 }
 
@@ -81,13 +80,11 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
   const { t } = useTranslation()
   const [showExpandableSection, setShowExpandableSection] = useState(false)
 
-  // We assume the token name is coin pair + lp e.g. CAKE-BNB LP, LINK-BNB LP,
-  // NAR-CAKE LP. The images should be cake-bnb.svg, link-bnb.svg, nar-cake.svg
+  const totalValueFormatted =
+    farm.liquidity && farm.liquidity.gt(0)
+      ? `$${farm.liquidity.toNumber().toLocaleString(undefined, { maximumFractionDigits: 0 })}`
+      : ''
   const farmImage = farm.lpSymbol.split(' ')[0].toLocaleLowerCase()
-  const totalValueFormatted = farm.liquidity
-    ? `$${farm.liquidity.toNumber().toLocaleString(undefined, { maximumFractionDigits: 0 })}`
-    : '-'
-
   const lpLabel = farm.lpSymbol && farm.lpSymbol.toUpperCase().replace('PANCAKE', '')
   const earnLabel = farm.dual ? farm.dual.earnLabel : 'CAKE'
   const farmAPR = farm.apr && farm.apr.toLocaleString('en-US', { maximumFractionDigits: 2 })
@@ -113,6 +110,8 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
         farmSymbol={farm.lpSymbol}
         tokenSymbol={farm.token.symbol}
         rewardToken={farm.quoteToken.symbol}
+        token={farm.token}
+        quoteToken={farm.quoteToken}
       />
       <hr style={{width: '100%', border: 'none', backgroundColor: theme.colors.primary, height: '2px'}}/>
       {/* {!removed && (
@@ -155,8 +154,8 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
       <ExpandingWrapper expanded={showExpandableSection}>
         <DetailsSection
           removed={removed}
-          bscScanAddress={`https://bscscan.com/address/${farm.lpAddresses[process.env.REACT_APP_CHAIN_ID]}`}
-          infoAddress={`https://pancakeswap.info/pair/${lpAddress}`}
+          bscScanAddress={getBscScanAddressUrl(farm.lpAddresses[process.env.REACT_APP_CHAIN_ID])}
+          infoAddress={`https://pancakeswap.info/pool/${lpAddress}`}
           totalValueFormatted={totalValueFormatted}
           lpLabel={lpLabel}
           addLiquidityUrl={addLiquidityUrl}

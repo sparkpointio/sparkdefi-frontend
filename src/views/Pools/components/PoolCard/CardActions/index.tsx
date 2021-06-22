@@ -17,11 +17,10 @@ const InlineText = styled(Text)`
 interface CardActionsProps {
   pool: Pool
   stakedBalance: BigNumber
-  stakingTokenPrice: number
 }
 
-const CardActions: React.FC<CardActionsProps> = ({ pool, stakedBalance, stakingTokenPrice }) => {
-  const { sousId, stakingToken, earningToken, harvest, poolCategory, userData } = pool
+const CardActions: React.FC<CardActionsProps> = ({ pool, stakedBalance }) => {
+  const { sousId, stakingToken, earningToken, harvest, poolCategory, userData, earningTokenPrice } = pool
   // Pools using native BNB behave differently than pools using a token
   const isBnbPool = poolCategory === PoolCategory.BINANCE
   const { t } = useTranslation()
@@ -42,13 +41,14 @@ const CardActions: React.FC<CardActionsProps> = ({ pool, stakedBalance, stakingT
                 {`${earningToken.symbol} `}
               </InlineText>
               <InlineText color="textSubtle" textTransform="uppercase" bold fontSize="12px">
-                {t(`earned`)}
+                {t('Earned')}
               </InlineText>
             </Box>
             <HarvestActions
               earnings={earnings}
               earningToken={earningToken}
               sousId={sousId}
+              earningTokenPrice={earningTokenPrice}
               isBnbPool={isBnbPool}
               isLoading={isLoading}
             />
@@ -56,10 +56,10 @@ const CardActions: React.FC<CardActionsProps> = ({ pool, stakedBalance, stakingT
         )}
         <Box display="inline">
           <InlineText color={isStaked ? 'secondary' : 'textSubtle'} textTransform="uppercase" bold fontSize="12px">
-            {isStaked ? stakingToken.symbol : t(`stake`)}{' '}
+            {isStaked ? stakingToken.symbol : t('Stake')}{' '}
           </InlineText>
           <InlineText color={isStaked ? 'textSubtle' : 'secondary'} textTransform="uppercase" bold fontSize="12px">
-            {isStaked ? t(`staked`) : `${stakingToken.symbol}`}
+            {isStaked ? t('Staked') : `${stakingToken.symbol}`}
           </InlineText>
         </Box>
         {needsApproval ? (
@@ -69,7 +69,6 @@ const CardActions: React.FC<CardActionsProps> = ({ pool, stakedBalance, stakingT
             isLoading={isLoading}
             pool={pool}
             stakingTokenBalance={stakingTokenBalance}
-            stakingTokenPrice={stakingTokenPrice}
             stakedBalance={stakedBalance}
             isBnbPool={isBnbPool}
             isStaked={isStaked}

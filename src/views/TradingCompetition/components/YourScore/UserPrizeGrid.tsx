@@ -8,6 +8,7 @@ import {
   Text,
   TeamPlayerIcon,
   TrophyGoldIcon,
+  Skeleton,
 } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import { UserTradingInformationProps } from '../../types'
@@ -15,7 +16,7 @@ import { useCompetitionCakeRewards, getRewardGroupAchievements } from '../../hel
 import { BoldTd, Td, StyledPrizeTable } from '../StyledPrizeTable'
 
 const StyledThead = styled.thead`
-  border-bottom: 2px solid ${({ theme }) => theme.colors.borderColor};
+  border-bottom: 2px solid ${({ theme }) => theme.colors.cardBorder};
 `
 
 const UserPrizeGrid: React.FC<{ userTradingInformation?: UserTradingInformationProps }> = ({
@@ -30,7 +31,7 @@ const UserPrizeGrid: React.FC<{ userTradingInformation?: UserTradingInformationP
     <StyledPrizeTable>
       <StyledThead>
         <tr>
-          <th>{t('CAKE Prizes ')}</th>
+          <th>{t('CAKE Prizes')}</th>
           <th>{t('Achievements')}</th>
           <th>{t('NFT')}</th>
         </tr>
@@ -40,9 +41,13 @@ const UserPrizeGrid: React.FC<{ userTradingInformation?: UserTradingInformationP
           <BoldTd>
             <Flex flexDirection="column">
               <Text bold>{cakeReward.toFixed(2)}</Text>
-              <Text fontSize="12px" color="textSubtle">
-                ~{dollarValueOfCakeReward} USD
-              </Text>
+              {dollarValueOfCakeReward ? (
+                <Text fontSize="12px" color="textSubtle">
+                  ~{dollarValueOfCakeReward} USD
+                </Text>
+              ) : (
+                <Skeleton height={24} width={80} />
+              )}
             </Flex>
           </BoldTd>
           <Td>
@@ -50,8 +55,8 @@ const UserPrizeGrid: React.FC<{ userTradingInformation?: UserTradingInformationP
               {champion && <CrownIcon mr={[0, '4px']} />}
               {teamPlayer && <TeamPlayerIcon mr={[0, '4px']} />}
               <TrophyGoldIcon mr={[0, '4px']} />
-              <Text fontSize="12px" color="textSubtle">
-                + {userPointReward} {t('points')}
+              <Text fontSize="12px" color="textSubtle" textTransform="lowercase">
+                + {userPointReward} {t('Points')}
               </Text>
             </Flex>
           </Td>

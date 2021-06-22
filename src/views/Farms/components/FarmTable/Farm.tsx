@@ -2,24 +2,17 @@ import React from 'react'
 import styled from 'styled-components'
 import { useFarmUser } from 'state/hooks'
 import { useTranslation } from 'contexts/Localization'
-import { Text, Image } from '@pancakeswap/uikit'
+import { Text } from '@pancakeswap/uikit'
 import { getBalanceNumber } from 'utils/formatBalance'
+import { Token } from 'config/constants/types'
+import TokenPairImage from 'components/TokenPairImage'
 
 export interface FarmProps {
   label: string
   pid: number
-  image: string
+  token: Token
+  quoteToken: Token
 }
-
-const IconImage = styled(Image)`
-  width: 24px;
-  height: 24px;
-
-  ${({ theme }) => theme.mediaQueries.sm} {
-    width: 40px;
-    height: 40px;
-  }
-`
 
 const Container = styled.div`
   padding-left: 16px;
@@ -31,7 +24,16 @@ const Container = styled.div`
   }
 `
 
-const Farm: React.FunctionComponent<FarmProps> = ({ image, label, pid }) => {
+const TokenWrapper = styled.div`
+  padding-right: 8px;
+  width: 24px;
+
+  ${({ theme }) => theme.mediaQueries.sm} {
+    width: 40px;
+  }
+`
+
+const Farm: React.FunctionComponent<FarmProps> = ({ token, quoteToken, label, pid }) => {
   const { stakedBalance } = useFarmUser(pid)
   const { t } = useTranslation()
   const rawStakedBalance = getBalanceNumber(stakedBalance)
@@ -39,8 +41,8 @@ const Farm: React.FunctionComponent<FarmProps> = ({ image, label, pid }) => {
   const handleRenderFarming = (): JSX.Element => {
     if (rawStakedBalance) {
       return (
-        <Text color="secondary" fontSize="12px" bold>
-          {t('FARMING')}
+        <Text color="secondary" fontSize="12px" bold textTransform="uppercase">
+          {t('Farming')}
         </Text>
       )
     }
@@ -50,7 +52,9 @@ const Farm: React.FunctionComponent<FarmProps> = ({ image, label, pid }) => {
 
   return (
     <Container>
-      <IconImage src={`/images/farms/${image}.svg`} alt="icon" width={40} height={40} mr="8px" />
+      <TokenWrapper>
+        <TokenPairImage variant="inverted" primaryToken={token} secondaryToken={quoteToken} width={40} height={40} />
+      </TokenWrapper>
       <div>
         {handleRenderFarming()}
         <Text bold>{label}</Text>
