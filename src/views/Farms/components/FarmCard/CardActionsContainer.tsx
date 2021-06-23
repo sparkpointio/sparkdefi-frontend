@@ -42,7 +42,7 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidi
   const stakedBalance = new BigNumber(stakedBalanceAsString)
   const earnings = new BigNumber(earningsAsString)
   const lpAddress = getAddress(lpAddresses)
-  const isApproved = account && allowance && allowance.isGreaterThan(0)
+  const isApproved = account && allowance  // && allowance.isGreaterThan(0)
   const dispatch = useAppDispatch()
 
   const lpContract = useERC20(lpAddress)
@@ -60,8 +60,8 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidi
     }
   }, [onApprove, dispatch, account, pid])
 
-  const renderApprovalOrStakeButton = () => {
-    return isApproved ? (
+  const renderDepositButton = () => {
+    return (
       <StakeAction
         stakedBalance={stakedBalance}
         tokenBalance={tokenBalance}
@@ -71,34 +71,12 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidi
         addTokenUrl={addTokenUrl}
         farm={farm}
       />
-    ) : (
-      <Button mt="8px" fullWidth disabled={requestedApproval} onClick={handleApprove}>
-        {t('Approve Contract')}
-      </Button>
-    )
+    ) 
   }
 
   return (
     <Action>
-      {/* <Flex>
-        <Text bold textTransform="uppercase" color="secondary" fontSize="12px" pr="3px"> */}
-          {/* TODO: Is there a way to get a dynamic value here from useFarmFromSymbol? */}
-          {/* CAKE
-        </Text>
-        <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px">
-          {t('Earned')}
-        </Text>
-      </Flex>
-      <HarvestAction earnings={earnings} pid={pid} />
-      <Flex>
-        <Text bold textTransform="uppercase" color="secondary" fontSize="12px" pr="4px">
-          {farm.lpSymbol}
-        </Text>
-        <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px">
-          {t('Staked')}
-        </Text>
-      </Flex> */}
-      {!account ? <UnlockButton mt="8px" width="100%" /> : renderApprovalOrStakeButton()}
+      {!account ? <UnlockButton mt="8px" width="100%" /> : renderDepositButton()}
     </Action>
   )
 }

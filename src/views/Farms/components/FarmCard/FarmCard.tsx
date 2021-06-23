@@ -79,7 +79,7 @@ interface FarmCardProps {
 const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }) => {
   const { t } = useTranslation()
   const [showExpandableSection, setShowExpandableSection] = useState(false)
-
+  console.log(farm)
   const totalValueFormatted =
     farm.liquidity && farm.liquidity.gt(0)
       ? `$${farm.liquidity.toNumber().toLocaleString(undefined, { maximumFractionDigits: 0 })}`
@@ -129,6 +129,9 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
           </Text>
         </Flex>
       )} */}
+
+
+      
       <Flex justifyContent="space-between" style={{textAlign: 'left'}}>
         <Text>{t('Total Deposits')}:</Text>
         <Text color="textSubtle">{totalValueFormatted}</Text>

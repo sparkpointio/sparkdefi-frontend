@@ -88,7 +88,7 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
   )
 
   const renderStakingButtons = () => {
-    return stakedBalance.eq(0) ? (
+    return (
       <Button
         onClick={onPresentDeposit}
         disabled={['history', 'archived'].some((item) => location.pathname.includes(item))}
@@ -96,22 +96,23 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
       >
         {t('Deposit')}
       </Button>
-    ) : (
-      <IconButtonWrapper>
-        <IconButton variant="tertiary" onClick={onPresentWithdraw} mr="6px">
-          <MinusIcon color="primary" width="14px" />
-        </IconButton>
-        <IconButton
-          variant="tertiary"
-          onClick={onPresentDeposit}
-          disabled={['history', 'archived'].some((item) => location.pathname.includes(item))}
-        >
-          <AddIcon color="primary" width="14px" />
-        </IconButton>
-      </IconButtonWrapper>
     )
   }
 
+  // (
+  //   <IconButtonWrapper>
+  //     <IconButton variant="tertiary" onClick={onPresentWithdraw} mr="6px">
+  //       <MinusIcon color="primary" width="14px" />
+  //     </IconButton>
+  //     <IconButton
+  //       variant="tertiary"
+  //       onClick={onPresentDeposit}
+  //       disabled={['history', 'archived'].some((item) => location.pathname.includes(item))}
+  //     >
+  //       <AddIcon color="primary" width="14px" />
+  //     </IconButton>
+  //   </IconButtonWrapper>
+  // )
   return (
     <Flex justifyContent="space-between" alignItems="center">
       {/* <Heading color={stakedBalance.eq(0) ? 'textDisabled' : 'text'}>{displayBalance()}</Heading> */}

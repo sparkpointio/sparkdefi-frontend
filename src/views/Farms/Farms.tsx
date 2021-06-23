@@ -2,8 +2,7 @@ import React, { useEffect, useCallback, useState, useMemo, useRef } from 'react'
 import { Route, useRouteMatch, useLocation } from 'react-router-dom'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
-import { Image, Heading, RowType, Toggle } from '@pancakeswap/uikit'
-import { Text } from '@sparkpointio/sparkswap-uikit'
+import { Image, Heading, RowType, Toggle, Text } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
@@ -317,34 +316,18 @@ const Farms: React.FC = () => {
 
     return (
       <div>
-          <div style={{margin: '20px'}}>
-            <Text fontSize="24px" bold> Active Liquidity Pools </Text>
-            <Text fontSize="16px">Stake LP tokens to earn</Text>
-          </div>
+        <div style={{ margin: '20px' }}>
+          <Text fontSize="24px" bold>
+            {' '}
+            Active Liquidity Pools{' '}
+          </Text>
+          <Text fontSize="16px">Stake LP tokens to earn</Text>
+        </div>
 
         <FlexLayout>
-          {/* <Route exact path={`${path}`}> */}
-  
-            {activeFarms.map((farm) => (
-              <FarmCard key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} />
-            ))}
-          {/* </Route> */}
-          {/* <Route exact path={`${path}/history`}> */}
-          
-            {/* {farmsStakedMemoized.map((farm) => (
-              <FarmCard key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed />
-            ))} */}
-            
-          {/* </Route> */}
-
-          {/* For future Use */}
-          {/* <Route exact path={`${path}/archived`}>
-            {farmsStakedMemoized.map((farm) => (
-              <FarmCard key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed />
-            ))}
-
-          </Route> */}
-         
+          {farmsStakedMemoized.map((farm) => (
+            <FarmCard key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} />
+          ))}
         </FlexLayout>
       </div>
     )
@@ -359,7 +342,7 @@ const Farms: React.FC = () => {
           </div>
 
         <FlexLayout>
-            {inactiveFarms.map((farm) => (
+            {farmsStakedMemoized.map((farm) => (
               <FarmCard key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed/>
             ))}
         </FlexLayout>
@@ -367,63 +350,13 @@ const Farms: React.FC = () => {
     )
   }
 
-
-  const handleSortOptionChange = (option: OptionProps): void => {
-    setSortOption(option.value)
-  }
-
   return (
     <>
       <Page>
-        {/* <ControlContainer>
-          <ViewControls>
-            <ToggleView viewMode={viewMode} onToggle={(mode: ViewMode) => setViewMode(mode)} />
-            <ToggleWrapper>
-              <Toggle checked={stakedOnly} onChange={() => setStakedOnly(!stakedOnly)} scale="sm" />
-              <Text> {t('Staked only')}</Text>
-            </ToggleWrapper>
-            <FarmTabButtons hasStakeInFinishedFarms={stakedInactiveFarms.length > 0} />
-          </ViewControls>
-          <FilterContainer>
-            <LabelWrapper>
-              <Text textTransform="uppercase">{t('Sort by')}</Text>
-              <Select
-                options={[
-                  {
-                    label: t('Hot'),
-                    value: 'hot',
-                  },
-                  {
-                    label: t('APR'),
-                    value: 'apr',
-                  },
-                  {
-                    label: t('Multiplier'),
-                    value: 'multiplier',
-                  },
-                  {
-                    label: t('Earned'),
-                    value: 'earned',
-                  },
-                  {
-                    label: t('Liquidity'),
-                    value: 'liquidity',
-                  },
-                ]}
-                onChange={handleSortOptionChange}
-              />
-            </LabelWrapper>
-            <LabelWrapper style={{ marginLeft: 16 }}>
-              <Text textTransform="uppercase">{t('Search')}</Text>
-              <SearchInput onChange={handleChangeQuery} placeholder="Search Farms" />
-            </LabelWrapper>
-          </FilterContainer>
-        </ControlContainer> */}
         {renderActiveContent()}
         <StyledHr />
         {renderInactiveContent()}
         <div ref={loadMoreRef} />
-        {/* <StyledImage src="/images/3dpan.png" alt="Pancake illustration" width={120} height={103} /> */}
       </Page>
     </>
   )

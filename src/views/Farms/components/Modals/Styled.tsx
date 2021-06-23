@@ -11,7 +11,7 @@ const Container = styled.div`
 const StyledFlex = styled(Flex)`
     padding: 10px 0px;
 `
-const ApproveButton = styled(Button)`
+const CancelButton = styled(Button)`
     flex: 1;
     margin-right: 10px;
 `
@@ -20,6 +20,6 @@ const DepositButton = styled(Button)`
     margin-left: 10px;
 `
 
-export {StyledFlex, ApproveButton, DepositButton}
+export {StyledFlex, CancelButton, DepositButton}
 export default Container;
 

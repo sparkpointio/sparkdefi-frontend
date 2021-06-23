@@ -1,27 +1,30 @@
-import React, { useState, useCallback, useMemo} from 'react'
-import { Modal, Text   } from '@sparkpointio/sparkswap-uikit';
-import ModalInput from 'components/ModalInput';
+import BigNumber from 'bignumber.js'
+import React, { useState, useCallback, useMemo } from 'react'
+import { Modal, Text } from '@sparkpointio/sparkswap-uikit'
+import ModalInput from 'components/ModalInput'
 import { getFullDisplayBalance } from 'utils/formatBalance'
-import Container, {ApproveButton, DepositButton, StyledFlex} from './Styled';
+import Container, { CancelButton, DepositButton, StyledFlex } from './Styled'
 
 interface StakeModalInterface {
-    onDismiss?: () => void
-    max: string
-    symbol: string
-    placeholder?: string
-    addLiquidityUrl?: string
-    inputTitle?: string
+  onDismiss?: () => void
+  max: BigNumber
+  symbol: string
+  placeholder?: string
+  addLiquidityUrl?: string
+  inputTitle?: string
+  onConfirm: (amount: string) => void
 }
 
-const Stake:React.FC<StakeModalInterface>  = ({ 
-    onDismiss,
-    max,
-    symbol,
-    addLiquidityUrl,
-    inputTitle,
-}) => {
+const Stake: React.FC<StakeModalInterface> = ({ onDismiss, max, symbol, addLiquidityUrl, inputTitle, onConfirm, }) => {
+  const [val, setVal] = useState('')
+  const [pendingTx, setPendingTx] = useState(false)
+  const valNumber = new BigNumber(val)
+  const fullBalance = useMemo(() => {
+    return getFullDisplayBalance(max)
+  }, [max])
 
-const [val, setVal] = useState('')
+  const fullBalanceNumber = new BigNumber(fullBalance)
+
   const handleChange = useCallback(
     (e: React.FormEvent<HTMLInputElement>) => {
       if (e.currentTarget.validity.valid) {
@@ -31,37 +34,49 @@ const [val, setVal] = useState('')
     [setVal],
   )
   const handleSelectMax = useCallback(() => {
-    setVal(max)
-  }, [max, setVal])
+    setVal(fullBalance)
+  }, [fullBalance, setVal])
 
-    return (
-        <Modal title="" onDismiss={onDismiss}>
-            <Container>
-            <Text>Stake amount: </Text>
-            <ModalInput 
-             value={val}
-             onSelectMax={handleSelectMax}
-             onChange={handleChange}
-             max={max}
-             symbol={symbol}
-             addLiquidityUrl={addLiquidityUrl}
-            //  inputTitle={t('Stake')}
-            />
-            </Container>
-            <StyledFlex justifyContent="space-between">
-              <Text>Appoved tokens: </Text>
-              <Text>00.00</Text>
-            </StyledFlex>
-            <StyledFlex justifyContent="space-between">
-              <ApproveButton>
-                Approved
-              </ApproveButton>
-              <DepositButton>
-                Deposit
-              </DepositButton>
-            </StyledFlex>
-        </Modal>
-    )
+  return (
+    <Modal title="" onDismiss={!pendingTx && onDismiss}>
+      <Container>
+        <Text>Stake amount: </Text>
+        <ModalInput
+          value={val}
+          onSelectMax={handleSelectMax}
+          onChange={handleChange}
+          max={fullBalance}
+          symbol={symbol}
+          addLiquidityUrl={addLiquidityUrl}
+          //  inputTitle={t('Stake')}
+        />
+      </Container>
+      <StyledFlex justifyContent="space-between">
+        <Text>Appoved tokens: </Text>
+        <Text>00.00</Text>
+      </StyledFlex>
+      <StyledFlex justifyContent="space-between">
+        <CancelButton 
+        onClick={onDismiss}
+        disabled={pendingTx}
+        >
+
+          Approve
+        </CancelButton>
+        <DepositButton
+        disabled={pendingTx || !valNumber.isFinite() || valNumber.eq(0) || valNumber.gt(fullBalanceNumber)}
+        onClick={async () => {
+          setPendingTx(true)
+          await onConfirm(val)
+          setPendingTx(false)
+          onDismiss()
+        }}
+        >
+        Deposit
+        </DepositButton>
+      </StyledFlex>
+    </Modal>
+  )
 }
 
-export default Stake;
+export default Stake

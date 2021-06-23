@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js'
 import React, { useCallback, useMemo, useState } from 'react'
 import { Button, Modal, LinkExternal, Text, useModal, Dropdown } from '@sparkpointio/sparkswap-uikit'
 import { ChevronDown, ChevronUp } from 'react-feather'
-import useTokenBalance from 'hooks/useTokenBalance'
+  import useTokenBalance from 'hooks/useTokenBalance'
 import ModalActions from 'components/ModalActions'
 import ModalInput from 'components/ModalInput'
 import { useTranslation } from 'contexts/Localization'
@@ -47,8 +47,8 @@ const DepositModal: React.FC<DepositModalProps> = ({
     return getFullDisplayBalance(max)
   }, [max])
 
-  // const RewardTokenBalance = useTokenBalance(tokenRewardAddress)
-  // const formatTokenBalance = getBalanceNumber(RewardTokenBalance)
+  const RewardTokenBalance = useTokenBalance(tokenRewardAddress)
+  const formatTokenBalance = getBalanceNumber(RewardTokenBalance.balance)
   
   
   // const valNumber = new BigNumber(val)
@@ -59,7 +59,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
   // }, [fullBalance, setVal])
 
   const [onPresentStake] = useModal(
-    <StakeModal max={fullBalance} symbol={tokenName} addLiquidityUrl={addLiquidityUrl} inputTitle={t('Stake')} />,
+    <StakeModal onConfirm={onConfirm} max={max} symbol={tokenName} addLiquidityUrl={addLiquidityUrl} inputTitle={t('Stake')} />,
   )
 
   return (
@@ -67,42 +67,10 @@ const DepositModal: React.FC<DepositModalProps> = ({
       <Text color="textSubtle" fontSize="14px" style={{ paddingBottom: '30px', marginTop: '-50px' }}>
         Staking, balance, and earnings
       </Text>
-
-      {/* <ModalInput
-        value={val}
-        onSelectMax={handleSelectMax}
-        onChange={handleChange}
-        max={fullBalance}
-        symbol={tokenName}
-        addLiquidityUrl={addLiquidityUrl}
-        inputTitle={t('Stake')}
-      />
-
-      <ModalActions>
-        <Button variant="secondary" onClick={onDismiss} fullWidth disabled={pendingTx}>
-          {t('Cancel')}
-        </Button>
-        <Button
-          fullWidth
-          disabled={pendingTx || !valNumber.isFinite() || valNumber.eq(0) || valNumber.gt(fullBalanceNumber)}
-          onClick={async () => {
-            setPendingTx(true)
-            await onConfirm(val)
-            setPendingTx(false)
-            onDismiss()
-          }}
-        >
-          {pendingTx ? t('Pending Confirmation') : t('Confirm')}
-        </Button>
-      </ModalActions>
-      <LinkExternal href={addLiquidityUrl} style={{ alignSelf: 'center' }}>
-        {t('Get')} {tokenName}
-      </LinkExternal> */}
-
       <Container>
         <DetailsCont>
           <Text bold fontSize="24px">
-          {/* {formatTokenBalance === 0? '0.0000': formatTokenBalance} */}
+          {formatTokenBalance === 0? '0.0000': formatTokenBalance}
           </Text>
           <Text color="textSubtle" fontSize="14px">
             {tokenReward}
