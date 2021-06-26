@@ -69,18 +69,18 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
   }, [stakedBalance])
 
   const [onPresentDeposit] = useModal(
-    <DepositModal 
-    max={tokenBalance} 
-    onConfirm={onStake} 
-    tokenName={tokenName} 
-    addLiquidityUrl={addLiquidityUrl} 
-    addTokenUrl={addTokenUrl} 
-    tokenReward={farm.quoteToken.symbol} 
-    tokenRewardAddress={farm.quoteToken.address[97]}
-    tokenBalance={farm.userData.tokenBalance} 
-    stakedBalance={farm.userData.stakedBalance} 
-    tokenEarnings={farm.userData.earnings}
-    
+    <DepositModal
+      max={tokenBalance}
+      onConfirm={onStake}
+      tokenName={tokenName}
+      addLiquidityUrl={addLiquidityUrl}
+      addTokenUrl={addTokenUrl}
+      tokenReward={farm.quoteToken.symbol}
+      tokenRewardAddress={farm.quoteToken.address[97]}
+      tokenBalance={farm.userData.tokenBalance}
+      stakedBalance={farm.userData.stakedBalance}
+      tokenEarnings={farm.userData.earnings}
+      farm={farm}
     />,
   )
   const [onPresentWithdraw] = useModal(
@@ -99,20 +99,6 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
     )
   }
 
-  // (
-  //   <IconButtonWrapper>
-  //     <IconButton variant="tertiary" onClick={onPresentWithdraw} mr="6px">
-  //       <MinusIcon color="primary" width="14px" />
-  //     </IconButton>
-  //     <IconButton
-  //       variant="tertiary"
-  //       onClick={onPresentDeposit}
-  //       disabled={['history', 'archived'].some((item) => location.pathname.includes(item))}
-  //     >
-  //       <AddIcon color="primary" width="14px" />
-  //     </IconButton>
-  //   </IconButtonWrapper>
-  // )
   return (
     <Flex justifyContent="space-between" alignItems="center">
       {/* <Heading color={stakedBalance.eq(0) ? 'textDisabled' : 'text'}>{displayBalance()}</Heading> */}

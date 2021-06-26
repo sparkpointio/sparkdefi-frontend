@@ -16,7 +16,7 @@ interface StakeModalInterface {
 }
 
 const Stake: React.FC<StakeModalInterface> = ({ onDismiss, max, symbol, addLiquidityUrl, inputTitle, onConfirm, }) => {
-  const [val, setVal] = useState('')
+  const [val, setVal] = useState('0')
   const [pendingTx, setPendingTx] = useState(false)
   const valNumber = new BigNumber(val)
   const fullBalance = useMemo(() => {
@@ -36,7 +36,6 @@ const Stake: React.FC<StakeModalInterface> = ({ onDismiss, max, symbol, addLiqui
   const handleSelectMax = useCallback(() => {
     setVal(fullBalance)
   }, [fullBalance, setVal])
-
   return (
     <Modal title="" onDismiss={!pendingTx && onDismiss}>
       <Container>
@@ -60,16 +59,20 @@ const Stake: React.FC<StakeModalInterface> = ({ onDismiss, max, symbol, addLiqui
         onClick={onDismiss}
         disabled={pendingTx}
         >
-
-          Approve
+         Cancel
         </CancelButton>
         <DepositButton
-        disabled={pendingTx || !valNumber.isFinite() || valNumber.eq(0) || valNumber.gt(fullBalanceNumber)}
+        // disabled={pendingTx || !valNumber.isFinite() || valNumber.eq(0) || valNumber.gt(fullBalanceNumber)}
         onClick={async () => {
-          setPendingTx(true)
-          await onConfirm(val)
-          setPendingTx(false)
-          onDismiss()
+          try {
+            setPendingTx(true)
+            await onConfirm(val)
+            setPendingTx(false)
+            onDismiss()
+          }
+          catch (e) {
+            setPendingTx(false)
+          }
         }}
         >
         Deposit

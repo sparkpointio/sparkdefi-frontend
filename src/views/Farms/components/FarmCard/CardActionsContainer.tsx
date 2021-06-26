@@ -59,7 +59,6 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidi
       console.error(e)
     }
   }, [onApprove, dispatch, account, pid])
-
   const renderDepositButton = () => {
     return (
       <StakeAction

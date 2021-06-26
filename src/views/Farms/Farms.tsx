@@ -325,7 +325,7 @@ const Farms: React.FC = () => {
         </div>
 
         <FlexLayout>
-          {farmsStakedMemoized.map((farm) => (
+          {farmsList(activeFarms).map((farm) => (
             <FarmCard key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} />
           ))}
         </FlexLayout>
@@ -342,7 +342,7 @@ const Farms: React.FC = () => {
           </div>
 
         <FlexLayout>
-            {farmsStakedMemoized.map((farm) => (
+            {farmsList(inactiveFarms).map((farm) => (
               <FarmCard key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed/>
             ))}
         </FlexLayout>

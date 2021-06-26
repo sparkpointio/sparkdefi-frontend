@@ -1,15 +1,24 @@
 import BigNumber from 'bignumber.js'
 import React, { useCallback, useMemo, useState } from 'react'
+import { useWeb3React } from '@web3-react/core'
 import { Button, Modal, LinkExternal, Text, useModal, Dropdown } from '@sparkpointio/sparkswap-uikit'
 import { ChevronDown, ChevronUp } from 'react-feather'
-  import useTokenBalance from 'hooks/useTokenBalance'
+import { useApprove } from 'hooks/useApprove'
+import { useERC20 } from 'hooks/useContract'
+import useTokenBalance from 'hooks/useTokenBalance'
+import { useAppDispatch } from 'state'
+import { Farm } from 'state/types'
+import { fetchFarmUserDataAsync } from 'state/farms'
+import { getAddress } from 'utils/addressHelpers'
+import { BIG_ZERO } from 'utils/bigNumber'
+import { getBalanceAmount, getFullDisplayBalance, getBalanceNumber} from 'utils/formatBalance'
+import { useTranslation } from 'contexts/Localization'
 import ModalActions from 'components/ModalActions'
 import ModalInput from 'components/ModalInput'
-import { useTranslation } from 'contexts/Localization'
-import { getFullDisplayBalance, getBalanceNumber } from 'utils/formatBalance'
 import Container, { ActionDiv, DetailsCont, ModalFooter } from './Styled'
 import { ModalHr } from './Divider'
 import StakeModal from './Modals/Stake'
+
 
 
 interface DepositModalProps {
@@ -24,6 +33,7 @@ interface DepositModalProps {
   tokenBalance?: string
   stakedBalance?: string
   tokenEarnings?: string
+  farm?: Farm
 }
 
 const DepositModal: React.FC<DepositModalProps> = ({
@@ -37,27 +47,44 @@ const DepositModal: React.FC<DepositModalProps> = ({
   tokenBalance,
   stakedBalance,
   tokenEarnings,
-  tokenRewardAddress
+  tokenRewardAddress,
+  farm
 }) => {
-  // const [val, setVal] = useState('')
+  const [requestedApproval, setRequestedApproval] = useState(false)
   const [pendingTx, setPendingTx] = useState(false)
   const { t } = useTranslation()
   const [activeSelect, setActiveSelect] = useState(false)
   const fullBalance = useMemo(() => {
     return getFullDisplayBalance(max)
   }, [max])
-
+  const {
+    allowance: allowanceAsString = 0,
+    tokenBalance: tokenBalanceAsString = 0,
+    stakedBalance: stakedBalanceAsString = 0,
+    earnings: earningsAsString = 0,
+  } = farm.userData || {}
+  const allowance = new BigNumber(allowanceAsString)
+  const earnings = new BigNumber(tokenBalanceAsString)
+  const { account } = useWeb3React()
+  const dispatch = useAppDispatch();
   const RewardTokenBalance = useTokenBalance(tokenRewardAddress)
   const formatTokenBalance = getBalanceNumber(RewardTokenBalance.balance)
-  
-  
-  // const valNumber = new BigNumber(val)
-  // const fullBalanceNumber = new BigNumber(fullBalance)
-
-  // const handleSelectMax = useCallback(() => {
-  //   setVal(fullBalance)
-  // }, [fullBalance, setVal])
-
+  const { pid, lpAddresses } = farm
+  const lpAddress = getAddress(lpAddresses)
+  const isApproved = account && allowance && allowance.isGreaterThan(0)
+  const lpContract = useERC20(lpAddress)
+  const { onApprove } = useApprove(lpContract)
+  const handleApprove = useCallback(async () => {
+    try {
+      setRequestedApproval(true)
+      await onApprove()
+      dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
+      setRequestedApproval(false)
+    } catch (e) {
+      console.error(e)
+    }
+  }, [onApprove, dispatch, account, pid])
+  const rawEarningsBalance = account ? getBalanceAmount(earnings) : BIG_ZERO
   const [onPresentStake] = useModal(
     <StakeModal onConfirm={onConfirm} max={max} symbol={tokenName} addLiquidityUrl={addLiquidityUrl} inputTitle={t('Stake')} />,
   )
@@ -102,9 +129,15 @@ const DepositModal: React.FC<DepositModalProps> = ({
             Your {tokenName} Deposits
           </Text>
           <ActionDiv>
-            <Button fullWidth onClick={onPresentStake}>
-              Stake Tokens
-            </Button>
+            {isApproved?
+              (<Button fullWidth onClick={onPresentStake}>
+                Stake Tokens
+              </Button>):
+              (<Button fullWidth onClick={handleApprove} disabled={requestedApproval}>
+                Approve
+              </Button>)
+            }
+            
           </ActionDiv>
         </DetailsCont>
       </Container>
@@ -135,7 +168,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
               </Button>
             }
           >
-            <Button fullWidth onClick={onDismiss}>
+            <Button fullWidth onClick={onDismiss}  disabled={rawEarningsBalance.eq(0) || pendingTx} >
               <Text>Claim</Text>
             </Button>
             <Button fullWidth onClick={onDismiss}>
