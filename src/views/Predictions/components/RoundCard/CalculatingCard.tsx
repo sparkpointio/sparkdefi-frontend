@@ -17,7 +17,7 @@ const CalculatingCard: React.FC<CalculatingCardProps> = ({ round }) => {
   const interval = useGetTotalIntervalBlocks()
   const estimatedEndBlock = round.startBlock + interval
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
-    t("This round's closing transaction has been submitted to the blockchain, and is waiting to be confirmed."),
+    t('This round’s closing transaction has been submitted to the blockchain, and is awaiting confirmation.'),
     { placement: 'bottom' },
   )
 
@@ -36,11 +36,9 @@ const CalculatingCard: React.FC<CalculatingCardProps> = ({ round }) => {
           <RoundResultBox>
             <Flex alignItems="center" justifyContent="center" flexDirection="column">
               <Spinner size={96} />
-              <Flex mt="8px">
-                <span ref={targetRef}>
-                  <TooltipText>{t('Calculating')}</TooltipText>
-                  <InfoIcon />
-                </span>
+              <Flex mt="8px" ref={targetRef}>
+                <TooltipText>{t('Calculating')}</TooltipText>
+                <InfoIcon ml="4px" />
               </Flex>
             </Flex>
           </RoundResultBox>

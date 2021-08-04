@@ -1,5 +1,6 @@
 // Set of helper functions to facilitate wallet setup
 
+import { BASE_BSC_SCAN_URL } from 'config'
 import { nodes } from './getRpcUrl'
 
 /**
@@ -10,20 +11,21 @@ export const setupNetwork = async () => {
   const provider = (window as WindowChain).ethereum
   if (provider) {
     const chainId = parseInt(process.env.REACT_APP_CHAIN_ID, 10)
+    console.log(process.env.REACT_APP_CHAIN_ID)
     try {
       await provider.request({
         method: 'wallet_addEthereumChain',
         params: [
           {
             chainId: `0x${chainId.toString(16)}`,
-            chainName: 'Binance Smart Chain Mainnet',
+            chainName: 'Binance Smart Chain Testnet',
             nativeCurrency: {
               name: 'BNB',
               symbol: 'bnb',
               decimals: 18,
             },
             rpcUrls: nodes,
-            blockExplorerUrls: ['https://bscscan.com/'],
+            blockExplorerUrls: [`${BASE_BSC_SCAN_URL}/`],
           },
         ],
       })

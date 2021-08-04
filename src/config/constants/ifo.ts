@@ -10,9 +10,34 @@ const cakeBnbLpToken: Token = {
 
 const ifos: Ifo[] = [
   {
+    id: 'kalmar',
+    address: '0x1aFB32b76696CdF05593Ca3f3957AEFB23a220FB',
+    isActive: true,
+    name: 'Kalmar (KALM)',
+    poolBasic: {
+      saleAmount: '375,000 KALM',
+      raiseAmount: '$750,000',
+      cakeToBurn: '$375,000',
+      distributionRatio: 0.3,
+    },
+    poolUnlimited: {
+      saleAmount: '875,000 KALM',
+      raiseAmount: '$2,500,000',
+      cakeToBurn: '$1,250,000',
+      distributionRatio: 0.7,
+    },
+    currency: cakeBnbLpToken,
+    token: tokens.kalm,
+    releaseBlockNumber: 7707736,
+    campaignId: '511110000',
+    articleUrl: 'https://pancakeswap.medium.com/kalmar-kalm-ifo-to-be-hosted-on-pancakeswap-4540059753e4',
+    tokenOfferingPrice: 2.0,
+    version: 2,
+  },
+  {
     id: 'hotcross',
     address: '0xb664cdbe385656F8c54031c0CB12Cea55b584b63',
-    isActive: true,
+    isActive: false,
     name: 'Hot Cross (HOTCROSS)',
     poolBasic: {
       saleAmount: '15,000,000 HOTCROSS',
@@ -32,7 +57,7 @@ const ifos: Ifo[] = [
     campaignId: '511100000',
     articleUrl: 'https://pancakeswap.medium.com/hot-cross-hotcross-ifo-to-be-hosted-on-pancakeswap-10e70f1f6841',
     tokenOfferingPrice: 0.05,
-    isV1: false,
+    version: 2,
   },
   {
     id: 'horizon',
@@ -57,7 +82,7 @@ const ifos: Ifo[] = [
     campaignId: '511090000',
     articleUrl: 'https://pancakeswap.medium.com/horizon-protocol-hzn-ifo-to-be-hosted-on-pancakeswap-51f79601c9d8',
     tokenOfferingPrice: 0.25,
-    isV1: false,
+    version: 2,
   },
   {
     id: 'belt',
@@ -76,7 +101,7 @@ const ifos: Ifo[] = [
     campaignId: '511080000',
     articleUrl: 'https://pancakeswap.medium.com/belt-fi-belt-ifo-to-be-hosted-on-pancakeswap-353585117e32',
     tokenOfferingPrice: null,
-    isV1: true,
+    version: 1,
   },
   {
     id: 'watch',
@@ -95,7 +120,7 @@ const ifos: Ifo[] = [
     campaignId: '511070000',
     articleUrl: 'https://pancakeswap.medium.com/yieldwatch-watch-ifo-to-be-hosted-on-pancakeswap-d24301f17241',
     tokenOfferingPrice: null,
-    isV1: true,
+    version: 1,
   },
   {
     id: 'berry',
@@ -114,7 +139,7 @@ const ifos: Ifo[] = [
     campaignId: '511060000',
     articleUrl: 'https://pancakeswap.medium.com/berry-bry-ifo-to-be-hosted-on-pancakeswap-b4f9095e9cdb',
     tokenOfferingPrice: null,
-    isV1: true,
+    version: 1,
   },
   {
     id: 'soteria',
@@ -133,7 +158,7 @@ const ifos: Ifo[] = [
     campaignId: '511050000',
     articleUrl: 'https://pancakeswap.medium.com/soteria-sota-ifo-to-be-hosted-on-pancakeswap-64b727c272ae',
     tokenOfferingPrice: null,
-    isV1: true,
+    version: 1,
   },
   {
     id: 'helmet',
@@ -152,7 +177,7 @@ const ifos: Ifo[] = [
     campaignId: '511040000',
     articleUrl: 'https://pancakeswap.medium.com/1-000-000-helmet-helmet-ifo-to-be-hosted-on-pancakeswap-3379a2a89a67',
     tokenOfferingPrice: null,
-    isV1: true,
+    version: 1,
   },
   {
     id: 'tenet',
@@ -171,7 +196,7 @@ const ifos: Ifo[] = [
     campaignId: '511030000',
     articleUrl: 'https://pancakeswap.medium.com/tenet-ten-ifo-to-be-hosted-on-pancakeswap-b7e1eb4cb272',
     tokenOfferingPrice: null,
-    isV1: true,
+    version: 1,
   },
   {
     id: 'ditto',
@@ -190,7 +215,7 @@ const ifos: Ifo[] = [
     campaignId: '511020000',
     articleUrl: 'https://pancakeswap.medium.com/ditto-money-ditto-ifo-to-be-hosted-on-pancakeswap-342da3059a66',
     tokenOfferingPrice: null,
-    isV1: true,
+    version: 1,
   },
   {
     id: 'blink',
@@ -209,7 +234,7 @@ const ifos: Ifo[] = [
     campaignId: '511010000',
     articleUrl: 'https://medium.com/pancakeswap/1-000-000-ifo-blink-joins-pancakeswap-15841800bdd8',
     tokenOfferingPrice: null,
-    isV1: true,
+    version: 1,
   },
 ]
 

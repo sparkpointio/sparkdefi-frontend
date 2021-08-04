@@ -1,6 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Flex, Heading, Text, Link, useTooltip } from '@pancakeswap/uikit'
+import { useTranslation } from 'contexts/Localization'
+import { ContextApi } from 'contexts/Localization/types'
+import { getBscScanBlockNumberUrl } from 'utils/bscscan'
 
 export interface TimerProps {
   timerStage?: string
@@ -21,14 +24,16 @@ const StyledTimerFlex = styled(Flex)<{ showTooltip?: boolean }>`
 `
 
 const Timer = ({ minutes, hours, days, showTooltip, HeadingTextComponent, BodyTextComponent }) => {
+  const { t } = useTranslation()
+
   return (
     <StyledTimerFlex alignItems="flex-end" showTooltip={showTooltip}>
       <HeadingTextComponent mr="2px">{days}</HeadingTextComponent>
-      <BodyTextComponent mr="16px">d</BodyTextComponent>
+      <BodyTextComponent mr="16px">{t('d')}</BodyTextComponent>
       <HeadingTextComponent mr="2px">{hours}</HeadingTextComponent>
-      <BodyTextComponent mr="16px">h</BodyTextComponent>
+      <BodyTextComponent mr="16px">{t('h')}</BodyTextComponent>
       <HeadingTextComponent mr="2px">{minutes}</HeadingTextComponent>
-      <BodyTextComponent>m</BodyTextComponent>
+      <BodyTextComponent>{t('m')}</BodyTextComponent>
     </StyledTimerFlex>
   )
 }
@@ -44,13 +49,13 @@ const DefaultBodyTextComponent = ({ children, ...props }) => (
   </Text>
 )
 
-const TooltipContent = ({ blockNumber }) => (
+const TooltipContent = ({ blockNumber, t }: { blockNumber: number; t: ContextApi['t'] }): JSX.Element => (
   <>
     <Text color="body" mb="10px" fontWeight="600">
-      Block {blockNumber}
+      {t('Block %num%', { num: blockNumber })}
     </Text>
-    <Link external href={`https://bscscan.com/block/${blockNumber}`}>
-      View on BscScan
+    <Link external href={getBscScanBlockNumberUrl(blockNumber)}>
+      {t('View on BscScan')}
     </Link>
   </>
 )
@@ -65,7 +70,8 @@ const Wrapper: React.FC<TimerProps> = ({
   HeadingTextComponent = DefaultHeadingTextComponent,
   BodyTextComponent = DefaultBodyTextComponent,
 }) => {
-  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipContent blockNumber={blockNumber} />, {
+  const { t } = useTranslation()
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipContent blockNumber={blockNumber} t={t} />, {
     placement: 'bottom',
   })
   const shouldDisplayTooltip = showTooltip && tooltipVisible

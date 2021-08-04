@@ -1,6 +1,6 @@
 import React, { lazy, Suspense, useContext, useMemo } from 'react'
 import styled from 'styled-components'
-import { Text } from '@pancakeswap/uikit'
+import { Flex, Text } from '@pancakeswap/uikit'
 import PastLotteryDataContext from 'contexts/PastLotteryDataContext'
 import { useTranslation } from 'contexts/Localization'
 import useTheme from 'hooks/useTheme'
@@ -44,22 +44,24 @@ const HistoryChart: React.FC<HistoryChartProps> = ({ showLast }) => {
     }
   }
 
-  const chartData = {
-    labels: getDataArray('lotteryNumber'),
-    datasets: [
-      {
-        label: 'Pool Size',
-        data: getDataArray('poolSize'),
-        yAxisID: 'y-axis-pool',
-        ...lineStyles({ color: '#7A6EAA' }),
-      },
-      {
-        label: 'Burned',
-        data: getDataArray('burned'),
-        yAxisID: 'y-axis-burned',
-        ...lineStyles({ color: '#1FC7D4' }),
-      },
-    ],
+  const chartData = () => {
+    return {
+      labels: getDataArray('lotteryNumber'),
+      datasets: [
+        {
+          label: t('Pool Size'),
+          data: getDataArray('poolSize'),
+          yAxisID: 'y-axis-pool',
+          ...lineStyles({ color: '#7A6EAA' }),
+        },
+        {
+          label: t('Burned'),
+          data: getDataArray('burned'),
+          yAxisID: 'y-axis-burned',
+          ...lineStyles({ color: '#1FC7D4' }),
+        },
+      ],
+    }
   }
 
   const axesStyles = ({ color, lineHeight, prefix = '' }) => {
@@ -107,7 +109,7 @@ const HistoryChart: React.FC<HistoryChartProps> = ({ showLast }) => {
           },
           labelColor: (tooltipItem, chart) => {
             return {
-              borderColor: chart.config.data.datasets[tooltipItem.datasetIndex].borderColor,
+              borderColor: chart.config.data.datasets[tooltipItem.datasetIndex].cardBorder,
               backgroundColor: chart.config.data.datasets[tooltipItem.datasetIndex].borderColor,
             }
           },
@@ -146,11 +148,17 @@ const HistoryChart: React.FC<HistoryChartProps> = ({ showLast }) => {
         </InnerWrapper>
       )}
       {!historyError && historyData.length > 1 ? (
-        <Suspense fallback={<div>{t('Loading...')}</div>}>
+        <Suspense
+          fallback={
+            <Flex justifyContent="center">
+              <Loading />
+            </Flex>
+          }
+        >
           {showLast === 50 || showLast === 100 ? (
-            <Bar data={chartData} options={options} />
+            <Bar data={chartData()} options={options} />
           ) : (
-            <Line data={chartData} options={options} type="line" />
+            <Line data={chartData()} options={options} type="line" />
           )}
         </Suspense>
       ) : (

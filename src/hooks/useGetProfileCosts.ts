@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'contexts/Localization'
 import BigNumber from 'bignumber.js'
-import { getProfileContract } from 'utils/contractHelpers'
-import makeBatchRequest from 'utils/makeBatchRequest'
 import { BIG_ZERO } from 'utils/bigNumber'
+import { multicallv2 } from 'utils/multicall'
+import profileABI from 'config/abi/pancakeProfile.json'
+import { getPancakeProfileAddress } from 'utils/addressHelpers'
 import useToast from './useToast'
 
 const useGetProfileCosts = () => {
+  const { t } = useTranslation()
   const [costs, setCosts] = useState({
     numberCakeToReactivate: BIG_ZERO,
     numberCakeToRegister: BIG_ZERO,
@@ -16,25 +19,27 @@ const useGetProfileCosts = () => {
   useEffect(() => {
     const fetchCosts = async () => {
       try {
-        const profileContract = getProfileContract()
-        const [numberCakeToReactivate, numberCakeToRegister, numberCakeToUpdate] = await makeBatchRequest([
-          profileContract.methods.numberCakeToReactivate().call,
-          profileContract.methods.numberCakeToRegister().call,
-          profileContract.methods.numberCakeToUpdate().call,
-        ])
+        const calls = ['numberCakeToReactivate', 'numberCakeToRegister', 'numberCakeToUpdate'].map((method) => ({
+          address: getPancakeProfileAddress(),
+          name: method,
+        }))
+        const [[numberCakeToReactivate], [numberCakeToRegister], [numberCakeToUpdate]] = await multicallv2(
+          profileABI,
+          calls,
+        )
 
         setCosts({
-          numberCakeToReactivate: new BigNumber(numberCakeToReactivate as string),
-          numberCakeToRegister: new BigNumber(numberCakeToRegister as string),
-          numberCakeToUpdate: new BigNumber(numberCakeToUpdate as string),
+          numberCakeToReactivate: new BigNumber(numberCakeToReactivate.toString()),
+          numberCakeToRegister: new BigNumber(numberCakeToRegister.toString()),
+          numberCakeToUpdate: new BigNumber(numberCakeToUpdate.toString()),
         })
       } catch (error) {
-        toastError('Error', 'Could not retrieve CAKE costs for profile')
+        toastError(t('Error'), t('Could not retrieve CAKE costs for profile'))
       }
     }
 
     fetchCosts()
-  }, [setCosts, toastError])
+  }, [setCosts, toastError, t])
 
   return costs
 }

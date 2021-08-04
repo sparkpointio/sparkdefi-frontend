@@ -1,7 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Text, Button, Input, InputProps, Flex, Link } from '@pancakeswap/uikit'
+import { Text, Button, Input, InputProps, Flex, Link } from '@sparkpointio/sparkswap-uikit'
 import { useTranslation } from 'contexts/Localization'
+import { BigNumber } from 'bignumber.js'
 
 interface ModalInputProps {
   max: string
@@ -12,6 +13,7 @@ interface ModalInputProps {
   value: string
   addLiquidityUrl?: string
   inputTitle?: string
+  decimals?: number
 }
 
 const getBoxShadow = ({ isWarning = false, theme }) => {
@@ -25,9 +27,9 @@ const getBoxShadow = ({ isWarning = false, theme }) => {
 const StyledTokenInput = styled.div<InputProps>`
   display: flex;
   flex-direction: column;
-  background-color: ${({ theme }) => theme.colors.input};
-  border-radius: 16px;
-  box-shadow: ${getBoxShadow};
+  background-color: transparent;
+  border: 2px solid ${({theme}) => theme.colors.primary};
+  // box-shadow: ${getBoxShadow};
   color: ${({ theme }) => theme.colors.text};
   padding: 8px 16px 8px 0;
   width: 100%;
@@ -35,16 +37,20 @@ const StyledTokenInput = styled.div<InputProps>`
 
 const StyledInput = styled(Input)`
   box-shadow: none;
-  width: 60px;
+  flex:1;
   margin: 0 8px;
   padding: 0 8px;
-
+  background: none;
   ${({ theme }) => theme.mediaQueries.xs} {
     width: 80px;
   }
 
   ${({ theme }) => theme.mediaQueries.sm} {
     width: auto;
+  }
+
+  &:focus:not(:disabled) {
+    box-shadow: none; 
   }
 `
 
@@ -64,6 +70,7 @@ const ModalInput: React.FC<ModalInputProps> = ({
   value,
   addLiquidityUrl,
   inputTitle,
+  decimals = 18,
 }) => {
   const { t } = useTranslation()
   const isBalanceZero = max === '0' || !max
@@ -72,25 +79,22 @@ const ModalInput: React.FC<ModalInputProps> = ({
     if (isBalanceZero) {
       return '0'
     }
-    const balanceNumber = Number(balance)
-    if (balanceNumber > 0 && balanceNumber < 0.0001) {
-      return balanceNumber.toLocaleString(undefined, { maximumFractionDigits: 20 })
+    const balanceBigNumber = new BigNumber(balance)
+    if (balanceBigNumber.gt(0) && balanceBigNumber.lt(0.0001)) {
+      return balanceBigNumber.toLocaleString()
     }
-    return balanceNumber.toLocaleString()
+    return balanceBigNumber.toFixed(3, BigNumber.ROUND_DOWN)
   }
 
   return (
-    <div style={{ position: 'relative' }}>
+    <div style={{ position: 'relative', margin: '15px 0px' }}>
       <StyledTokenInput isWarning={isBalanceZero}>
-        <Flex justifyContent="space-between" pl="16px">
+        {/* <Flex justifyContent="space-between" pl="16px">
           <Text fontSize="14px">{inputTitle}</Text>
-          <Text fontSize="14px">
-            {t('Balance')}: {displayBalance(max)}
-          </Text>
-        </Flex>
+        </Flex> */}
         <Flex alignItems="flex-end" justifyContent="space-around">
           <StyledInput
-            pattern="^[0-9]*[.,]?[0-9]*$"
+            pattern={`^[0-9]*[.,]?[0-9]{0,${decimals}}$`}
             inputMode="decimal"
             step="any"
             min="0"
@@ -98,20 +102,25 @@ const ModalInput: React.FC<ModalInputProps> = ({
             placeholder="0"
             value={value}
           />
-          <Button scale="sm" onClick={onSelectMax} mr="8px">
+          <Button size="sm" onClick={onSelectMax} mr="8px">
             {t('Max')}
           </Button>
-          <Text fontSize="16px">{symbol}</Text>
+          {/* <Text fontSize="16px">{symbol}</Text> */}
         </Flex>
       </StyledTokenInput>
-      {isBalanceZero && (
+      <Flex> 
+          <Text fontSize="14px" color="textSubtle">
+            {t('Available')}: {displayBalance(max)}
+          </Text>
+        </Flex>
+      {/* {isBalanceZero && (
         <StyledErrorMessage fontSize="14px" color="failure">
-          No tokens to stake:{' '}
+          {t('No tokens to stake')}:{' '}
           <Link fontSize="14px" bold={false} href={addLiquidityUrl} external color="failure">
-            {t('get')} {symbol}
+            {t('Get %symbol%', { symbol })}
           </Link>
         </StyledErrorMessage>
-      )}
+      )} */}
     </div>
   )
 }

@@ -11,7 +11,6 @@ import StakeModal from '../Modals/StakeModal'
 interface StakeActionsProps {
   pool: Pool
   stakingTokenBalance: BigNumber
-  stakingTokenPrice: number
   stakedBalance: BigNumber
   isBnbPool: boolean
   isStaked: ConstrainBoolean
@@ -21,19 +20,19 @@ interface StakeActionsProps {
 const StakeAction: React.FC<StakeActionsProps> = ({
   pool,
   stakingTokenBalance,
-  stakingTokenPrice,
   stakedBalance,
   isBnbPool,
   isStaked,
   isLoading = false,
 }) => {
-  const { stakingToken, stakingLimit, isFinished, userData } = pool
+  const { stakingToken, stakingTokenPrice, stakingLimit, isFinished, userData } = pool
   const { t } = useTranslation()
   const stakedTokenBalance = getBalanceNumber(stakedBalance, stakingToken.decimals)
   const stakedTokenDollarBalance = getBalanceNumber(
     stakedBalance.multipliedBy(stakingTokenPrice),
     stakingToken.decimals,
   )
+
   const [onPresentTokenRequired] = useModal(<NotEnoughTokensModal tokenSymbol={stakingToken.symbol} />)
 
   const [onPresentStake] = useModal(
@@ -56,7 +55,7 @@ const StakeAction: React.FC<StakeActionsProps> = ({
   )
 
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
-    t("You've already staked the maximum amount you can stake in this pool!"),
+    t('You’ve already staked the maximum amount you can stake in this pool!'),
     { placement: 'bottom' },
   )
 
@@ -68,16 +67,18 @@ const StakeAction: React.FC<StakeActionsProps> = ({
         <Flex flexDirection="column">
           <>
             <Balance bold fontSize="20px" decimals={3} value={stakedTokenBalance} />
-            <Text fontSize="12px" color="textSubtle">
-              <Balance
-                fontSize="12px"
-                color="textSubtle"
-                decimals={2}
-                value={stakedTokenDollarBalance}
-                prefix="~"
-                unit=" USD"
-              />
-            </Text>
+            {stakingTokenPrice !== 0 && (
+              <Text fontSize="12px" color="textSubtle">
+                <Balance
+                  fontSize="12px"
+                  color="textSubtle"
+                  decimals={2}
+                  value={stakedTokenDollarBalance}
+                  prefix="~"
+                  unit=" USD"
+                />
+              </Text>
+            )}
           </>
         </Flex>
         <Flex>

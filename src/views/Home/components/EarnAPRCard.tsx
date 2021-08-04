@@ -1,13 +1,15 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { Heading, Card, CardBody, Flex, ArrowForwardIcon, Skeleton } from '@pancakeswap/uikit'
 import max from 'lodash/max'
 import { NavLink } from 'react-router-dom'
-import { useTranslation } from 'contexts/Localization'
 import BigNumber from 'bignumber.js'
+import { useTranslation } from 'contexts/Localization'
+import { useAppDispatch } from 'state'
+import { useFarms, usePriceCakeBusd } from 'state/hooks'
+import { fetchFarmsPublicDataAsync, nonArchivedFarms } from 'state/farms'
 import { getFarmApr } from 'utils/apr'
-import { useFarms, usePriceCakeBusd, useGetApiPrices } from 'state/hooks'
-import { getAddress } from 'utils/addressHelpers'
+import useIntersectionObserver from 'hooks/useIntersectionObserver'
 
 const StyledFarmStakingCard = styled(Card)`
   margin-left: auto;
@@ -28,41 +30,69 @@ const CardMidContent = styled(Heading).attrs({ scale: 'xl' })`
   line-height: 44px;
 `
 const EarnAPRCard = () => {
+  const [isFetchingFarmData, setIsFetchingFarmData] = useState(true)
   const { t } = useTranslation()
   const { data: farmsLP } = useFarms()
-  const prices = useGetApiPrices()
   const cakePrice = usePriceCakeBusd()
+  const dispatch = useAppDispatch()
+  const { observerRef, isIntersecting } = useIntersectionObserver()
+
+  // Fetch farm data once to get the max APR
+  useEffect(() => {
+    const fetchFarmData = async () => {
+      try {
+        await dispatch(fetchFarmsPublicDataAsync(nonArchivedFarms.map((nonArchivedFarm) => nonArchivedFarm.pid)))
+      } finally {
+        setIsFetchingFarmData(false)
+      }
+    }
+
+    if (isIntersecting) {
+      fetchFarmData()
+    }
+  }, [dispatch, setIsFetchingFarmData, isIntersecting])
 
   const highestApr = useMemo(() => {
-    const aprs = farmsLP
-      // Filter inactive farms, because their theoretical APR is super high. In practice, it's 0.
-      .filter((farm) => farm.pid !== 0 && farm.multiplier !== '0X')
-      .map((farm) => {
-        if (farm.lpTotalInQuoteToken && prices) {
-          const quoteTokenPriceUsd = prices[getAddress(farm.quoteToken.address).toLowerCase()]
-          const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(quoteTokenPriceUsd)
-          return getFarmApr(farm.poolWeight, cakePrice, totalLiquidity)
+    if (cakePrice.gt(0)) {
+      const aprs = farmsLP.map((farm) => {
+        // Filter inactive farms, because their theoretical APR is super high. In practice, it's 0.
+        if (farm.pid !== 0 && farm.multiplier !== '0X' && farm.lpTotalInQuoteToken && farm.quoteToken.busdPrice) {
+          const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(farm.quoteToken.busdPrice)
+          return getFarmApr(new BigNumber(farm.poolWeight), cakePrice, totalLiquidity)
         }
         return null
       })
 
-    const maxApr = max(aprs)
-    return maxApr?.toLocaleString('en-US', { maximumFractionDigits: 2 })
-  }, [cakePrice, farmsLP, prices])
+      const maxApr = max(aprs)
+      return maxApr?.toLocaleString('en-US', { maximumFractionDigits: 2 })
+    }
+    return null
+  }, [cakePrice, farmsLP])
+
+  const aprText = highestApr || '-'
+  const earnAprText = t('Earn up to %highestApr% APR in Farms', { highestApr: aprText })
+  const [earnUpTo, InFarms] = earnAprText.split(aprText)
 
   return (
     <StyledFarmStakingCard>
       <NavLink exact activeClassName="active" to="/farms" id="farm-apr-cta">
         <CardBody>
           <Heading color="contrast" scale="lg">
-            Earn up to
+            {earnUpTo}
           </Heading>
           <CardMidContent color="#7645d9">
-            {highestApr ? `${highestApr}% ${t('APR')}` : <Skeleton animation="pulse" variant="rect" height="44px" />}
+            {highestApr && !isFetchingFarmData ? (
+              `${highestApr}%`
+            ) : (
+              <>
+                <Skeleton animation="pulse" variant="rect" height="44px" />
+                <div ref={observerRef} />
+              </>
+            )}
           </CardMidContent>
           <Flex justifyContent="space-between">
             <Heading color="contrast" scale="lg">
-              in Farms
+              {InFarms}
             </Heading>
             <ArrowForwardIcon mt={30} color="primary" />
           </Flex>

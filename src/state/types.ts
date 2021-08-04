@@ -1,5 +1,9 @@
+import { ThunkAction } from 'redux-thunk'
+import { AnyAction } from '@reduxjs/toolkit'
 import BigNumber from 'bignumber.js'
 import { CampaignType, FarmConfig, Nft, PoolConfig, Team } from 'config/constants/types'
+
+export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, State, unknown, AnyAction>
 
 export type TranslatableText =
   | string
@@ -10,13 +14,17 @@ export type TranslatableText =
       }
     }
 
+export type SerializedBigNumber = string
+
 export interface Farm extends FarmConfig {
-  tokenAmount?: BigNumber
-  quoteTokenAmount?: BigNumber
-  lpTotalInQuoteToken?: BigNumber
-  lpTotalSupply?: BigNumber
-  tokenPriceVsQuote?: BigNumber
-  poolWeight?: BigNumber
+  tokenAmountMc?: SerializedBigNumber
+  quoteTokenAmountMc?: SerializedBigNumber
+  tokenAmountTotal?: SerializedBigNumber
+  quoteTokenAmountTotal?: SerializedBigNumber
+  lpTotalInQuoteToken?: SerializedBigNumber
+  lpTotalSupply?: SerializedBigNumber
+  tokenPriceVsQuote?: SerializedBigNumber
+  poolWeight?: SerializedBigNumber
   userData?: {
     allowance: string
     tokenBalance: string
@@ -30,6 +38,10 @@ export interface Pool extends PoolConfig {
   stakingLimit?: BigNumber
   startBlock?: number
   endBlock?: number
+  apr?: number
+  stakingTokenPrice?: number
+  earningTokenPrice?: number
+  isAutoVault?: boolean
   userData?: {
     allowance: BigNumber
     stakingTokenBalance: BigNumber
@@ -86,6 +98,7 @@ export interface CakeVault {
 export interface PoolsState {
   data: Pool[]
   cakeVault: CakeVault
+  userDataLoaded: boolean
 }
 
 export interface ProfileState {
@@ -125,40 +138,6 @@ export interface Achievement {
 
 export interface AchievementState {
   data: Achievement[]
-}
-
-// API Price State
-export interface PriceApiList {
-  /* eslint-disable camelcase */
-  [key: string]: {
-    name: string
-    symbol: string
-    price: string
-    price_BNB: string
-  }
-}
-
-export interface PriceApiListThunk {
-  /* eslint-disable camelcase */
-  [key: string]: number
-}
-
-export interface PriceApiResponse {
-  /* eslint-disable camelcase */
-  updated_at: string
-  data: PriceApiList
-}
-
-export interface PriceApiThunk {
-  /* eslint-disable camelcase */
-  updated_at: string
-  data: PriceApiListThunk
-}
-
-export interface PriceState {
-  isLoading: boolean
-  lastUpdated: string
-  data: PriceApiListThunk
 }
 
 // Block
@@ -226,6 +205,7 @@ export interface Bet {
   amount: number
   position: BetPosition
   claimed: boolean
+  claimedHash: string
   user?: PredictionUser
   round: Round
 }
@@ -282,7 +262,6 @@ export interface State {
   achievements: AchievementState
   block: BlockState
   farms: FarmsState
-  prices: PriceState
   pools: PoolsState
   predictions: PredictionsState
   profile: ProfileState

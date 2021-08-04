@@ -27,14 +27,14 @@ const BattleBanner = () => {
   return (
     <Flex flexDirection="column" justifyContent="center" alignItems="center">
       <ImageWrapper>
-        <Image src={AllBunniesImage} alt="all the bunnies" width={1208} height={659} responsive />
+        <Image src={AllBunniesImage} alt="all the bunnies" width={1208} height={659} />
       </ImageWrapper>
       <StyledHeading1Text>{t('Easter Battle')}</StyledHeading1Text>
       <StyledHeading2Text background="linear-gradient(180deg, #FFD800 0%, #EB8C00 100%)" $fill>
         {t('$200,000 in Prizes!')}
       </StyledHeading2Text>
       <StyledHeading scale="md" color="inputSecondary" mt="16px">
-        {t('Registration starting April 5th')}
+        {t('Registration starting April 5')}
       </StyledHeading>
     </Flex>
   )

@@ -1,142 +1,93 @@
-import { MenuEntry } from '@pancakeswap/uikit'
+import { MenuEntry } from '@sparkpointio/sparkswap-uikit'
 
 const config: MenuEntry[] = [
   {
-    label: 'Home',
-    icon: 'HomeIcon',
-    href: '/',
+    label: "Swap",
+    icon: "TradeIcon",
+    href: "https://sparkswap.finance/#/swap",
   },
   {
-    label: 'Trade',
-    icon: 'TradeIcon',
+    label: "Farm",
+    icon: "FarmIcon",
+    href: "/farms",
+  },
+  {
+    label: "Pool",
+    icon: "PoolIcon",
+    href: "/pools",
+  },
+  {
+    label: "Bridge",
+    icon: "BridgeIcon",
+    href: "https://app.srk.finance/#/bridge",
+  },
+  {
+    label: "Info",
+    icon: "InfoIcon",
+    href: "https://sparkswap.info/#/home",
+  },
+  {
+    label: "Help",
+    icon: "MoreIcon",
+    href: "https://medium.com/theecosystem/a-beginners-guide-to-sparkswap-79f92a2f7074"
+  }
+  // {
+  //   label: 'Trade',
+  //   icon: 'TradeIcon',
+  //   initialOpenState: true,
+  //   items: [
+  //     {
+  //       label: 'Exchange',
+  //       href: '/swap'
+  //     },
+  //     {
+  //       label: 'Liquidity',
+  //       href: '/pool'
+  //     }
+  //   ]
+  // },
+  /*
+  {
+    label: "Info",
+    icon: "InfoIcon",
     items: [
       {
-        label: 'Exchange',
-        href: 'https://exchange.pancakeswap.finance/#/swap',
+        label: "Overview",
+        href: "https://coinmarketcap.com/currencies/sparkpoint/",
       },
       {
-        label: 'Liquidity',
-        href: 'https://exchange.pancakeswap.finance/#/pool',
-      },
-      {
-        label: 'LP Migration',
-        href: 'https://v1exchange.pancakeswap.finance/#/migrate',
-      },
-      {
-        label: 'V1 Liquidity (Old)',
-        href: 'https://v1exchange.pancakeswap.finance/#/pool',
+        label: "Trade SRK",
+        href: "https://srk.sh/trade",
       },
     ],
   },
   {
-    label: 'Farms',
-    icon: 'FarmIcon',
-    href: '/farms',
-  },
-  {
-    label: 'Pools',
-    icon: 'PoolIcon',
-    href: '/pools',
-  },
-  {
-    label: 'Prediction',
-    icon: 'PredictionsIcon',
-    href: '/prediction',
-    status: {
-      text: 'BETA',
-      color: 'warning',
-    },
-  },
-  {
-    label: 'Lottery',
-    icon: 'TicketIcon',
-    href: '/lottery',
-  },
-  {
-    label: 'Collectibles',
-    icon: 'NftIcon',
-    href: '/collectibles',
-  },
-  {
-    label: 'Team Battle',
-    icon: 'TeamBattleIcon',
-    href: '/competition',
-  },
-  {
-    label: 'Teams & Profile',
-    icon: 'GroupsIcon',
+    label: "More",
+    icon: "MoreIcon",
     items: [
       {
-        label: 'Leaderboard',
-        href: '/teams',
+        label: "SparkDeFi",
+        href: "https://srk.finance/",
       },
       {
-        label: 'Task Center',
-        href: '/profile/tasks',
+        label: "SparkPoint",
+        href: "https://sparkpoint.io/",
       },
       {
-        label: 'Your Profile',
-        href: '/profile',
+        label: "Github",
+        href: "https://github.com/sparkpointio",
+      },
+      {
+        label: "White Paper",
+        href: "https://github.com/sparkpointio/sparkdefi-whitepaper/blob/main/WHITEPAPER.md",
+      },
+      {
+        label: "Blog",
+        href: "https://medium.com/theecosystem",
       },
     ],
   },
-  {
-    label: 'Info',
-    icon: 'InfoIcon',
-    items: [
-      {
-        label: 'Overview',
-        href: 'https://pancakeswap.info',
-      },
-      {
-        label: 'Tokens',
-        href: 'https://pancakeswap.info/tokens',
-      },
-      {
-        label: 'Pairs',
-        href: 'https://pancakeswap.info/pairs',
-      },
-      {
-        label: 'Accounts',
-        href: 'https://pancakeswap.info/accounts',
-      },
-    ],
-  },
-  {
-    label: 'IFO',
-    icon: 'IfoIcon',
-    href: '/ifo',
-  },
-  {
-    label: 'More',
-    icon: 'MoreIcon',
-    items: [
-      {
-        label: 'Contact',
-        href: 'https://docs.pancakeswap.finance/contact-us',
-      },
-      {
-        label: 'Voting',
-        href: 'https://voting.pancakeswap.finance',
-      },
-      {
-        label: 'Github',
-        href: 'https://github.com/pancakeswap',
-      },
-      {
-        label: 'Docs',
-        href: 'https://docs.pancakeswap.finance',
-      },
-      {
-        label: 'Blog',
-        href: 'https://pancakeswap.medium.com',
-      },
-      {
-        label: 'Merch',
-        href: 'https://pancakeswap.creator-spring.com/',
-      },
-    ],
-  },
+  */
 ]
 
 export default config

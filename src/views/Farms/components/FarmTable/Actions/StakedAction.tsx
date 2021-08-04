@@ -1,24 +1,26 @@
 import React, { useState, useCallback } from 'react'
 import styled from 'styled-components'
-import { Button, useModal, IconButton, AddIcon, MinusIcon, Skeleton } from '@pancakeswap/uikit'
+import { Button, useModal, IconButton, AddIcon, MinusIcon, Skeleton, Text } from '@pancakeswap/uikit'
 import { useLocation } from 'react-router-dom'
+import { BigNumber } from 'bignumber.js'
 import UnlockButton from 'components/UnlockButton'
+import Balance from 'components/Balance'
 import { useWeb3React } from '@web3-react/core'
-import { useFarmUser } from 'state/hooks'
+import { useFarmUser, useLpTokenPrice } from 'state/hooks'
+import { fetchFarmUserDataAsync } from 'state/farms'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import { useTranslation } from 'contexts/Localization'
 import { useApprove } from 'hooks/useApprove'
-import { getBep20Contract } from 'utils/contractHelpers'
+import { useERC20 } from 'hooks/useContract'
 import { BASE_ADD_LIQUIDITY_URL } from 'config'
+import { useAppDispatch } from 'state'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
-import { getBalanceNumber, getFullDisplayBalance } from 'utils/formatBalance'
+import { getBalanceAmount, getBalanceNumber, getFullDisplayBalance } from 'utils/formatBalance'
 import useStake from 'hooks/useStake'
 import useUnstake from 'hooks/useUnstake'
-import useWeb3 from 'hooks/useWeb3'
-
 import DepositModal from '../../DepositModal'
 import WithdrawModal from '../../WithdrawModal'
-import { ActionContainer, ActionTitles, ActionContent, Earned, Title, Subtle } from './styles'
+import { ActionContainer, ActionTitles, ActionContent, Earned } from './styles'
 
 const IconButtonWrapper = styled.div`
   display: flex;
@@ -42,8 +44,8 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
   const { allowance, tokenBalance, stakedBalance } = useFarmUser(pid)
   const { onStake } = useStake(pid)
   const { onUnstake } = useUnstake(pid)
-  const web3 = useWeb3()
   const location = useLocation()
+  const lpPrice = useLpTokenPrice(lpSymbol)
 
   const isApproved = account && allowance && allowance.isGreaterThan(0)
 
@@ -54,38 +56,53 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
   })
   const addLiquidityUrl = `${BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`
 
+  const handleStake = async (amount: string) => {
+    await onStake(amount)
+    dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
+  }
+
+  const handleUnstake = async (amount: string) => {
+    await onUnstake(amount)
+    dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
+  }
+
   const displayBalance = useCallback(() => {
-    const stakedBalanceNumber = getBalanceNumber(stakedBalance)
-    if (stakedBalanceNumber > 0 && stakedBalanceNumber < 0.0001) {
+    const stakedBalanceBigNumber = getBalanceAmount(stakedBalance)
+    if (stakedBalanceBigNumber.gt(0) && stakedBalanceBigNumber.lt(0.0001)) {
       return getFullDisplayBalance(stakedBalance).toLocaleString()
     }
-    return stakedBalanceNumber.toLocaleString()
+    return stakedBalanceBigNumber.toFixed(3, BigNumber.ROUND_DOWN)
   }, [stakedBalance])
 
   const [onPresentDeposit] = useModal(
-    <DepositModal max={tokenBalance} onConfirm={onStake} tokenName={lpSymbol} addLiquidityUrl={addLiquidityUrl} />,
+    <DepositModal max={tokenBalance} onConfirm={handleStake} tokenName={lpSymbol} addLiquidityUrl={addLiquidityUrl} />,
   )
-  const [onPresentWithdraw] = useModal(<WithdrawModal max={stakedBalance} onConfirm={onUnstake} tokenName={lpSymbol} />)
-
-  const lpContract = getBep20Contract(lpAddress, web3)
-
+  const [onPresentWithdraw] = useModal(
+    <WithdrawModal max={stakedBalance} onConfirm={handleUnstake} tokenName={lpSymbol} />,
+  )
+  const lpContract = useERC20(lpAddress)
+  const dispatch = useAppDispatch()
   const { onApprove } = useApprove(lpContract)
 
   const handleApprove = useCallback(async () => {
     try {
       setRequestedApproval(true)
       await onApprove()
+      dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
+
       setRequestedApproval(false)
     } catch (e) {
       console.error(e)
     }
-  }, [onApprove])
+  }, [onApprove, dispatch, account, pid])
 
   if (!account) {
     return (
       <ActionContainer>
         <ActionTitles>
-          <Subtle>{t('START FARMING')}</Subtle>
+          <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px">
+            {t('Start Farming')}
+          </Text>
         </ActionTitles>
         <ActionContent>
           <UnlockButton width="100%" />
@@ -99,12 +116,26 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
       return (
         <ActionContainer>
           <ActionTitles>
-            <Title>{lpSymbol} </Title>
-            <Subtle>{t('STAKED')}</Subtle>
+            <Text bold textTransform="uppercase" color="secondary" fontSize="12px" pr="4px">
+              {lpSymbol}
+            </Text>
+            <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px">
+              {t('Staked')}
+            </Text>
           </ActionTitles>
           <ActionContent>
             <div>
               <Earned>{displayBalance()}</Earned>
+              {stakedBalance.gt(0) && lpPrice.gt(0) && (
+                <Balance
+                  fontSize="12px"
+                  color="textSubtle"
+                  decimals={2}
+                  value={getBalanceNumber(lpPrice.times(stakedBalance))}
+                  unit=" USD"
+                  prefix="~"
+                />
+              )}
             </div>
             <IconButtonWrapper>
               <IconButton variant="secondary" onClick={onPresentWithdraw} mr="6px">
@@ -126,8 +157,12 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
     return (
       <ActionContainer>
         <ActionTitles>
-          <Subtle>{t('STAKE')} </Subtle>
-          <Title>{lpSymbol}</Title>
+          <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px" pr="4px">
+            {t('Stake').toUpperCase()}
+          </Text>
+          <Text bold textTransform="uppercase" color="secondary" fontSize="12px">
+            {lpSymbol}
+          </Text>
         </ActionTitles>
         <ActionContent>
           <Button
@@ -147,7 +182,9 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
     return (
       <ActionContainer>
         <ActionTitles>
-          <Subtle>{t('START FARMING')}</Subtle>
+          <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px">
+            {t('Start Farming')}
+          </Text>
         </ActionTitles>
         <ActionContent>
           <Skeleton width={180} marginBottom={28} marginTop={14} />
@@ -159,7 +196,9 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
   return (
     <ActionContainer>
       <ActionTitles>
-        <Subtle>{t('ENABLE FARM')}</Subtle>
+        <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px">
+          {t('Enable Farm')}
+        </Text>
       </ActionTitles>
       <ActionContent>
         <Button width="100%" disabled={requestedApproval} onClick={handleApprove} variant="secondary">
