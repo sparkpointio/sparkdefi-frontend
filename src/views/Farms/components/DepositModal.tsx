@@ -19,6 +19,7 @@ import WithdrawModal from './WithdrawModal'
 import Container, { ActionDiv, DetailsCont, ModalFooter } from './Styled'
 import { ModalHr } from './Divider'
 import StakeModal from './Modals/Stake'
+import ClaimModal from './Modals/ClaimModal'
 
 
 
@@ -93,6 +94,8 @@ const DepositModal: React.FC<DepositModalProps> = ({
   const [onPresentStake] = useModal(
     <StakeModal onConfirm={onConfirm} max={max} symbol={tokenName} addLiquidityUrl={addLiquidityUrl} inputTitle={t('Stake')} />,
   )
+
+  const [onPresentClaim] = useModal (<ClaimModal />)
   const [onPresentWithdraw] = useModal(
     <WithdrawModal max={maxStake} onConfirm={handleUnstake} tokenName={tokenName} />,
   )
@@ -176,7 +179,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
               </Button>
             }
           >
-            <Button fullWidth onClick={onDismiss}  disabled={rawEarningsBalance.eq(0) || pendingTx} >
+            <Button fullWidth onClick={onPresentClaim}>
               <Text>Claim</Text>
             </Button>
             <Button fullWidth onClick={onPresentWithdraw}>
