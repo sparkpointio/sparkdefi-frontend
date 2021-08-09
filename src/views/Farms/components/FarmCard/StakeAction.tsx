@@ -81,7 +81,7 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
       stakedBalance={farm.userData.stakedBalance}
       tokenEarnings={farm.userData.earnings}
       farm={farm}
-    />,
+    />
   )
   const [onPresentWithdraw] = useModal(
     <WithdrawModal max={stakedBalance} onConfirm={handleUnstake} tokenName={tokenName} />,

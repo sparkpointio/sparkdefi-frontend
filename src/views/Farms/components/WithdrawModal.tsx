@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js'
 import React, { useCallback, useMemo, useState } from 'react'
-import { Button, Modal } from '@pancakeswap/uikit'
+import { Button, Modal, Text, Flex } from '@sparkpointio/sparkswap-uikit'
 import ModalActions from 'components/ModalActions'
 import ModalInput from 'components/ModalInput'
 import { useTranslation } from 'contexts/Localization'
@@ -38,8 +38,8 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onConfirm, onDismiss, max
   }, [fullBalance, setVal])
 
   return (
-    <Modal title={t('Unstake LP tokens')} onDismiss={onDismiss}>
-      <ModalInput
+    <Modal title="" onDismiss={onDismiss}>
+      {/* <ModalInput
         onSelectMax={handleSelectMax}
         onChange={handleChange}
         value={val}
@@ -63,7 +63,17 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onConfirm, onDismiss, max
         >
           {pendingTx ? t('Pending Confirmation') : t('Confirm')}
         </Button>
-      </ModalActions>
+      </ModalActions> */}
+      <Flex marginTop="-10px" style={{width: '450px'}} alignItems="center" flexDirection="column">
+        <Text>You will be claiming the reward amount of </Text>
+        <Text fontSize="28px" bold>78.912 SRK Tokens</Text>
+        <Text fontSize="28px" bold>AND</Text>
+        <Text>withdrawing the staked amount of</Text>
+        <Text fontSize="28px" bold>678.910 SRK-ETH LP Tokens</Text>
+      </Flex>
+      <Flex justifyContent="center" margin="24px" padding="0px 35px">
+        <Button fullWidth>Confirm</Button>
+      </Flex>
     </Modal>
   )
 }
