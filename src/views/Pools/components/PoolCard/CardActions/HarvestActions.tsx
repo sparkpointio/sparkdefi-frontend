@@ -1,11 +1,15 @@
 import React from 'react'
-import { Flex, Text, Button, Heading, useModal, Skeleton } from '@pancakeswap/uikit'
+import { Heading, useModal, Skeleton } from '@pancakeswap/uikit';
+import { Button, Text, Flex } from '@sparkpointio/sparkswap-uikit';
+import { ChevronDown } from 'react-feather';
 import BigNumber from 'bignumber.js'
 import { Token } from 'config/constants/types'
 import { useTranslation } from 'contexts/Localization'
 import { getFullDisplayBalance, getBalanceNumber, formatNumber } from 'utils/formatBalance'
 import Balance from 'components/Balance'
 import CollectModal from '../Modals/CollectModal'
+
+
 
 interface HarvestActionsProps {
   earnings: BigNumber
@@ -48,9 +52,8 @@ const HarvestActions: React.FC<HarvestActionsProps> = ({
   )
 
   return (
-    <Flex flexDirection="column" mb="16px">
-      <Flex justifyContent="space-between" alignItems="center">
-        <Flex flexDirection="column">
+    <Flex flexDirection="column" mb="16px" marginLeft="5px">
+        {/* <Flex flexDirection="column">
           {isLoading ? (
             <Skeleton width="80px" height="48px" />
           ) : (
@@ -79,13 +82,10 @@ const HarvestActions: React.FC<HarvestActionsProps> = ({
               )}
             </>
           )}
-        </Flex>
-        <Flex>
-          <Button disabled={!hasEarnings} onClick={onPresentCollect}>
-            {isCompoundPool ? t('Collect') : t('Harvest')}
+        </Flex> */}
+          <Button onClick={onPresentCollect} fullWidth variant="secondary">
+            Withdraw <ChevronDown />
           </Button>
-        </Flex>
-      </Flex>
     </Flex>
   )
 }

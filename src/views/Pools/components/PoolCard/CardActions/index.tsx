@@ -2,7 +2,8 @@ import BigNumber from 'bignumber.js'
 import React from 'react'
 import styled from 'styled-components'
 import { BIG_ZERO } from 'utils/bigNumber'
-import { Flex, Text, Box } from '@pancakeswap/uikit'
+import { Flex, Text } from '@sparkpointio/sparkswap-uikit'
+import { Box } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import { PoolCategory } from 'config/constants/types'
 import { Pool } from 'state/types'
@@ -12,6 +13,13 @@ import HarvestActions from './HarvestActions'
 
 const InlineText = styled(Text)`
   display: inline;
+`
+
+const StyledFlex = styled(Flex)`
+  & > * {
+    flex: 1;
+    height: 60px;
+  }
 `
 
 interface CardActionsProps {
@@ -36,36 +44,45 @@ const CardActions: React.FC<CardActionsProps> = ({ pool, stakedBalance }) => {
       <Flex flexDirection="column">
         {harvest && (
           <>
-            <Box display="inline">
-              <InlineText color="secondary" textTransform="uppercase" bold fontSize="12px">
-                {`${earningToken.symbol} `}
-              </InlineText>
-              <InlineText color="textSubtle" textTransform="uppercase" bold fontSize="12px">
-                {t('Earned')}
-              </InlineText>
-            </Box>
-            <HarvestActions
-              earnings={earnings}
-              earningToken={earningToken}
-              sousId={sousId}
-              earningTokenPrice={earningTokenPrice}
-              isBnbPool={isBnbPool}
-              isLoading={isLoading}
-            />
+            <Flex justifyContent="space-between">
+              <Box display="inline">
+                <Text color="text" textTransform="uppercase" bold fontSize="12px">
+                  {`${stakingToken.symbol} Staked`}
+                </Text>
+              </Box>
+              <Box display="inline">
+                <Text color="text" textTransform="uppercase" bold fontSize="12px">
+                  {`${earningToken.symbol} Earned`}
+                </Text>
+              </Box>
+            </Flex>
+            <Flex justifyContent="space-between">
+              <Box display="inline">
+                <Text color="text" textTransform="uppercase" bold fontSize="12px">
+                  {`${stakingTokenBalance} ${stakingToken.symbol}`}
+                </Text>
+              </Box>
+              <Box display="inline">
+                <Text color="text" textTransform="uppercase" bold fontSize="12px">
+                  {`${earnings}`}
+                </Text>
+              </Box>
+            </Flex>
           </>
         )}
-        <Box display="inline">
+        {/* <Box display="inline">
           <InlineText color={isStaked ? 'secondary' : 'textSubtle'} textTransform="uppercase" bold fontSize="12px">
             {isStaked ? stakingToken.symbol : t('Stake')}{' '}
           </InlineText>
           <InlineText color={isStaked ? 'textSubtle' : 'secondary'} textTransform="uppercase" bold fontSize="12px">
             {isStaked ? t('Staked') : `${stakingToken.symbol}`}
           </InlineText>
-        </Box>
-        {needsApproval ? (
+        </Box> */}
+        {!needsApproval ? (
           <ApprovalAction pool={pool} isLoading={isLoading} />
         ) : (
-          <StakeActions
+          <StyledFlex justifyContent="space-between" marginTop="10px">
+             <StakeActions
             isLoading={isLoading}
             pool={pool}
             stakingTokenBalance={stakingTokenBalance}
@@ -73,6 +90,15 @@ const CardActions: React.FC<CardActionsProps> = ({ pool, stakedBalance }) => {
             isBnbPool={isBnbPool}
             isStaked={isStaked}
           />
+             <HarvestActions
+              earnings={earnings}
+              earningToken={earningToken}
+              sousId={sousId}
+              earningTokenPrice={earningTokenPrice}
+              isBnbPool={isBnbPool}
+              isLoading={isLoading}
+            />
+          </StyledFlex>
         )}
       </Flex>
     </Flex>
