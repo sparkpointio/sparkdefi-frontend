@@ -1,6 +1,5 @@
 import React from 'react'
-import { Heading, useModal, Skeleton } from '@pancakeswap/uikit';
-import { Button, Text, Flex } from '@sparkpointio/sparkswap-uikit';
+import { Button, Text, Flex, useModal} from '@sparkpointio/sparkswap-uikit';
 import { ChevronDown } from 'react-feather';
 import BigNumber from 'bignumber.js'
 import { Token } from 'config/constants/types'
