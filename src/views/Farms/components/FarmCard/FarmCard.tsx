@@ -131,19 +131,19 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
 
       
       <Flex justifyContent="space-between" style={{textAlign: 'left'}}>
-        <Text>{t('Total Deposits')}:</Text>
+        <Text>{t('Total Deposit')}</Text>
         <Text color="textSubtle">{totalValueFormatted}</Text>
       </Flex>
       <Flex justifyContent="space-between">
-        <Text>{t('Pool Rate')}:</Text>
+        <Text>{t('Pool Rate')}</Text>
         <Text color="textSubtle">{earnLabel}</Text>
       </Flex>
       <Flex justifyContent="space-between">
-        <Text>{t('Your Rate')}:</Text>
+        <Text>{t('Your Rate')}</Text>
         <Text color="textSubtle">{farm.userData.earnings}</Text>
       </Flex>
       <Flex justifyContent="space-between">
-        <Text>{t('Duration')}:</Text>
+        <Text>{t('Duration')}</Text>
         <Text color="textSubtle">{earnLabel}</Text>
       </Flex>
       <CardActionsContainer farm={farm} account={account} addLiquidityUrl={addLiquidityUrl} addTokenUrl={AddTokenUrl} />

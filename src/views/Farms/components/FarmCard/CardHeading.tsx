@@ -42,7 +42,7 @@ const CardHeading: React.FC<ExpandableSectionProps> = ({
   return (
     <Wrapper justifyContent="space-between" alignItems="center" mb="12px">
       <Flex flexDirection="column" alignItems="flex-end">
-        <Heading  mb="4px" style={{textAlign: 'left'}}>Stake {lpLabel.split(' ')[0]} <br /> {farmSymbol} <br /> to earn {rewardToken}</Heading>
+        <Heading  mb="4px" style={{textAlign: 'left'}}>Stake {lpLabel.split(' ')[0]} <br /> {farmSymbol} <br /> to Earn {rewardToken}</Heading>
       </Flex>
       <TokenPairImage variant="inverted" primaryToken={token} secondaryToken={quoteToken} width={64} height={64} />
       {/* <Image src={`/images/farms/${farmImage}.svg`} alt={tokenSymbol} width={64} height={64} /> */}

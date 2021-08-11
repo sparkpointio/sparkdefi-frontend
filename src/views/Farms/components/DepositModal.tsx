@@ -92,7 +92,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
   return (
     <Modal title={t('Account Info')} onDismiss={onDismiss}>
       <Text color="textSubtle" fontSize="14px" style={{ paddingBottom: '30px', marginTop: '-50px' }}>
-        Staking, balance, and earnings
+        Staking, balances & earnings
       </Text>
       <Container>
         <DetailsCont>
@@ -172,7 +172,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
               <Text>Claim</Text>
             </Button>
             <Button fullWidth onClick={onDismiss}>
-              <Text>Claim and Withdraw</Text>
+              <Text>Claim & Withdraw</Text>
             </Button>
           </Dropdown>
         </DetailsCont>
