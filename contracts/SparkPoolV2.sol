@@ -813,10 +813,10 @@ contract SparkPoolV2 is Ownable, ReentrancyGuard {
     // Accrued token per share
     uint256 public accTokenPerShare;
 
-    // The block number when CAKE mining ends.
+    // The block number when staking ends.
     uint256 public bonusEndBlock;
 
-    // The block number when CAKE mining starts.
+    // The block number when staking starts.
     uint256 public startBlock;
 
     // The block number of the last pool update
@@ -825,7 +825,7 @@ contract SparkPoolV2 is Ownable, ReentrancyGuard {
     // The pool limit (0 if none)
     uint256 public poolLimitPerUser;
 
-    // CAKE tokens created per block.
+    // Reward tokens created per block.
     uint256 public rewardPerBlock;
 
     // The precision factor
@@ -1069,9 +1069,9 @@ contract SparkPoolV2 is Ownable, ReentrancyGuard {
         uint256 stakedTokenSupply = stakedToken.balanceOf(address(this));
         if (block.number > lastRewardBlock && stakedTokenSupply != 0) {
             uint256 multiplier = _getMultiplier(lastRewardBlock, block.number);
-            uint256 cakeReward = multiplier.mul(rewardPerBlock);
+            uint256 tokenReward = multiplier.mul(rewardPerBlock);
             uint256 adjustedTokenPerShare =
-                accTokenPerShare.add(cakeReward.mul(PRECISION_FACTOR).div(stakedTokenSupply));
+                accTokenPerShare.add(tokenReward.mul(PRECISION_FACTOR).div(stakedTokenSupply));
             return user.amount.mul(adjustedTokenPerShare).div(PRECISION_FACTOR).sub(user.rewardDebt);
         } else {
             return user.amount.mul(accTokenPerShare).div(PRECISION_FACTOR).sub(user.rewardDebt);
@@ -1094,8 +1094,8 @@ contract SparkPoolV2 is Ownable, ReentrancyGuard {
         }
 
         uint256 multiplier = _getMultiplier(lastRewardBlock, block.number);
-        uint256 cakeReward = multiplier.mul(rewardPerBlock);
-        accTokenPerShare = accTokenPerShare.add(cakeReward.mul(PRECISION_FACTOR).div(stakedTokenSupply));
+        uint256 tokenReward = multiplier.mul(rewardPerBlock);
+        accTokenPerShare = accTokenPerShare.add(tokenReward.mul(PRECISION_FACTOR).div(stakedTokenSupply));
         lastRewardBlock = block.number;
     }
 
