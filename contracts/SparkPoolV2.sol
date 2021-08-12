@@ -795,16 +795,14 @@ library SafeBEP20 {
     }
 }
 
-// File: contracts/SmartChefInitializable.sol
-
 pragma solidity 0.6.12;
 
-contract SmartChefInitializable is Ownable, ReentrancyGuard {
+contract SparkPoolV2 is Ownable, ReentrancyGuard {
     using SafeMath for uint256;
     using SafeBEP20 for IBEP20;
 
-    // The address of the smart chef factory
-    address public SMART_CHEF_FACTORY;
+    // The address of the SparkPoolV2 factory
+    address public SPARKPOOLV2_FACTORY;
 
     // Whether a limit is set for users
     bool public hasUserLimit;
@@ -857,7 +855,7 @@ contract SmartChefInitializable is Ownable, ReentrancyGuard {
     event Withdraw(address indexed user, uint256 amount);
 
     constructor() public {
-        SMART_CHEF_FACTORY = msg.sender;
+        SPARKPOOLV2_FACTORY = msg.sender;
     }
 
     /*
@@ -880,7 +878,7 @@ contract SmartChefInitializable is Ownable, ReentrancyGuard {
         address _admin
     ) external {
         require(!isInitialized, "Already initialized");
-        require(msg.sender == SMART_CHEF_FACTORY, "Not factory");
+        require(msg.sender == SPARKPOOLV2_FACTORY, "Not factory");
 
         // Make this contract initialized
         isInitialized = true;
@@ -965,7 +963,7 @@ contract SmartChefInitializable is Ownable, ReentrancyGuard {
     }
 
     /*
-     * @notice Withdraw staked tokens without caring about rewards rewards
+     * @notice Withdraw staked tokens without caring about rewards
      * @dev Needs to be for emergency.
      */
     function emergencyWithdraw() external nonReentrant {
@@ -1117,12 +1115,10 @@ contract SmartChefInitializable is Ownable, ReentrancyGuard {
     }
 }
 
-// File: contracts/SmartChefFactory.sol
-
 pragma solidity 0.6.12;
 
-contract SmartChefFactory is Ownable {
-    event NewSmartChefContract(address indexed smartChef);
+contract SparkPoolV2Factory is Ownable {
+    event NewSparkPoolV2Contract(address indexed sparkPoolV2);
 
     constructor() public {
         //
@@ -1137,7 +1133,7 @@ contract SmartChefFactory is Ownable {
      * @param _endBlock: end block
      * @param _poolLimitPerUser: pool limit per user in stakedToken (if any, else 0)
      * @param _admin: admin address with ownership
-     * @return address of new smart chef contract
+     * @return address of new SparkPoolV2 contract
      */
     function deployPool(
         IBEP20 _stakedToken,
@@ -1152,15 +1148,15 @@ contract SmartChefFactory is Ownable {
         require(_rewardToken.totalSupply() >= 0);
         require(_stakedToken != _rewardToken, "Tokens must be be different");
 
-        bytes memory bytecode = type(SmartChefInitializable).creationCode;
+        bytes memory bytecode = type(SparkPoolV2).creationCode;
         bytes32 salt = keccak256(abi.encodePacked(_stakedToken, _rewardToken, _startBlock));
-        address smartChefAddress;
+        address sparkpoolV2Address;
 
         assembly {
-            smartChefAddress := create2(0, add(bytecode, 32), mload(bytecode), salt)
+            sparkpoolV2Address := create2(0, add(bytecode, 32), mload(bytecode), salt)
         }
 
-        SmartChefInitializable(smartChefAddress).initialize(
+        SparkPoolV2(sparkpoolV2Address).initialize(
             _stakedToken,
             _rewardToken,
             _rewardPerBlock,
@@ -1170,6 +1166,6 @@ contract SmartChefFactory is Ownable {
             _admin
         );
 
-        emit NewSmartChefContract(smartChefAddress);
+        emit NewSparkPoolV2Contract(sparkpoolV2Address);
     }
 }
