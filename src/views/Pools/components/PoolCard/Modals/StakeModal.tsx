@@ -135,7 +135,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
       title=""
       onDismiss={onDismiss}
     >
-      <Flex flexDirection="column" style={{marginTop: '-24px', width: "550px"}}>
+      <Flex flexDirection="column" style={{marginTop: '-24px', width: "550px"}} >
         <Text fontSize="20px">Account Info</Text>
         <Text fontSize="15px">Staking, balances & earnings</Text>
         <StyledFlex marginTop="21px">
@@ -154,6 +154,9 @@ const StakeModal: React.FC<StakeModalProps> = ({
             <Text color="textSubtle">SRK Tokens</Text>
             <Button fullWidth>Stake Tokens</Button>
           </Flex>
+        </StyledFlex>
+        <StyledFlex >
+        <hr style={{marginTop: '20px', border: 'none', borderTop: `2px solid ${theme.colors.primary}` }} />
         </StyledFlex>
         <StyledFlex marginTop="21px">
           <Flex flexDirection="column">
