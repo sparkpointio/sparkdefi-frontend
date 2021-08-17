@@ -44,7 +44,7 @@ const PoolCard: React.FC<{ pool: Pool; account: string }> = ({ pool, account }) 
           </Flex>
           <Flex justifyContent="space-between" style={{textAlign: 'left'}}>
             <Text>APY</Text>
-            <Text>00.00</Text>
+            <Text>0%</Text>
           </Flex>
           <Flex mt="24px" flexDirection="column" marginTop="10px">
             {account ? (
