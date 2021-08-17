@@ -135,37 +135,37 @@ const StakeModal: React.FC<StakeModalProps> = ({
       title=""
       onDismiss={onDismiss}
     >
-      <Flex flexDirection="column" style={{marginTop: '-24px', width: "550px"}} >
-        <Text fontSize="20px">Account Info</Text>
-        <Text fontSize="15px">Staking, balances & earnings</Text>
+      <Flex flexDirection="column" style={{marginTop: '-50px', width: "550px"}} >
+        <Text fontSize="20px" marginBottom="10px" marginLeft="10px">Account Info</Text>
+        <Text fontSize="15px" marginLeft="10px">Staking, balances & earnings</Text>
         <StyledFlex marginTop="21px">
           <Flex flexDirection="column">
             <Text fontSize="24px">0.0000</Text>
-            <Text color="textSubtle">SRK Tokens</Text>
-            <Button fullWidth>Add more</Button>
+            <Text color="textSubtle" marginTop="10px">SRK Tokens</Text>
+            <Button fullWidth marginTop="20px">Add more</Button>
           </Flex>
           <Flex flexDirection="column">
             <Text fontSize="24px">0.0000</Text>
-            <Text color="textSubtle">SRK LP Tokens</Text>
-            <Button fullWidth>Add liquidity</Button>
+            <Text color="textSubtle" marginTop="10px">SRK LP Tokens</Text>
+            <Button fullWidth marginTop="20px">Add liquidity</Button>
           </Flex>
           <Flex flexDirection="column">
             <Text fontSize="24px">0.0000</Text>
-            <Text color="textSubtle">SRK Tokens</Text>
-            <Button fullWidth>Stake Tokens</Button>
+            <Text color="textSubtle" marginTop="10px">Your SRK Deposits</Text>
+            <Button fullWidth marginTop="20px">Stake Tokens</Button>
           </Flex>
         </StyledFlex>
         <StyledFlex >
-        <hr style={{marginTop: '20px', border: 'none', borderTop: `2px solid ${theme.colors.primary}` }} />
+        <hr style={{marginTop: '30px', border: 'none', borderTop: `2px solid ${theme.colors.primary}` }} />
         </StyledFlex>
-        <StyledFlex marginTop="21px">
+        <StyledFlex marginTop="30px" marginBottom="20px">
           <Flex flexDirection="column">
             <Text fontSize="24px">0.0000</Text>
-            <Text color="textSubtle" fontSize="17px">Your Rate SRK/Week Tokens</Text>
+            <Text color="textSubtle" fontSize="15px">Your Rate SRK/Week</Text>
           </Flex>
           <Flex flexDirection="column">
             <Text fontSize="24px">0.0000</Text>
-            <Text color="textSubtle" fontSize="17px">SRK Token Earnings</Text>
+            <Text color="textSubtle" fontSize="15px">SRK Token Earnings</Text>
           </Flex>
           <Flex flexDirection="column" justifyContent="center" alignItems="center">
            <Button variant="secondary">Withdraw <ChevronDown /> </Button>
