@@ -1,12 +1,11 @@
 import React from 'react'
-import { Button, Text, Flex, useModal} from '@sparkpointio/sparkswap-uikit';
+import { Button, Text, Flex, useModal, Dropdown} from '@sparkpointio/sparkswap-uikit';
 import { ChevronDown } from 'react-feather';
 import BigNumber from 'bignumber.js'
 import { Token } from 'config/constants/types'
 import { useTranslation } from 'contexts/Localization'
 import { getFullDisplayBalance, getBalanceNumber, formatNumber } from 'utils/formatBalance'
 import Balance from 'components/Balance'
-import styled from 'styled-components'
 import CollectModal from '../Modals/CollectModal'
 
 
@@ -51,10 +50,6 @@ const HarvestActions: React.FC<HarvestActionsProps> = ({
     />,
   )
 
-  const InlineText = styled(Text)`
-  display: inline;
-`
-
   return (
     <Flex flexDirection="column" mb="16px" marginLeft="5px">
         {/* <Flex flexDirection="column">
@@ -65,8 +60,7 @@ const HarvestActions: React.FC<HarvestActionsProps> = ({
               {hasEarnings ? (
                 <Balance bold fontSize="20px" decimals={5} value={earningTokenBalance} />
               ) : (
-                // <Heading color="textDisabled">0</Heading>
-                <Text>SRK Staked</Text>
+                <Heading color="textDisabled">0</Heading>
               )}
               {earningTokenPrice !== 0 && (
                 <Text fontSize="12px" color={hasEarnings ? 'textSubtle' : 'textDisabled'}>
@@ -78,50 +72,32 @@ const HarvestActions: React.FC<HarvestActionsProps> = ({
                       color="textSubtle"
                       decimals={2}
                       value={earningTokenDollarBalance}
-                      unit=" SRK"
+                      unit=" USD"
                     />
                   ) : (
-                    '0 SRK'
-                  )}
-                </Text>
-              )}
-            </>
-          )}
-        </Flex>
-        <Flex marginRight="-12vh" flexDirection="column">
-          {isLoading ? (
-            <Skeleton width="80px" height="48px" />
-          ) : (
-            <>
-              {hasEarnings ? (
-                <Balance bold fontSize="20px" decimals={5} value={earningTokenBalance} />
-              ) : (
-                // <Heading color="textDisabled">0</Heading>
-                <Text>SRK Earned</Text>
-              )}
-              {earningTokenPrice !== 0 && (
-                <Text fontSize="12px" color={hasEarnings ? 'textSubtle' : 'textDisabled'}>
-                  ~
-                  {hasEarnings ? (
-                    <Balance
-                      display="inline"
-                      fontSize="12px"
-                      color="textSubtle"
-                      decimals={2}
-                      value={earningTokenDollarBalance}
-                      // unit=" USD"
-                    />
-                  ) : (
-                    '0.0000'
+                    '0 USD'
                   )}
                 </Text>
               )}
             </>
           )}
         </Flex> */}
-          <Button onClick={onPresentCollect} fullWidth variant="secondary">
-            Withdraw <ChevronDown />
-          </Button>
+         <Dropdown
+            position="top"
+            target={
+              <Button fullWidth variant="secondary">Withdraw <ChevronDown />
+               {/* <Text>Withdraw</Text> {activeSelect ? <ChevronDown /> : <ChevronUp />} */}
+              </Button>
+            }
+          >
+            {/* <Button fullWidth onClick={"onDismiss"}  disabled={rawEarningsBalance.eq(0) || pendingTx} > */}
+              <Button fullWidth>
+              <Text>Claim</Text>
+            </Button>
+            <Button>
+              <Text>Claim & Withdraw</Text>
+            </Button>
+          </Dropdown>
     </Flex>
   )
 }
