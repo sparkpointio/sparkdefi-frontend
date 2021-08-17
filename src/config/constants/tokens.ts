@@ -1587,6 +1587,24 @@ const tokens = {
     decimals: 18,
     projectLink: 'https://decentral.games/',
   },
+  srkb: {
+    symbol: 'SRKb',
+    address: {
+      56: '0xc3440c10c4f36f354eb591b19fafb4906d449b75',
+      97: '',
+    },
+    decimals: 18,
+    projectLink: 'https://sparkpoint.io/',
+  },
+  ttkb: {
+    symbol: 'TTKb',
+    address: {
+      56: '0x9ee47c9630a41525c139ef9ca42ba3b238ecfecf',
+      97: '',
+    },
+    decimals: 18,
+    projectLink: 'https://sparkpoint.io/',
+  },
 }
 
 export default tokens
