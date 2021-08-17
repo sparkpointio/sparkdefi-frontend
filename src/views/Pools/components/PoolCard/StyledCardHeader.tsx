@@ -26,6 +26,7 @@ const StyledCardHeader: React.FC<{
   const isCakePool = earningToken.symbol === 'CAKE' && stakingToken.symbol === 'CAKE'
   const background = isStaking ? 'bubblegum' : 'cardHeader'
 
+/* 
   const getHeadingPrefix = () => {
     if (isAutoVault) {
       // vault
@@ -38,25 +39,30 @@ const StyledCardHeader: React.FC<{
     // all other pools
     return t('Earn')
   }
+*/
 
   const getSubHeading = () => {
     if (isAutoVault) {
       return t('Automatic restaking')
     }
     if (isCakePool) {
-      return t('Earn CAKE, stake CAKE')
+      return t('Stake CAKE to Earn CAKE')
     }
-    return t('Stake %symbol%', { symbol: stakingToken.symbol })
-  }
+    // return t('Stake %symbol%', { symbol: stakingToken.symbol })
+      return t('Stake %symbol% to Earn SRK', { symbol: stakingToken.symbol } )      
+
+    }
+      
 
   return (
     <Wrapper isFinished={isFinished} background={background}>
       <Flex alignItems="center" justifyContent="space-between">
         <Flex flexDirection="column">
           <Heading color={isFinished ? 'textDisabled' : 'body'} size="lg">
-            {`${getHeadingPrefix()} ${earningToken.symbol}`}
+            {/* {`${getHeadingPrefix()} ${earningToken.symbol}`} */}
           </Heading>
-          <Text color={isFinished ? 'textDisabled' : 'textSubtle'}>{getSubHeading()}</Text>
+          {/* <Text color={isFinished ? 'textDisabled' : 'textSubtle'}>{getSubHeading()}</Text> */}
+          <Text color={isFinished ? 'textDisabled' : 'White'}>{getSubHeading()}</Text>
         </Flex>
         {isAutoVault ? (
           <CakeVaultTokenPairImage width={64} height={64} />
