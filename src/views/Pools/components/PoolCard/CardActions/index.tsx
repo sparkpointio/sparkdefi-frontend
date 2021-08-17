@@ -36,6 +36,7 @@ const CardActions: React.FC<CardActionsProps> = ({ pool, stakedBalance }) => {
       <Flex flexDirection="column">
         {harvest && (
           <>
+          {/* 
             <Box display="inline">
               <InlineText color="secondary" textTransform="uppercase" bold fontSize="12px">
                 {`${earningToken.symbol} `}
@@ -44,6 +45,17 @@ const CardActions: React.FC<CardActionsProps> = ({ pool, stakedBalance }) => {
                 {t('Earned')}
               </InlineText>
             </Box>
+          */}
+          {/*
+            <Box display="inline">
+              <InlineText color="secondary" textTransform="uppercase" bold fontSize="12px">
+                {`${earningToken.symbol} `}
+              </InlineText>
+              <InlineText color="textSubtle" textTransform="uppercase" bold fontSize="12px">
+                {t('Earned')}
+              </InlineText>
+            </Box>
+          */}
             <HarvestActions
               earnings={earnings}
               earningToken={earningToken}
@@ -56,10 +68,10 @@ const CardActions: React.FC<CardActionsProps> = ({ pool, stakedBalance }) => {
         )}
         <Box display="inline">
           <InlineText color={isStaked ? 'secondary' : 'textSubtle'} textTransform="uppercase" bold fontSize="12px">
-            {isStaked ? stakingToken.symbol : t('Stake')}{' '}
+            {/* {isStaked ? stakingToken.symbol : t('Stake')}{' '} */}
           </InlineText>
           <InlineText color={isStaked ? 'textSubtle' : 'secondary'} textTransform="uppercase" bold fontSize="12px">
-            {isStaked ? t('Staked') : `${stakingToken.symbol}`}
+           {/* {isStaked ? t('Staked') : `${stakingToken.symbol}`} */}
           </InlineText>
         </Box>
         {needsApproval ? (
