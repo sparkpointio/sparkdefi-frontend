@@ -35,17 +35,20 @@ const PoolCard: React.FC<{ pool: Pool; account: string }> = ({ pool, account }) 
       
           {/* <AprRow pool={pool} stakingTokenPrice={stakingTokenPrice} /> */}
           <Flex justifyContent="space-between" style={{textAlign: 'left'}}>
-            <Text>Total Deposits:</Text>
+            <Text>Total Deposit</Text>
           </Flex>
           <Flex justifyContent="space-between" style={{textAlign: 'left'}}>
-            <Text>Pool Rate:</Text>
-          </Flex>
+            <Text>Pool Size</Text>
+          </Flex> 
           <Flex justifyContent="space-between" style={{textAlign: 'left'}}>
-            <Text>Your Rate:</Text>
+            {/* <Text>Your Rate</Text> */}
+            <Text> APY </Text>
           </Flex>
+          {/*
           <Flex justifyContent="space-between" style={{textAlign: 'left'}}> 
-            <Text>Duration:</Text>
+            <Text>Duration</Text>
           </Flex>
+          */}
           <Flex mt="24px" flexDirection="column">
             {account ? (
               <CardActions pool={pool} stakedBalance={stakedBalance} />
