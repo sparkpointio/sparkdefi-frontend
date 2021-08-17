@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { Modal, Text, Flex, Image, Button, Slider, BalanceInput, AutoRenewIcon, Link } from '@pancakeswap/uikit'
+import {  Slider, BalanceInput, } from '@pancakeswap/uikit';
+import { Modal, Text, Flex, Image, Button, AutoRenewIcon, Link  } from '@sparkpointio/sparkswap-uikit'
 import { useTranslation } from 'contexts/Localization'
 import { BASE_EXCHANGE_URL } from 'config'
 import { useSousStake } from 'hooks/useStake'
 import { useSousUnstake } from 'hooks/useUnstake'
+import { ChevronDown } from 'react-feather';
 import useTheme from 'hooks/useTheme'
 import useToast from 'hooks/useToast'
 import BigNumber from 'bignumber.js'
@@ -12,6 +14,7 @@ import { getFullDisplayBalance, formatNumber, getDecimalAmount } from 'utils/for
 import { Pool } from 'state/types'
 import { getAddress } from 'utils/addressHelpers'
 import PercentageButton from './PercentageButton'
+
 
 interface StakeModalProps {
   isBnbPool: boolean
@@ -24,6 +27,13 @@ interface StakeModalProps {
 
 const StyledLink = styled(Link)`
   width: 100%;
+`
+const StyledFlex = styled(Flex)`
+justify-content: center;
+  & > * {
+    flex: 1;
+    margin: 0px 10px;
+  }
 `
 
 const StakeModal: React.FC<StakeModalProps> = ({
@@ -122,83 +132,46 @@ const StakeModal: React.FC<StakeModalProps> = ({
 
   return (
     <Modal
-      title={isRemovingStake ? t('Unstake') : t('Stake in Pool')}
+      title=""
       onDismiss={onDismiss}
-      headerBackground={theme.colors.gradients.cardHeader}
     >
-      {stakingLimit.gt(0) && !isRemovingStake && (
-        <Text color="secondary" bold mb="24px" style={{ textAlign: 'center' }} fontSize="16px">
-          {t('Max stake for this pool: %amount% %token%', {
-            amount: getFullDisplayBalance(stakingLimit, stakingToken.decimals, 0),
-            token: stakingToken.symbol,
-          })}
-        </Text>
-      )}
-      <Flex alignItems="center" justifyContent="space-between" mb="8px">
-        <Text bold>{isRemovingStake ? t('Unstake') : t('Stake')}:</Text>
-        <Flex alignItems="center" minWidth="70px">
-          <Image
-            src={`/images/tokens/${getAddress(stakingToken.address)}.png`}
-            width={24}
-            height={24}
-            alt={stakingToken.symbol}
-          />
-          <Text ml="4px" bold>
-            {stakingToken.symbol}
-          </Text>
-        </Flex>
+      <Flex flexDirection="column" style={{marginTop: '-24px', width: "550px"}} >
+        <Text fontSize="20px">Account Info</Text>
+        <Text fontSize="15px">Staking, balances & earnings</Text>
+        <StyledFlex marginTop="21px">
+          <Flex flexDirection="column">
+            <Text fontSize="24px">0.0000</Text>
+            <Text color="textSubtle">SRK Tokens</Text>
+            <Button fullWidth>Add more</Button>
+          </Flex>
+          <Flex flexDirection="column">
+            <Text fontSize="24px">0.0000</Text>
+            <Text color="textSubtle">SRK LP Tokens</Text>
+            <Button fullWidth>Add liquidity</Button>
+          </Flex>
+          <Flex flexDirection="column">
+            <Text fontSize="24px">0.0000</Text>
+            <Text color="textSubtle">SRK Tokens</Text>
+            <Button fullWidth>Stake Tokens</Button>
+          </Flex>
+        </StyledFlex>
+        <StyledFlex >
+        <hr style={{marginTop: '20px', border: 'none', borderTop: `2px solid ${theme.colors.primary}` }} />
+        </StyledFlex>
+        <StyledFlex marginTop="21px">
+          <Flex flexDirection="column">
+            <Text fontSize="24px">0.0000</Text>
+            <Text color="textSubtle" fontSize="17px">Your Rate SRK/Week Tokens</Text>
+          </Flex>
+          <Flex flexDirection="column">
+            <Text fontSize="24px">0.0000</Text>
+            <Text color="textSubtle" fontSize="17px">SRK Token Earnings</Text>
+          </Flex>
+          <Flex flexDirection="column" justifyContent="center" alignItems="center">
+           <Button variant="secondary">Withdraw <ChevronDown /> </Button>
+          </Flex>
+        </StyledFlex>
       </Flex>
-      <BalanceInput
-        value={stakeAmount}
-        onUserInput={handleStakeInputChange}
-        currencyValue={stakingTokenPrice !== 0 && `~${usdValueStaked || 0} USD`}
-        isWarning={hasReachedStakeLimit}
-        decimals={stakingToken.decimals}
-      />
-      {hasReachedStakeLimit && (
-        <Text color="failure" fontSize="12px" style={{ textAlign: 'right' }} mt="4px">
-          {t('Maximum total stake: %amount% %token%', {
-            amount: getFullDisplayBalance(new BigNumber(stakingLimit), stakingToken.decimals, 0),
-            token: stakingToken.symbol,
-          })}
-        </Text>
-      )}
-      <Text ml="auto" color="textSubtle" fontSize="12px" mb="8px">
-        {t('Balance: %balance%', {
-          balance: getFullDisplayBalance(getCalculatedStakingLimit(), stakingToken.decimals),
-        })}
-      </Text>
-      <Slider
-        min={0}
-        max={100}
-        value={percent}
-        onValueChanged={handleChangePercent}
-        name="stake"
-        valueLabel={`${percent}%`}
-        step={1}
-      />
-      <Flex alignItems="center" justifyContent="space-between" mt="8px">
-        <PercentageButton onClick={() => handleChangePercent(25)}>25%</PercentageButton>
-        <PercentageButton onClick={() => handleChangePercent(50)}>50%</PercentageButton>
-        <PercentageButton onClick={() => handleChangePercent(75)}>75%</PercentageButton>
-        <PercentageButton onClick={() => handleChangePercent(100)}>{t('Max')}</PercentageButton>
-      </Flex>
-      <Button
-        isLoading={pendingTx}
-        endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
-        onClick={handleConfirmClick}
-        disabled={!stakeAmount || parseFloat(stakeAmount) === 0 || hasReachedStakeLimit}
-        mt="24px"
-      >
-        {pendingTx ? t('Confirming') : t('Confirm')}
-      </Button>
-      {!isRemovingStake && (
-        <StyledLink external href={BASE_EXCHANGE_URL}>
-          <Button width="100%" mt="8px" variant="secondary">
-            {t('Get %symbol%', { symbol: stakingToken.symbol })}
-          </Button>
-        </StyledLink>
-      )}
     </Modal>
   )
 }

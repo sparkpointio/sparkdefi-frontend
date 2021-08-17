@@ -15,9 +15,11 @@ import { getBalanceAmount, getFullDisplayBalance, getBalanceNumber} from 'utils/
 import { useTranslation } from 'contexts/Localization'
 import ModalActions from 'components/ModalActions'
 import ModalInput from 'components/ModalInput'
+import WithdrawModal from './WithdrawModal'
 import Container, { ActionDiv, DetailsCont, ModalFooter } from './Styled'
 import { ModalHr } from './Divider'
 import StakeModal from './Modals/Stake'
+import ClaimModal from './Modals/ClaimModal'
 
 
 
@@ -34,6 +36,8 @@ interface DepositModalProps {
   stakedBalance?: string
   tokenEarnings?: string
   farm?: Farm
+  handleUnstake?: (amount: string) => void
+  maxStake?: BigNumber
 }
 
 const DepositModal: React.FC<DepositModalProps> = ({
@@ -48,7 +52,9 @@ const DepositModal: React.FC<DepositModalProps> = ({
   stakedBalance,
   tokenEarnings,
   tokenRewardAddress,
-  farm
+  handleUnstake,
+  farm,
+  maxStake
 }) => {
   const [requestedApproval, setRequestedApproval] = useState(false)
   const [pendingTx, setPendingTx] = useState(false)
@@ -87,6 +93,11 @@ const DepositModal: React.FC<DepositModalProps> = ({
   const rawEarningsBalance = account ? getBalanceAmount(earnings) : BIG_ZERO
   const [onPresentStake] = useModal(
     <StakeModal onConfirm={onConfirm} max={max} symbol={tokenName} addLiquidityUrl={addLiquidityUrl} inputTitle={t('Stake')} />,
+  )
+
+  const [onPresentClaim] = useModal (<ClaimModal />)
+  const [onPresentWithdraw] = useModal(
+    <WithdrawModal max={maxStake} onConfirm={handleUnstake} tokenName={tokenName} />,
   )
 
   return (
@@ -168,7 +179,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
               </Button>
             }
           >
-            <Button fullWidth onClick={onDismiss}  disabled={rawEarningsBalance.eq(0) || pendingTx} >
+            <Button fullWidth onClick={onPresentClaim}>
               <Text>Claim</Text>
             </Button>
             <Button fullWidth onClick={onDismiss}>

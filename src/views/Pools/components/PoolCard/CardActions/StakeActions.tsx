@@ -1,5 +1,6 @@
 import React from 'react'
-import { Flex, Text, Button, IconButton, AddIcon, MinusIcon, useModal, Skeleton, useTooltip } from '@pancakeswap/uikit'
+import { IconButton, AddIcon, MinusIcon, Skeleton, useTooltip } from '@pancakeswap/uikit'
+import { Button, Text, Flex, useModal } from '@sparkpointio/sparkswap-uikit'
 import BigNumber from 'bignumber.js'
 import { useTranslation } from 'contexts/Localization'
 import { getBalanceNumber } from 'utils/formatBalance'
@@ -62,55 +63,59 @@ const StakeAction: React.FC<StakeActionsProps> = ({
   const reachStakingLimit = stakingLimit.gt(0) && userData.stakedBalance.gte(stakingLimit)
 
   const renderStakeAction = () => {
-    return isStaked ? (
-      <Flex justifyContent="space-between" alignItems="center">
-        <Flex flexDirection="column">
-          <>
-            <Balance bold fontSize="20px" decimals={3} value={stakedTokenBalance} />
-            {stakingTokenPrice !== 0 && (
-              <Text fontSize="12px" color="textSubtle">
-                <Balance
-                  fontSize="12px"
-                  color="textSubtle"
-                  decimals={2}
-                  value={stakedTokenDollarBalance}
-                  prefix="~"
-                  unit=" USD"
-                />
-              </Text>
-            )}
-          </>
-        </Flex>
-        <Flex>
-          <IconButton variant="secondary" onClick={onPresentUnstake} mr="6px">
-            <MinusIcon color="primary" width="24px" />
-          </IconButton>
-          {reachStakingLimit ? (
-            <span ref={targetRef}>
-              <IconButton variant="secondary" disabled>
-                <AddIcon color="textDisabled" width="24px" height="24px" />
-              </IconButton>
-            </span>
-          ) : (
-            <IconButton
-              variant="secondary"
-              onClick={stakingTokenBalance.gt(0) ? onPresentStake : onPresentTokenRequired}
-              disabled={isFinished}
-            >
-              <AddIcon color="primary" width="24px" height="24px" />
-            </IconButton>
-          )}
-        </Flex>
-        {tooltipVisible && tooltip}
-      </Flex>
-    ) : (
-      <Button disabled={isFinished} onClick={stakingTokenBalance.gt(0) ? onPresentStake : onPresentTokenRequired}>
+    // isStaked ? (
+    //   <Flex justifyContent="space-between" alignItems="center">
+    //     <Flex flexDirection="column">
+    //       <>
+    //         <Balance bold fontSize="20px" decimals={3} value={stakedTokenBalance} />
+    //         {stakingTokenPrice !== 0 && (
+    //           <Text fontSize="12px" color="textSubtle">
+    //             <Balance
+    //               fontSize="12px"
+    //               color="textSubtle"
+    //               decimals={2}
+    //               value={stakedTokenDollarBalance}
+    //               prefix="~"
+    //               unit=" USD"
+    //             />
+    //           </Text>
+    //         )}
+    //       </>
+    //     </Flex>
+    //     <Flex>
+    //       <IconButton variant="secondary" onClick={onPresentUnstake} mr="6px">
+    //         <MinusIcon color="primary" width="24px" />
+    //       </IconButton>
+    //       {reachStakingLimit ? (
+    //         <span ref={targetRef}>
+    //           <IconButton variant="secondary" disabled>
+    //             <AddIcon color="textDisabled" width="24px" height="24px" />
+    //           </IconButton>
+    //         </span>
+    //       ) : (
+    //         <IconButton
+    //           variant="secondary"
+    //           onClick={stakingTokenBalance.gt(0) ? onPresentStake : onPresentTokenRequired}
+    //           disabled={isFinished}
+    //         >
+    //           <AddIcon color="primary" width="24px" height="24px" />
+    //         </IconButton>
+    //       )}
+    //     </Flex>
+    //     {tooltipVisible && tooltip}
+    //   </Flex>
+    // ) : 
+
+    // Reserve function for future use
+    // <Button disabled={isFinished} onClick={stakingTokenBalance.gt(0) ? onPresentStake : onPresentTokenRequired} fullWidth>
+    return (
+      <Button disabled={isFinished} onClick={ onPresentStake } fullWidth>
         {t('Stake')}
       </Button>
     )
   }
 
-  return <Flex flexDirection="column">{isLoading ? <Skeleton width="100%" height="52px" /> : renderStakeAction()}</Flex>
+  return <Flex flexDirection="column" marginRight="5px">{isLoading ? <Skeleton width="100%" height="52px" /> : renderStakeAction()}</Flex>
 }
 
 export default StakeAction

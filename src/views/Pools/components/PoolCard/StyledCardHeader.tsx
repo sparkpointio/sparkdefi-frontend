@@ -1,14 +1,13 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Heading, Text, Flex, Image } from '@sparkpointio/sparkswap-uikit'
-import styled from 'styled-components'
+import styled, { ThemeContext } from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
 import { Token } from 'config/constants/types'
 import TokenPairImage from 'components/TokenPairImage'
 import CakeVaultTokenPairImage from '../CakeVaultCard/CakeVaultTokenPairImage'
 
 const Wrapper = styled.div<{ isFinished?: boolean; background?: string }>`
-  background: ${({ isFinished, background, theme }) =>
-    isFinished ? theme.colors.backgroundDisabled : theme.colors.gradients[background]};
+  background: ${({ isFinished, background, theme }) => theme.colors.gradients[background]};
   border-radius: ${({ theme }) => `${theme.radii.card} ${theme.radii.card} 0 0`};
 `
 //  background: ${({ isFinished, background, theme }) =>
@@ -41,28 +40,27 @@ const StyledCardHeader: React.FC<{
   }
 */
 
-  const getSubHeading = () => {
+  const getCardTitle = () => {
     if (isAutoVault) {
       return t('Automatic restaking')
     }
     if (isCakePool) {
-      return t('Stake CAKE to Earn CAKE')
+      return t(`Stake CAKE to Earn CAKE`)
     }
-    // return t('Stake %symbol%', { symbol: stakingToken.symbol })
-      return t('Stake %symbol% to Earn SRK', { symbol: stakingToken.symbol } )      
-
-    }
-      
+    return t('Stake %symbol%', { symbol: stakingToken.symbol })
+    // return t('Stake %symbol% to Earn SRK', { symbol: stakingToken.symbol } )
+  }
+  const theme = useContext(ThemeContext);
 
   return (
     <Wrapper isFinished={isFinished} background={background}>
       <Flex alignItems="center" justifyContent="space-between">
-        <Flex flexDirection="column">
-          <Heading color={isFinished ? 'textDisabled' : 'body'} size="lg">
-            {/* {`${getHeadingPrefix()} ${earningToken.symbol}`} */}
+        <Flex flexDirection="column" style={{textAlign: 'left'}}>
+          <Heading color='text' size="lg">
+            {`Stake ${stakingToken.symbol}`} <br/>
+            to <br />
+            {`Earn ${earningToken.symbol}`}
           </Heading>
-          {/* <Text color={isFinished ? 'textDisabled' : 'textSubtle'}>{getSubHeading()}</Text> */}
-          <Text color={isFinished ? 'textDisabled' : 'White'}>{getSubHeading()}</Text>
         </Flex>
         {isAutoVault ? (
           <CakeVaultTokenPairImage width={64} height={64} />
