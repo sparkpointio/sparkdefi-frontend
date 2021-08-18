@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import {  Slider, BalanceInput, useModal, } from '@pancakeswap/uikit';
-import { Modal, Text, Flex, Image, Button, AutoRenewIcon, Link  } from '@sparkpointio/sparkswap-uikit'
+import {  Slider, BalanceInput, } from '@pancakeswap/uikit';
+import { Modal, Text, Flex, Image, Button, AutoRenewIcon, Link, Dropdown  } from '@sparkpointio/sparkswap-uikit'
 import { useTranslation } from 'contexts/Localization'
 import { BASE_EXCHANGE_URL } from 'config'
 import { useSousStake } from 'hooks/useStake'
 import { useSousUnstake } from 'hooks/useUnstake'
-import { ChevronDown } from 'react-feather';
+import { ChevronDown, ChevronUp } from 'react-feather';
 import useTheme from 'hooks/useTheme'
 import useToast from 'hooks/useToast'
 import BigNumber from 'bignumber.js'
@@ -63,8 +63,8 @@ const StakeModal: React.FC<StakeModalProps> = ({
   }
   
   const usdValueStaked = stakeAmount && formatNumber(new BigNumber(stakeAmount).times(stakingTokenPrice).toNumber())
-  // const [ onPresentStake ] = useModal(
-  //   <StakeTokenModal symbol="" addLiquidityUrl="" inputTitle={t('Stake')}  /> )
+  const [activeSelect, setActiveSelect] = useState(false)
+  
   useEffect(() => {
     if (stakingLimit.gt(0) && !isRemovingStake) {
       const fullDecimalStakeAmount = getDecimalAmount(new BigNumber(stakeAmount), stakingToken.decimals)
@@ -137,9 +137,9 @@ const StakeModal: React.FC<StakeModalProps> = ({
       title=""
       onDismiss={onDismiss}
     >
-      <Flex flexDirection="column" style={{marginTop: '-24px', width: "550px"}} >
-        <Text fontSize="20px">Account Info</Text>
-        <Text fontSize="15px">Staking, balances & earnings</Text>
+      <Flex flexDirection="column" style={{marginTop: '-50px', width: "550px"}} >
+        <Text fontSize="20px" marginBottom="10px" marginLeft="10px">Account Info</Text>
+        <Text fontSize="15px" marginLeft="10px">Staking, balances & earnings</Text>
         <StyledFlex marginTop="21px">
           <Flex flexDirection="column">
             <Text fontSize="24px">0.0000</Text>
@@ -158,9 +158,9 @@ const StakeModal: React.FC<StakeModalProps> = ({
           </Flex>
         </StyledFlex>
         <StyledFlex >
-        <hr style={{marginTop: '20px', border: 'none', borderTop: `2px solid ${theme.colors.primary}` }} />
+        <hr style={{marginTop: '30px', border: 'none', borderTop: `2px solid ${theme.colors.primary}` }} />
         </StyledFlex>
-        <StyledFlex marginTop="21px">
+        <StyledFlex marginTop="30px" marginBottom="20px">
           <Flex flexDirection="column">
             <Text fontSize="24px">0.0000</Text>
             <Text color="textSubtle" fontSize="17px">Your Rate {pool.earningToken.symbol}/Week Tokens</Text>
@@ -172,6 +172,27 @@ const StakeModal: React.FC<StakeModalProps> = ({
           <Flex flexDirection="column" justifyContent="center" alignItems="center">
            <Button variant="secondary">Withdraw <ChevronDown /> </Button>
           </Flex>
+          <Flex flexDirection="column" mb="16px" marginLeft="5px"
+          onMouseEnter={() => setActiveSelect(true)}
+          onMouseLeave={() => setActiveSelect(false)}>
+        
+         <Dropdown
+            position="top"
+            target={
+              <Button fullWidth variant="secondary"><Text>Withdraw</Text> {activeSelect ? <ChevronDown /> : <ChevronUp />}
+               {/* <Text>Withdraw</Text> {activeSelect ? <ChevronDown /> : <ChevronUp />} */}
+              </Button>
+            }
+          >
+            {/* <Button fullWidth onClick={"onDismiss"}  disabled={rawEarningsBalance.eq(0) || pendingTx} > */}
+              <Button fullWidth>
+              <Text>Claim</Text>
+            </Button>
+            <Button>
+              <Text>Claim & Withdraw</Text>
+            </Button>
+          </Dropdown>
+    </Flex>
         </StyledFlex>
       </Flex>
     </Modal>

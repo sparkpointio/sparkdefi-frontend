@@ -25,6 +25,7 @@ const StyledCardHeader: React.FC<{
   const isCakePool = earningToken.symbol === 'CAKE' && stakingToken.symbol === 'CAKE'
   const background = isStaking ? 'bubblegum' : 'cardHeader'
 
+/* 
   const getHeadingPrefix = () => {
     if (isAutoVault) {
       // vault
@@ -37,6 +38,7 @@ const StyledCardHeader: React.FC<{
     // all other pools
     return t('Earn')
   }
+*/
 
   const getCardTitle = () => {
     if (isAutoVault) {
@@ -46,6 +48,7 @@ const StyledCardHeader: React.FC<{
       return t(`Stake CAKE to Earn CAKE`)
     }
     return t('Stake %symbol%', { symbol: stakingToken.symbol })
+    // return t('Stake %symbol% to Earn SRK', { symbol: stakingToken.symbol } )
   }
   const theme = useContext(ThemeContext);
 

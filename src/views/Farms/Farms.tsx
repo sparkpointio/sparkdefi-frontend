@@ -316,10 +316,10 @@ const Farms: React.FC = () => {
 
     return (
       <div>
-        <div style={{ margin: '20px' }}>
+        <div style={{ marginTop: '-5px', marginLeft: '17px', marginBottom: '17px' }}>
           <Text fontSize="24px" bold>
             {' '}
-            Active Liquidity Pools{' '}
+            Active Liquidity Pools{' '} 
           </Text>
           <Text fontSize="16px">Stake LP tokens to earn</Text>
         </div>

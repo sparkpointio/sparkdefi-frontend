@@ -2,8 +2,7 @@ import BigNumber from 'bignumber.js'
 import React from 'react'
 import styled from 'styled-components'
 import { BIG_ZERO } from 'utils/bigNumber'
-import { Flex, Text } from '@sparkpointio/sparkswap-uikit'
-import { Box } from '@pancakeswap/uikit'
+import { Flex, Text, Box } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import { PoolCategory } from 'config/constants/types'
 import { Pool } from 'state/types'
@@ -41,29 +40,33 @@ const CardActions: React.FC<CardActionsProps> = ({ pool, stakedBalance }) => {
 
   return (
     <Flex flexDirection="column">
-      <Flex flexDirection="column">
+      <Flex flexDirection="column" >
         {harvest && (
           <>
             <Flex justifyContent="space-between">
               <Box display="inline">
-                <Text color="text" textTransform="uppercase" bold fontSize="12px">
+                {/* <Text color="text" textTransform="uppercase" bold fontSize="12px"> */}
+                <Text color="text" bold fontSize="15px" marginBottom="8px">
                   {`${stakingToken.symbol} Staked`}
                 </Text>
               </Box>
               <Box display="inline">
-                <Text color="text" textTransform="uppercase" bold fontSize="12px">
+                {/* <Text color="text" textTransform="uppercase" bold fontSize="12px"> */}
+                <Text color="text" bold fontSize="15px" marginBottom="8px">
                   {`${earningToken.symbol} Earned`}
                 </Text>
               </Box>
             </Flex>
-            <Flex justifyContent="space-between">
+            <Flex justifyContent="space-between" marginBottom="20px">
               <Box display="inline">
-                <Text color="text" textTransform="uppercase" bold fontSize="12px">
+                {/* <Text color="text" textTransform="uppercase"  bold fontSize="12px"> */}
+                <Text color="text" textTransform="uppercase" fontSize="12px">
                   {`${stakingTokenBalance} ${stakingToken.symbol}`}
                 </Text>
               </Box>
               <Box display="inline">
-                <Text color="text" textTransform="uppercase" bold fontSize="12px">
+                {/* <Text color="text" textTransform="uppercase" bold fontSize="12px"> */}
+                <Text color="text" textTransform="uppercase" fontSize="12px">
                   {`${earnings}`}
                 </Text>
               </Box>
