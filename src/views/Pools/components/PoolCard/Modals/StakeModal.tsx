@@ -61,7 +61,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
     }
     return stakingLimit.gt(0) && stakingTokenBalance.gt(stakingLimit) ? stakingLimit : stakingTokenBalance
   }
-
+  
   const usdValueStaked = stakeAmount && formatNumber(new BigNumber(stakeAmount).times(stakingTokenPrice).toNumber())
   // const [ onPresentStake ] = useModal(
   //   <StakeTokenModal symbol="" addLiquidityUrl="" inputTitle={t('Stake')}  /> )
@@ -143,17 +143,17 @@ const StakeModal: React.FC<StakeModalProps> = ({
         <StyledFlex marginTop="21px">
           <Flex flexDirection="column">
             <Text fontSize="24px">0.0000</Text>
-            <Text color="textSubtle">SRK Tokens</Text>
+            <Text color="textSubtle">{pool.stakingToken.symbol} Tokens</Text>
             <Button fullWidth>Add more</Button>
           </Flex>
           <Flex flexDirection="column">
             <Text fontSize="24px">0.0000</Text>
-            <Text color="textSubtle">SRK LP Tokens</Text>
-            <Button fullWidth>Add liquidity</Button>
+            <Text color="textSubtle">{pool.earningToken.symbol} Tokens</Text>
+            <Button fullWidth>Add More</Button>
           </Flex>
           <Flex flexDirection="column">
             <Text fontSize="24px">0.0000</Text>
-            <Text color="textSubtle">SRK Tokens</Text>
+            <Text color="textSubtle">{pool.stakingToken.symbol} Tokens</Text>
             <Button fullWidth >Stake Tokens</Button>
           </Flex>
         </StyledFlex>
@@ -163,11 +163,11 @@ const StakeModal: React.FC<StakeModalProps> = ({
         <StyledFlex marginTop="21px">
           <Flex flexDirection="column">
             <Text fontSize="24px">0.0000</Text>
-            <Text color="textSubtle" fontSize="17px">Your Rate SRK/Week Tokens</Text>
+            <Text color="textSubtle" fontSize="17px">Your Rate {pool.earningToken.symbol}/Week Tokens</Text>
           </Flex>
           <Flex flexDirection="column">
             <Text fontSize="24px">0.0000</Text>
-            <Text color="textSubtle" fontSize="17px">SRK Token Earnings</Text>
+            <Text color="textSubtle" fontSize="17px">{pool.earningToken.symbol} Token Earnings</Text>
           </Flex>
           <Flex flexDirection="column" justifyContent="center" alignItems="center">
            <Button variant="secondary">Withdraw <ChevronDown /> </Button>
