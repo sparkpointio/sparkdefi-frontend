@@ -13,6 +13,7 @@ import BigNumber from 'bignumber.js'
 import { getFullDisplayBalance, formatNumber, getDecimalAmount } from 'utils/formatBalance'
 import { Pool } from 'state/types'
 import { getAddress } from 'utils/addressHelpers'
+// import StakeTokenModal from './Stake';
 import PercentageButton from './PercentageButton'
 
 
@@ -60,7 +61,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
     }
     return stakingLimit.gt(0) && stakingTokenBalance.gt(stakingLimit) ? stakingLimit : stakingTokenBalance
   }
-
+  
   const usdValueStaked = stakeAmount && formatNumber(new BigNumber(stakeAmount).times(stakingTokenPrice).toNumber())
   const [activeSelect, setActiveSelect] = useState(false)
   
@@ -142,18 +143,18 @@ const StakeModal: React.FC<StakeModalProps> = ({
         <StyledFlex marginTop="21px">
           <Flex flexDirection="column">
             <Text fontSize="24px">0.0000</Text>
-            <Text color="textSubtle" marginTop="10px">SRK Tokens</Text>
-            <Button fullWidth marginTop="20px">Add more</Button>
+            <Text color="textSubtle">{pool.stakingToken.symbol} Tokens</Text>
+            <Button fullWidth>Add more</Button>
           </Flex>
           <Flex flexDirection="column">
             <Text fontSize="24px">0.0000</Text>
-            <Text color="textSubtle" marginTop="10px">SRK LP Tokens</Text>
-            <Button fullWidth marginTop="20px">Add liquidity</Button>
+            <Text color="textSubtle">{pool.earningToken.symbol} Tokens</Text>
+            <Button fullWidth>Add More</Button>
           </Flex>
           <Flex flexDirection="column">
             <Text fontSize="24px">0.0000</Text>
-            <Text color="textSubtle" marginTop="10px">Your SRK Deposits</Text>
-            <Button fullWidth marginTop="20px">Stake Tokens</Button>
+            <Text color="textSubtle">{pool.stakingToken.symbol} Tokens</Text>
+            <Button fullWidth >Stake Tokens</Button>
           </Flex>
         </StyledFlex>
         <StyledFlex >
@@ -162,11 +163,11 @@ const StakeModal: React.FC<StakeModalProps> = ({
         <StyledFlex marginTop="30px" marginBottom="20px">
           <Flex flexDirection="column">
             <Text fontSize="24px">0.0000</Text>
-            <Text color="textSubtle" fontSize="15px">Your Rate SRK/Week</Text>
+            <Text color="textSubtle" fontSize="17px">Your Rate {pool.earningToken.symbol}/Week Tokens</Text>
           </Flex>
           <Flex flexDirection="column">
             <Text fontSize="24px">0.0000</Text>
-            <Text color="textSubtle" fontSize="15px">SRK Token Earnings</Text>
+            <Text color="textSubtle" fontSize="17px">{pool.earningToken.symbol} Token Earnings</Text>
           </Flex>
           <Flex flexDirection="column" mb="16px" marginLeft="5px"
           onMouseEnter={() => setActiveSelect(true)}
