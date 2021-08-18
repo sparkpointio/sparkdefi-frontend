@@ -139,6 +139,10 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
         <Text color="textSubtle">{earnLabel}</Text>
       </Flex>
       <Flex justifyContent="space-between">
+        <Text>{t('APR')}</Text>
+        <Text color="textSubtle">0%</Text>
+      </Flex>
+      <Flex justifyContent="space-between">
         <Text>{t('Your Rate')}</Text>
         <Text color="textSubtle">{farm.userData.earnings}</Text>
       </Flex>

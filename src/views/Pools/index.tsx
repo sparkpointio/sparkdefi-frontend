@@ -231,17 +231,26 @@ const Pools: React.FC = () => {
           setStakedOnly={setStakedOnly}
           hasStakeInFinishedPools={hasStakeInFinishedPools}
         /> */}
+        {/* 
         <div>
           <Flex justifyContent="space-between" style={{ margin: '20px' }}>
             <Flex flexDirection="column" mr={['8px', 0]}>
               <Text color="text" fontSize="24px" bold>
-                {t('Active Pools')}
+                
               </Text>
               <Text color="text" fontSize="16px">
-                {t('Stake LP tokens to earn')}
+                {t(' Stake Liquidity Pool tokens to earn')}
               </Text>
             </Flex>
           </Flex>
+        */}
+
+          <div >
+          <Text fontSize="20px" marginLeft='24px' paddingBottom='17px'>
+            {' '}
+            Stake tokens to earn{' '} 
+          </Text>
+        
 
           <FlexLayout>
             {/* <Route exact path={`${path}`}> */}

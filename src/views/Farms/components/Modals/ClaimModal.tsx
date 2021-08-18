@@ -1,42 +1,13 @@
+import React from 'react'
 import BigNumber from 'bignumber.js'
-import React, { useCallback, useMemo, useState } from 'react'
 import { Button, Modal, Text, Flex } from '@sparkpointio/sparkswap-uikit'
-import ModalActions from 'components/ModalActions'
-import ModalInput from 'components/ModalInput'
-import { useTranslation } from 'contexts/Localization'
-import { getFullDisplayBalance } from 'utils/formatBalance'
 
-interface WithdrawModalProps {
-  max: BigNumber
-  onConfirm: (amount: string) => void
+interface ClaimModalProps {
   onDismiss?: () => void
-  tokenName?: string
 }
 
-const WithdrawModal: React.FC<WithdrawModalProps> = ({ onConfirm, onDismiss, max, tokenName = '' }) => {
-  const [val, setVal] = useState('')
-  const [pendingTx, setPendingTx] = useState(false)
-  const { t } = useTranslation()
-  const fullBalance = useMemo(() => {
-    return getFullDisplayBalance(max)
-  }, [max])
-
-  const valNumber = new BigNumber(val)
-  const fullBalanceNumber = new BigNumber(fullBalance)
-
-  const handleChange = useCallback(
-    (e: React.FormEvent<HTMLInputElement>) => {
-      if (e.currentTarget.validity.valid) {
-        setVal(e.currentTarget.value.replace(/,/g, '.'))
-      }
-    },
-    [setVal],
-  )
-
-  const handleSelectMax = useCallback(() => {
-    setVal(fullBalance)
-  }, [fullBalance, setVal])
-
+const ClaimModal: React.FC<ClaimModalProps> = ({ onDismiss}) => {
+  
   return (
     <Modal title="" onDismiss={onDismiss}>
       {/* <ModalInput
@@ -67,9 +38,6 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onConfirm, onDismiss, max
       <Flex marginTop="-10px" style={{width: '450px'}} alignItems="center" flexDirection="column">
         <Text>You will be claiming the reward amount of </Text>
         <Text fontSize="28px" bold>78.912 SRK Tokens</Text>
-        <Text fontSize="28px" bold>AND</Text>
-        <Text>withdrawing the staked amount of</Text>
-        <Text fontSize="28px" bold>678.910 SRK-ETH LP Tokens</Text>
       </Flex>
       <Flex justifyContent="center" margin="24px" padding="0px 35px">
         <Button fullWidth>Confirm</Button>
@@ -78,4 +46,4 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onConfirm, onDismiss, max
   )
 }
 
-export default WithdrawModal
+export default ClaimModal
