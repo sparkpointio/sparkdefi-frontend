@@ -169,9 +169,6 @@ const StakeModal: React.FC<StakeModalProps> = ({
             <Text fontSize="24px">0.0000</Text>
             <Text color="textSubtle" fontSize="17px">{pool.earningToken.symbol} Token Earnings</Text>
           </Flex>
-          <Flex flexDirection="column" justifyContent="center" alignItems="center">
-           <Button variant="secondary">Withdraw <ChevronDown /> </Button>
-          </Flex>
           <Flex flexDirection="column" mb="16px" marginLeft="5px"
           onMouseEnter={() => setActiveSelect(true)}
           onMouseLeave={() => setActiveSelect(false)}>
