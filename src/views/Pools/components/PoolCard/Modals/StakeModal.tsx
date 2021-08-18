@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import {  Slider, BalanceInput, } from '@pancakeswap/uikit';
+import {  Slider, BalanceInput, useModal, } from '@pancakeswap/uikit';
 import { Modal, Text, Flex, Image, Button, AutoRenewIcon, Link  } from '@sparkpointio/sparkswap-uikit'
 import { useTranslation } from 'contexts/Localization'
 import { BASE_EXCHANGE_URL } from 'config'
@@ -13,6 +13,7 @@ import BigNumber from 'bignumber.js'
 import { getFullDisplayBalance, formatNumber, getDecimalAmount } from 'utils/formatBalance'
 import { Pool } from 'state/types'
 import { getAddress } from 'utils/addressHelpers'
+// import StakeTokenModal from './Stake';
 import PercentageButton from './PercentageButton'
 
 
@@ -62,7 +63,8 @@ const StakeModal: React.FC<StakeModalProps> = ({
   }
 
   const usdValueStaked = stakeAmount && formatNumber(new BigNumber(stakeAmount).times(stakingTokenPrice).toNumber())
-
+  // const [ onPresentStake ] = useModal(
+  //   <StakeTokenModal symbol="" addLiquidityUrl="" inputTitle={t('Stake')}  /> )
   useEffect(() => {
     if (stakingLimit.gt(0) && !isRemovingStake) {
       const fullDecimalStakeAmount = getDecimalAmount(new BigNumber(stakeAmount), stakingToken.decimals)
@@ -152,7 +154,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
           <Flex flexDirection="column">
             <Text fontSize="24px">0.0000</Text>
             <Text color="textSubtle">SRK Tokens</Text>
-            <Button fullWidth>Stake Tokens</Button>
+            <Button fullWidth >Stake Tokens</Button>
           </Flex>
         </StyledFlex>
         <StyledFlex >
