@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, Text, Flex, useModal, Dropdown} from '@sparkpointio/sparkswap-uikit';
-import { ChevronDown } from 'react-feather';
+import { ChevronDown, ChevronUp } from 'react-feather';
 import BigNumber from 'bignumber.js'
 import { Token } from 'config/constants/types'
 import { useTranslation } from 'contexts/Localization'
@@ -37,6 +37,7 @@ const HarvestActions: React.FC<HarvestActionsProps> = ({
   const fullBalance = getFullDisplayBalance(earnings, earningToken.decimals)
   const hasEarnings = earnings.toNumber() > 0
   const isCompoundPool = sousId === 0
+  const [activeSelect, setActiveSelect] = useState(false)
 
   const [onPresentCollect] = useModal(
     <CollectModal
@@ -51,7 +52,9 @@ const HarvestActions: React.FC<HarvestActionsProps> = ({
   )
 
   return (
-    <Flex flexDirection="column" mb="16px" marginLeft="5px">
+    <Flex flexDirection="column" mb="16px" marginLeft="5px"
+          onMouseEnter={() => setActiveSelect(true)}
+          onMouseLeave={() => setActiveSelect(false)}>
         {/* <Flex flexDirection="column">
           {isLoading ? (
             <Skeleton width="80px" height="48px" />
@@ -85,12 +88,10 @@ const HarvestActions: React.FC<HarvestActionsProps> = ({
          <Dropdown
             position="top"
             target={
-              <Button fullWidth variant="secondary">Withdraw <ChevronDown />
-               {/* <Text>Withdraw</Text> {activeSelect ? <ChevronDown /> : <ChevronUp />} */}
+              <Button fullWidth variant="secondary"><Text>Withdraw</Text> {activeSelect ? <ChevronDown /> : <ChevronUp />}
               </Button>
             }
           >
-            {/* <Button fullWidth onClick={"onDismiss"}  disabled={rawEarningsBalance.eq(0) || pendingTx} > */}
               <Button fullWidth>
               <Text>Claim</Text>
             </Button>
