@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import {  Slider, BalanceInput, } from '@pancakeswap/uikit';
-import { Modal, Text, Flex, Image, Button, AutoRenewIcon, Link  } from '@sparkpointio/sparkswap-uikit'
+import { Modal, Text, Flex, Image, Button, AutoRenewIcon, Link, Dropdown  } from '@sparkpointio/sparkswap-uikit'
 import { useTranslation } from 'contexts/Localization'
 import { BASE_EXCHANGE_URL } from 'config'
 import { useSousStake } from 'hooks/useStake'
 import { useSousUnstake } from 'hooks/useUnstake'
-import { ChevronDown } from 'react-feather';
+import { ChevronDown, ChevronUp } from 'react-feather';
 import useTheme from 'hooks/useTheme'
 import useToast from 'hooks/useToast'
 import BigNumber from 'bignumber.js'
@@ -62,7 +62,8 @@ const StakeModal: React.FC<StakeModalProps> = ({
   }
 
   const usdValueStaked = stakeAmount && formatNumber(new BigNumber(stakeAmount).times(stakingTokenPrice).toNumber())
-
+  const [activeSelect, setActiveSelect] = useState(false)
+  
   useEffect(() => {
     if (stakingLimit.gt(0) && !isRemovingStake) {
       const fullDecimalStakeAmount = getDecimalAmount(new BigNumber(stakeAmount), stakingToken.decimals)
@@ -167,9 +168,27 @@ const StakeModal: React.FC<StakeModalProps> = ({
             <Text fontSize="24px">0.0000</Text>
             <Text color="textSubtle" fontSize="15px">SRK Token Earnings</Text>
           </Flex>
-          <Flex flexDirection="column" justifyContent="center" alignItems="center">
-           <Button variant="secondary">Withdraw <ChevronDown /> </Button>
-          </Flex>
+          <Flex flexDirection="column" mb="16px" marginLeft="5px"
+          onMouseEnter={() => setActiveSelect(true)}
+          onMouseLeave={() => setActiveSelect(false)}>
+        
+         <Dropdown
+            position="top"
+            target={
+              <Button fullWidth variant="secondary"><Text>Withdraw</Text> {activeSelect ? <ChevronDown /> : <ChevronUp />}
+               {/* <Text>Withdraw</Text> {activeSelect ? <ChevronDown /> : <ChevronUp />} */}
+              </Button>
+            }
+          >
+            {/* <Button fullWidth onClick={"onDismiss"}  disabled={rawEarningsBalance.eq(0) || pendingTx} > */}
+              <Button fullWidth>
+              <Text>Claim</Text>
+            </Button>
+            <Button>
+              <Text>Claim & Withdraw</Text>
+            </Button>
+          </Dropdown>
+    </Flex>
         </StyledFlex>
       </Flex>
     </Modal>
