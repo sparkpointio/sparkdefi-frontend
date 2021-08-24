@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import {  Slider, BalanceInput, } from '@pancakeswap/uikit';
-import { Modal, Text, Flex, Image, Button, AutoRenewIcon, Link, Dropdown  } from '@sparkpointio/sparkswap-uikit'
+import { Modal, Text, Flex, Image, Button, AutoRenewIcon, Link, Dropdown, useModal} from '@sparkpointio/sparkswap-uikit'
 import { useTranslation } from 'contexts/Localization'
 import { BASE_EXCHANGE_URL } from 'config'
 import { useSousStake } from 'hooks/useStake'
@@ -131,7 +131,8 @@ const StakeModal: React.FC<StakeModalProps> = ({
       }
     }
   }
-
+  
+  const [ onPresentStakeAction ] = useModal(<StakeTokenModal isBnbPool={isBnbPool} pool={pool} stakingTokenBalance={stakingTokenBalance} stakingTokenPrice={stakingTokenPrice} />)
   return (
     <Modal
       title=""
@@ -154,7 +155,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
           <Flex flexDirection="column">
             <Text fontSize="24px">0.0000</Text>
             <Text color="textSubtle">{pool.stakingToken.symbol} Tokens</Text>
-            <Button fullWidth >Stake Tokens</Button>
+            <Button fullWidth onClick={onPresentStakeAction}>Stake Tokens</Button>
           </Flex>
         </StyledFlex>
         <StyledFlex >
