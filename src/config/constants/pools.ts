@@ -21,8 +21,8 @@ const pools: PoolConfig[] = [
     stakingToken: tokens.srkb,
     earningToken: tokens.ttkb,
     contractAddress: {
-      97: '',
-      56: '0x1be0843bc76f91387a2a6b941c07b0ca09f0b983',
+      97: '0xa4bf8a4abb7fd91971854ac0aade50c61afd9f2a',
+      56: '0x9c03326543bf9a927a5ff51c407fbc444f19ca0a',
     },
     poolCategory: PoolCategory.CORE,
     harvest: true,

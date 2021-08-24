@@ -1591,7 +1591,7 @@ const tokens = {
     symbol: 'SRKb',
     address: {
       56: '0xc3440c10c4f36f354eb591b19fafb4906d449b75',
-      97: '',
+      97: '0xe09b8661d80cf24db230a167969d18b94a5a3266',
     },
     decimals: 18,
     projectLink: 'https://sparkpoint.io/',
@@ -1600,7 +1600,7 @@ const tokens = {
     symbol: 'TTKb',
     address: {
       56: '0x9ee47c9630a41525c139ef9ca42ba3b238ecfecf',
-      97: '',
+      97: '0xac9b89c1049b358277ca1d76f6c18f10f3d8128e',
     },
     decimals: 18,
     projectLink: 'https://sparkpoint.io/',
