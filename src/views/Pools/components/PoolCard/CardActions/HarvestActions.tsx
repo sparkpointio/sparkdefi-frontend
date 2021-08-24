@@ -1,11 +1,14 @@
-import React from 'react'
-import { Flex, Text, Button, Heading, useModal, Skeleton } from '@pancakeswap/uikit'
+import React, { useState } from 'react'
+import { Button, Text, Flex, useModal, Dropdown} from '@sparkpointio/sparkswap-uikit';
+import { ChevronDown, ChevronUp } from 'react-feather';
 import BigNumber from 'bignumber.js'
 import { Token } from 'config/constants/types'
 import { useTranslation } from 'contexts/Localization'
 import { getFullDisplayBalance, getBalanceNumber, formatNumber } from 'utils/formatBalance'
 import Balance from 'components/Balance'
 import CollectModal from '../Modals/CollectModal'
+
+
 
 interface HarvestActionsProps {
   earnings: BigNumber
@@ -34,6 +37,7 @@ const HarvestActions: React.FC<HarvestActionsProps> = ({
   const fullBalance = getFullDisplayBalance(earnings, earningToken.decimals)
   const hasEarnings = earnings.toNumber() > 0
   const isCompoundPool = sousId === 0
+  const [activeSelect, setActiveSelect] = useState(false)
 
   const [onPresentCollect] = useModal(
     <CollectModal
@@ -48,9 +52,10 @@ const HarvestActions: React.FC<HarvestActionsProps> = ({
   )
 
   return (
-    <Flex flexDirection="column" mb="16px">
-      <Flex justifyContent="space-between" alignItems="center">
-        <Flex flexDirection="column">
+    <Flex flexDirection="column" mb="16px" marginLeft="5px"
+          onMouseEnter={() => setActiveSelect(true)}
+          onMouseLeave={() => setActiveSelect(false)}>
+        {/* <Flex flexDirection="column">
           {isLoading ? (
             <Skeleton width="80px" height="48px" />
           ) : (
@@ -79,13 +84,21 @@ const HarvestActions: React.FC<HarvestActionsProps> = ({
               )}
             </>
           )}
-        </Flex>
-        <Flex>
-          <Button disabled={!hasEarnings} onClick={onPresentCollect}>
-            {isCompoundPool ? t('Collect') : t('Harvest')}
-          </Button>
-        </Flex>
-      </Flex>
+        </Flex> */}
+         <Dropdown
+            position="top"
+            target={
+              <Button fullWidth variant="secondary"><Text>Withdraw</Text> {activeSelect ? <ChevronDown /> : <ChevronUp />}
+              </Button>
+            }
+          >
+              <Button fullWidth>
+              <Text>Claim</Text>
+            </Button>
+            <Button>
+              <Text>Claim & Withdraw</Text>
+            </Button>
+          </Dropdown>
     </Flex>
   )
 }
