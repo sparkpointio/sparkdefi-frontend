@@ -13,7 +13,7 @@ import BigNumber from 'bignumber.js'
 import { getFullDisplayBalance, formatNumber, getDecimalAmount } from 'utils/formatBalance'
 import { Pool } from 'state/types'
 import { getAddress } from 'utils/addressHelpers'
-// import StakeTokenModal from './Stake';
+import StakeTokenModal from './Stake';
 import PercentageButton from './PercentageButton'
 
 
