@@ -46,6 +46,10 @@ const PoolCard: React.FC<{ pool: Pool; account: string }> = ({ pool, account }) 
             <Text>APY</Text>
             <Text>0%</Text>
           </Flex>
+          <Flex justifyContent="space-between" style={{textAlign: 'left'}}>
+        <Text>{t('Your Rate')}</Text>
+        <Text>0.00</Text>
+      </Flex>
           <Flex mt="24px" flexDirection="column" marginTop="10px">
             {account ? (
               <CardActions pool={pool} stakedBalance={stakedBalance} />
