@@ -102,18 +102,18 @@ const DepositModal: React.FC<DepositModalProps> = ({
 
   return (
     <Modal title={t('Account Info')} onDismiss={onDismiss}>
-      <Text color="textSubtle" fontSize="14px" style={{ paddingBottom: '30px', marginTop: '-50px' }}>
+      <Text color="textSubtle" fontSize="14px" style={{ paddingBottom: '30px', marginTop: '-40px' }}>
         Staking, balances & earnings
       </Text>
       <Container>
         <DetailsCont>
-          <Text bold fontSize="24px">
+          <Text bold fontSize="24px" >
           {formatTokenBalance === 0? '0.0000': formatTokenBalance}
           </Text>
           <Text color="textSubtle" fontSize="14px">
             {tokenReward}
           </Text>
-          <ActionDiv>
+          <ActionDiv style={{ paddingTop: '30px' }}>
             <Button fullWidth as="a" href={addTokenUrl}>
               Add More
             </Button>
@@ -126,7 +126,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
           <Text color="textSubtle" fontSize="14px">
             {tokenName} Tokens
           </Text>
-          <ActionDiv>
+          <ActionDiv style={{ paddingTop: '30px' }}>
             <Button fullWidth as="a" href={addLiquidityUrl}>
               Add Liquidity
             </Button>
@@ -139,15 +139,15 @@ const DepositModal: React.FC<DepositModalProps> = ({
           <Text color="textSubtle" fontSize="14px">
             Your {tokenName} Deposits
           </Text>
-          <ActionDiv>
-            {isApproved?
-              (<Button fullWidth onClick={onPresentStake}>
+          <ActionDiv style={{ paddingTop: '30px' }}>
+             {/* {isApproved? */}
+              <Button fullWidth onClick={onPresentStake}>
                 Stake Tokens
-              </Button>):
-              (<Button fullWidth onClick={handleApprove} disabled={requestedApproval}>
-                Approve
-              </Button>)
-            }
+              </Button>
+              {/* <Button fullWidth onClick={handleApprove} disabled={requestedApproval}>
+                Stake Tokens
+              </Button> */}
+             {/* } */}
             
           </ActionDiv>
         </DetailsCont>
