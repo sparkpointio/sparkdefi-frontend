@@ -6,6 +6,7 @@ import { Flex, Text, Box } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import { PoolCategory } from 'config/constants/types'
 import { Pool } from 'state/types'
+import { getBalanceNumber } from 'utils/formatBalance'
 import ApprovalAction from './ApprovalAction'
 import StakeActions from './StakeActions'
 import HarvestActions from './HarvestActions'
@@ -28,6 +29,9 @@ interface CardActionsProps {
 
 const CardActions: React.FC<CardActionsProps> = ({ pool, stakedBalance }) => {
   const { sousId, stakingToken, earningToken, harvest, poolCategory, userData, earningTokenPrice } = pool
+
+  console.log(pool)
+  // getBalanceNumber(stakedBalance, stakingToken.decimals)
   // Pools using native BNB behave differently than pools using a token
   const isBnbPool = poolCategory === PoolCategory.BINANCE
   const { t } = useTranslation()
@@ -37,6 +41,9 @@ const CardActions: React.FC<CardActionsProps> = ({ pool, stakedBalance }) => {
   const needsApproval = !allowance.gt(0) && !isBnbPool
   const isStaked = stakedBalance.gt(0)
   const isLoading = !userData
+
+  const totalStaked = userData?.stakedBalance ? getBalanceNumber(new BigNumber(userData.stakedBalance), stakingToken.decimals) : BIG_ZERO
+  const totalEarned = userData?.pendingReward ? getBalanceNumber(new BigNumber(userData.pendingReward)) : BIG_ZERO
 
   return (
     <Flex flexDirection="column">
@@ -61,13 +68,13 @@ const CardActions: React.FC<CardActionsProps> = ({ pool, stakedBalance }) => {
               <Box display="inline">
                 {/* <Text color="text" textTransform="uppercase"  bold fontSize="12px"> */}
                 <Text color="text" textTransform="uppercase" fontSize="12px">
-                  {`${stakingTokenBalance} ${stakingToken.symbol}`}
+                  {`${totalStaked} ${stakingToken.symbol}`}
                 </Text>
               </Box>
               <Box display="inline">
                 {/* <Text color="text" textTransform="uppercase" bold fontSize="12px"> */}
                 <Text color="text" textTransform="uppercase" fontSize="12px">
-                  {`${earnings}`}
+                  {`${totalEarned} ${earningToken.symbol}`}
                 </Text>
               </Box>
             </Flex>
@@ -81,7 +88,7 @@ const CardActions: React.FC<CardActionsProps> = ({ pool, stakedBalance }) => {
             {isStaked ? t('Staked') : `${stakingToken.symbol}`}
           </InlineText>
         </Box> */}
-        {!needsApproval ? (
+        {needsApproval ? (
           <ApprovalAction pool={pool} isLoading={isLoading} />
         ) : (
           <StyledFlex justifyContent="space-between" marginTop="10px">

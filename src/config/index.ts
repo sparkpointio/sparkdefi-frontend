@@ -34,3 +34,8 @@ export const DEFAULT_GAS_LIMIT = 200000
 export const DEFAULT_GAS_PRICE = 5
 export const TESTNET_CHAIN_ID = '97'
 export const MAINNET_CHAIN_ID = '56'
+
+export const BASE_BSC_SCAN_URLS = {
+  [MAINNET_CHAIN_ID]: 'https://bscscan.com',
+  [TESTNET_CHAIN_ID]: 'https://testnet.bscscan.com',
+}
