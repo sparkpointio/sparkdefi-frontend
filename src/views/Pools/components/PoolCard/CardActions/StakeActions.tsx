@@ -115,7 +115,7 @@ const StakeAction: React.FC<StakeActionsProps> = ({
     )
   }
 
-  return <Flex flexDirection="column" marginRight="5px">{isLoading ? <Skeleton width="100%" height="52px" /> : renderStakeAction()}</Flex>
+  return <Flex justifyContent="space-between" alignItems="center">{isLoading ? <Skeleton width="100%" height="52px" /> : renderStakeAction()}</Flex>
 }
 
 export default StakeAction
