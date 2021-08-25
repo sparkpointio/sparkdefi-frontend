@@ -110,7 +110,7 @@ const StakeAction: React.FC<StakeActionsProps> = ({
     // <Button disabled={isFinished} onClick={stakingTokenBalance.gt(0) ? onPresentStake : onPresentTokenRequired} fullWidth>
     return (
       <Button fullWidth disabled={isFinished} onClick={ onPresentStake }>
-        {t('Stake')}
+        Stake
       </Button>
     )
   }
