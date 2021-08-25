@@ -13,6 +13,8 @@ import BigNumber from 'bignumber.js'
 import { getFullDisplayBalance, formatNumber, getDecimalAmount } from 'utils/formatBalance'
 import { Pool } from 'state/types'
 import { getAddress } from 'utils/addressHelpers'
+import Container, { ActionDiv, DetailsCont, ModalFooter } from './Styled'
+import { ModalHr } from './Divider'
 // import StakeTokenModal from './Stake';
 import PercentageButton from './PercentageButton'
 
@@ -132,68 +134,139 @@ const StakeModal: React.FC<StakeModalProps> = ({
     }
   }
 
-  return (
-    <Modal
-      title=""
-      onDismiss={onDismiss}
-    >
-      <Flex flexDirection="column" style={{marginTop: '-50px', width: "550px"}} >
-        <Text fontSize="20px" marginBottom="10px" marginLeft="10px">Account Info</Text>
-        <Text fontSize="15px" marginLeft="10px">Staking, balances & earnings</Text>
-        <StyledFlex marginTop="21px">
-          <Flex flexDirection="column">
-            <Text fontSize="24px">0.0000</Text>
-            <Text color="textSubtle">{pool.stakingToken.symbol} Tokens</Text>
-            <Button fullWidth>Add more</Button>
-          </Flex>
-          <Flex flexDirection="column">
-            <Text fontSize="24px">0.0000</Text>
-            <Text color="textSubtle">{pool.earningToken.symbol} Tokens</Text>
-            <Button fullWidth>Add More</Button>
-          </Flex>
-          <Flex flexDirection="column">
-            <Text fontSize="24px">0.0000</Text>
-            <Text color="textSubtle">{pool.stakingToken.symbol} Tokens</Text>
-            <Button fullWidth >Stake Tokens</Button>
-          </Flex>
-        </StyledFlex>
-        <StyledFlex >
-        <hr style={{marginTop: '30px', border: 'none', borderTop: `2px solid ${theme.colors.primary}` }} />
-        </StyledFlex>
-        <StyledFlex marginTop="30px" marginBottom="20px">
-          <Flex flexDirection="column">
-            <Text fontSize="24px">0.0000</Text>
-            <Text color="textSubtle" fontSize="17px">Your Rate {pool.earningToken.symbol}/Week Tokens</Text>
-          </Flex>
-          <Flex flexDirection="column">
-            <Text fontSize="24px">0.0000</Text>
-            <Text color="textSubtle" fontSize="17px">{pool.earningToken.symbol} Token Earnings</Text>
-          </Flex>
-          <Flex flexDirection="column" mb="16px" marginLeft="5px"
-          onMouseEnter={() => setActiveSelect(true)}
-          onMouseLeave={() => setActiveSelect(false)}>
+  // return (
+//     <Modal title={t('Account Info')} onDismiss={onDismiss}>
+//       {/* <Flex flexDirection="column" style={{marginTop: '-50px', width: "550px"}} > */}
+//         {/* <Text fontSize="20px" marginBottom="10px" marginLeft="10px">Account Info</Text> */}
+//         <Text color="textSubtle" fontSize="14px" style={{ paddingBottom: '30px', marginTop: '-50px' }}>
+//         Staking, balances & earnings
+//       </Text>
+//         <StyledFlex marginTop="21px">
+//           <Flex flexDirection="column">
+//             <Text fontSize="24px">0.0000</Text>
+//             <Text color="textSubtle">{pool.stakingToken.symbol} Tokens</Text>
+//             <Button fullWidth marginTop="20px">Add more</Button>
+//           </Flex>
+//           <Flex flexDirection="column">
+//             <Text fontSize="24px">0.0000</Text>
+//             <Text color="textSubtle">{pool.earningToken.symbol} Tokens</Text>
+//             <Button fullWidth marginTop="20px">Add More</Button>
+//           </Flex>
+//           <Flex flexDirection="column">
+//             <Text fontSize="24px">0.0000</Text>
+//             <Text color="textSubtle">Your {pool.stakingToken.symbol} Deposits</Text>
+//             <Button fullWidth marginTop="20px">Stake Tokens</Button>
+//           </Flex>
+//         </StyledFlex>
+//         <StyledFlex >
+//         <hr style={{marginTop: '30px', border: 'none', borderTop: `2px solid ${theme.colors.primary}` }} />
+//         </StyledFlex>
+//         <StyledFlex marginTop="30px" marginBottom="20px">
+//           <Flex flexDirection="column">
+//             <Text fontSize="24px">0.0000</Text>
+//             <Text color="textSubtle" fontSize="15px">Your Rate {pool.earningToken.symbol}/Week</Text>
+//           </Flex>
+//           <Flex flexDirection="column">
+//             <Text fontSize="24px">0.0000</Text>
+//             <Text color="textSubtle" fontSize="15px">{pool.earningToken.symbol} Token Earnings</Text>
+//           </Flex>
+//           <Flex flexDirection="column" mb="16px" marginLeft="5px"
+//           onMouseEnter={() => setActiveSelect(true)}
+//           onMouseLeave={() => setActiveSelect(false)}>
         
-         <Dropdown
+//          <Dropdown
+//             position="top"
+//             target={
+//               <Button fullWidth variant="secondary"><Text>Withdraw</Text> {activeSelect ? <ChevronDown /> : <ChevronUp />}
+//                {/* <Text>Withdraw</Text> {activeSelect ? <ChevronDown /> : <ChevronUp />} */}
+//               </Button>
+//             }
+//           >
+//             {/* <Button fullWidth onClick={"onDismiss"}  disabled={rawEarningsBalance.eq(0) || pendingTx} > */}
+//               <Button fullWidth>
+//               <Text>Claim</Text>
+//             </Button>
+//             <Button>
+//               <Text>Claim & Withdraw</Text>
+//             </Button>
+//           </Dropdown>
+//     </Flex>
+//         </StyledFlex>
+//       {/* </Flex> */}
+//     </Modal>
+//   )
+// }
+
+return (
+  <Modal title={t('')} onDismiss={onDismiss}>
+    <Text fontSize="20px" marginBottom="40px" marginTop="-30px" marginLeft="10px">Account Info</Text>
+      <Text color="textSubtle" fontSize="14px" style={{ paddingBottom: '30px', marginTop: '-40px' }}>
+          Staking, balances & earnings
+      </Text>
+      <Container>
+          <DetailsCont>
+              <Text bold fontSize="24px">0.0000</Text>
+              <Text color="textSubtle" fontSize="14px">{pool.stakingToken.symbol} Tokens</Text>
+              <ActionDiv>
+                  <Button fullWidth marginTop="20px">Add more</Button>
+              </ActionDiv>
+          </DetailsCont>
+          <DetailsCont>
+              <Text bold fontSize="24px">0.0000</Text>
+              <Text color="textSubtle" fontSize="14px">{pool.earningToken.symbol} Tokens</Text>
+              <ActionDiv>
+                  <Button fullWidth marginTop="20px">Add More</Button>
+              </ActionDiv>
+          </DetailsCont>
+          <DetailsCont>
+              <Text bold fontSize="24px">0.0000</Text>
+              <Text color="textSubtle" fontSize="14px">Your {pool.stakingToken.symbol} Deposits</Text>
+              <ActionDiv>     
+                  <Button fullWidth marginTop="20px" >Stake Tokens</Button>
+              </ActionDiv>
+              
+          </DetailsCont>
+      </Container>
+    <ModalHr />
+    <ModalFooter>
+      <DetailsCont>
+        <Text bold fontSize="24px">
+          0.0000
+        </Text>
+        <Text color="textSubtle" fontSize="15px">Your Rate {pool.earningToken.symbol}/Week</Text>
+      </DetailsCont>
+      <DetailsCont>
+        <Text bold fontSize="24px">
+        <Text fontSize="24px" bold>0.0000</Text>
+             <Text color="textSubtle" fontSize="15px">{pool.earningToken.symbol} Token Earnings</Text>
+        </Text>
+        {/* <Text color="textSubtle" fontSize="14px">{`${tokenReward} Token Earnings`}</Text> */}
+      </DetailsCont>
+      <DetailsCont
+          style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+          onMouseEnter={() => setActiveSelect(true)}
+          onMouseLeave={() => setActiveSelect(false)}
+        >
+          <Dropdown
             position="top"
             target={
-              <Button fullWidth variant="secondary"><Text>Withdraw</Text> {activeSelect ? <ChevronDown /> : <ChevronUp />}
-               {/* <Text>Withdraw</Text> {activeSelect ? <ChevronDown /> : <ChevronUp />} */}
+              <Button variant="secondary" onClick={onDismiss}>
+                <Text>Withdraw</Text> {activeSelect ? <ChevronDown /> : <ChevronUp />}
               </Button>
             }
           >
-            {/* <Button fullWidth onClick={"onDismiss"}  disabled={rawEarningsBalance.eq(0) || pendingTx} > */}
-              <Button fullWidth>
+            <Button fullWidth>
               <Text>Claim</Text>
             </Button>
-            <Button>
+            <Button fullWidth onClick={onDismiss}>
               <Text>Claim & Withdraw</Text>
             </Button>
           </Dropdown>
-    </Flex>
-        </StyledFlex>
-      </Flex>
+        </DetailsCont>
+      </ModalFooter>
     </Modal>
   )
 }
+
 
 export default StakeModal
