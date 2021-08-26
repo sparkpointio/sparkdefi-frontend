@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import {  Slider, BalanceInput, } from '@pancakeswap/uikit';
-import { Modal, Text, Flex, Image, Button, AutoRenewIcon, Link, Dropdown  } from '@sparkpointio/sparkswap-uikit'
+import { Modal, Text, Flex, Image, Button, AutoRenewIcon, Link, Dropdown, useModal} from '@sparkpointio/sparkswap-uikit'
 import { useTranslation } from 'contexts/Localization'
 import { BASE_EXCHANGE_URL } from 'config'
 import { useSousStake } from 'hooks/useStake'
@@ -13,7 +13,7 @@ import BigNumber from 'bignumber.js'
 import { getFullDisplayBalance, formatNumber, getDecimalAmount } from 'utils/formatBalance'
 import { Pool } from 'state/types'
 import { getAddress } from 'utils/addressHelpers'
-// import StakeTokenModal from './Stake';
+import StakeTokenModal from './Stake';
 import PercentageButton from './PercentageButton'
 
 
@@ -24,6 +24,7 @@ interface StakeModalProps {
   stakingTokenPrice: number
   isRemovingStake?: boolean
   onDismiss?: () => void
+  addTokenUrl?: string
 }
 
 const StyledLink = styled(Link)`
@@ -42,96 +43,15 @@ const StakeModal: React.FC<StakeModalProps> = ({
   pool,
   stakingTokenBalance,
   stakingTokenPrice,
+  addTokenUrl,
   isRemovingStake = false,
   onDismiss,
 }) => {
-  const { sousId, stakingToken, userData, stakingLimit, earningToken } = pool
   const { t } = useTranslation()
   const { theme } = useTheme()
-  const { onStake } = useSousStake(sousId, isBnbPool)
-  const { onUnstake } = useSousUnstake(sousId, pool.enableEmergencyWithdraw)
-  const { toastSuccess, toastError } = useToast()
-  const [pendingTx, setPendingTx] = useState(false)
-  const [stakeAmount, setStakeAmount] = useState('')
-  const [hasReachedStakeLimit, setHasReachedStakedLimit] = useState(false)
-  const [percent, setPercent] = useState(0)
-  const getCalculatedStakingLimit = () => {
-    if (isRemovingStake) {
-      return userData.stakedBalance
-    }
-    return stakingLimit.gt(0) && stakingTokenBalance.gt(stakingLimit) ? stakingLimit : stakingTokenBalance
-  }
-  
-  const usdValueStaked = stakeAmount && formatNumber(new BigNumber(stakeAmount).times(stakingTokenPrice).toNumber())
   const [activeSelect, setActiveSelect] = useState(false)
-  
-  useEffect(() => {
-    if (stakingLimit.gt(0) && !isRemovingStake) {
-      const fullDecimalStakeAmount = getDecimalAmount(new BigNumber(stakeAmount), stakingToken.decimals)
-      setHasReachedStakedLimit(fullDecimalStakeAmount.plus(userData.stakedBalance).gt(stakingLimit))
-    }
-  }, [stakeAmount, stakingLimit, userData, stakingToken, isRemovingStake, setHasReachedStakedLimit])
 
-  const handleStakeInputChange = (input: string) => {
-    if (input) {
-      const convertedInput = getDecimalAmount(new BigNumber(input), stakingToken.decimals)
-      const percentage = Math.floor(convertedInput.dividedBy(getCalculatedStakingLimit()).multipliedBy(100).toNumber())
-      setPercent(Math.min(percentage, 100))
-    } else {
-      setPercent(0)
-    }
-    setStakeAmount(input)
-  }
-
-  const handleChangePercent = (sliderPercent: number) => {
-    if (sliderPercent > 0) {
-      const percentageOfStakingMax = getCalculatedStakingLimit().dividedBy(100).multipliedBy(sliderPercent)
-      const amountToStake = getFullDisplayBalance(percentageOfStakingMax, stakingToken.decimals, stakingToken.decimals)
-      setStakeAmount(amountToStake)
-    } else {
-      setStakeAmount('')
-    }
-    setPercent(sliderPercent)
-  }
-
-  const handleConfirmClick = async () => {
-    setPendingTx(true)
-
-    if (isRemovingStake) {
-      // unstaking
-      try {
-        await onUnstake(stakeAmount, stakingToken.decimals)
-        toastSuccess(
-          `${t('Unstaked')}!`,
-          t('Your %symbol% earnings have also been harvested to your wallet!', {
-            symbol: earningToken.symbol,
-          }),
-        )
-        setPendingTx(false)
-        onDismiss()
-      } catch (e) {
-        toastError(t('Canceled'), t('Please try again and confirm the transaction.'))
-        setPendingTx(false)
-      }
-    } else {
-      try {
-        // staking
-        await onStake(stakeAmount, stakingToken.decimals)
-        toastSuccess(
-          `${t('Staked')}!`,
-          t('Your %symbol% funds have been staked in the pool!', {
-            symbol: stakingToken.symbol,
-          }),
-        )
-        setPendingTx(false)
-        onDismiss()
-      } catch (e) {
-        toastError(t('Canceled'), t('Please try again and confirm the transaction.'))
-        setPendingTx(false)
-      }
-    }
-  }
-
+  const [ onPresentStakeAction ] = useModal(<StakeTokenModal isBnbPool={isBnbPool} pool={pool} stakingTokenBalance={stakingTokenBalance} stakingTokenPrice={stakingTokenPrice} />)
   return (
     <Modal
       title=""
@@ -144,17 +64,19 @@ const StakeModal: React.FC<StakeModalProps> = ({
           <Flex flexDirection="column">
             <Text fontSize="24px">0.0000</Text>
             <Text color="textSubtle">{pool.stakingToken.symbol} Tokens</Text>
-            <Button fullWidth>Add more</Button>
+            <Button fullWidth as="a" href={`https://sparkswap.finance/#/swap/${pool.stakingToken.address}`}>Add More</Button>
+            {/* <Button fullWidth as="a" href={`https://sparkswap.finance/#/swap/${farm.token.address[56]}`}>Add More</Button> */}
           </Flex>
           <Flex flexDirection="column">
             <Text fontSize="24px">0.0000</Text>
             <Text color="textSubtle">{pool.earningToken.symbol} Tokens</Text>
-            <Button fullWidth>Add More</Button>
+            {/* <Button fullWidth as="a" href="https://sparkswap.finance/#/swap/0x9ee47c9630a41525c139ef9ca42ba3b238ecfecf">Add More</Button> */}
+            <Button fullWidth as="a" href={`https://sparkswap.finance/#/swap/${pool.earningToken.address}`}>Add More</Button>
           </Flex>
           <Flex flexDirection="column">
             <Text fontSize="24px">0.0000</Text>
             <Text color="textSubtle">{pool.stakingToken.symbol} Tokens</Text>
-            <Button fullWidth >Stake Tokens</Button>
+            <Button fullWidth onClick={onPresentStakeAction}>Stake Tokens</Button>
           </Flex>
         </StyledFlex>
         <StyledFlex >
@@ -177,11 +99,10 @@ const StakeModal: React.FC<StakeModalProps> = ({
             position="top"
             target={
               <Button fullWidth variant="secondary"><Text>Withdraw</Text> {activeSelect ? <ChevronDown /> : <ChevronUp />}
-               {/* <Text>Withdraw</Text> {activeSelect ? <ChevronDown /> : <ChevronUp />} */}
+        
               </Button>
             }
           >
-            {/* <Button fullWidth onClick={"onDismiss"}  disabled={rawEarningsBalance.eq(0) || pendingTx} > */}
               <Button fullWidth>
               <Text>Claim</Text>
             </Button>

@@ -85,7 +85,8 @@ const HarvestActions: React.FC<HarvestActionsProps> = ({
             </>
           )}
         </Flex> */}
-         <Dropdown
+         
+         {/* <Dropdown
             position="top"
             target={
               <Button fullWidth variant="secondary"><Text>Withdraw</Text> {activeSelect ? <ChevronDown /> : <ChevronUp />}
@@ -98,7 +99,7 @@ const HarvestActions: React.FC<HarvestActionsProps> = ({
             <Button>
               <Text>Claim & Withdraw</Text>
             </Button>
-          </Dropdown>
+          </Dropdown> */}
     </Flex>
   )
 }

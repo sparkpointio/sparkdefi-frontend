@@ -22,33 +22,33 @@ const ApprovalAction: React.FC<ApprovalActionProps> = ({ pool, isLoading = false
   // const [activeSelect, setActiveSelect] = useState(false)
   
   return (
-    <>
+    
     <Flex flexDirection="row" alignItems='flex-start'>
       {isLoading ? (
         <Skeleton width="100%" height="52px" />
       ) : (
-        <ActionDiv>
-        <Button
+        // <ActionDiv>
+        <Button style= {{width: '100%' }}
           isLoading={requestedApproval}
           endIcon={requestedApproval ? <AutoRenewIcon spin color="currentColor" /> : null}
           disabled={requestedApproval}
           onClick={handleApprove}
           // width="100%"
         >
-          {t('Stake')}
+          { }
         </Button>
-        </ActionDiv>
+        // </ActionDiv>
       )}
-      <ActionDiv style={{width: '100%'}}>
+      {/* <ActionDiv style={{width: '100%'}}>
       <Dropdown
             position="top"
             target={
               <Button fullWidth variant="secondary">Withdraw <ChevronDown />
-               {/* <Text>Withdraw</Text> {activeSelect ? <ChevronDown /> : <ChevronUp />} */}
+               
               </Button>
             }
           >
-            {/* <Button fullWidth onClick={"onDismiss"}  disabled={rawEarningsBalance.eq(0) || pendingTx} > */}
+            
               <Button fullWidth>
               <Text>Claim</Text>
             </Button>
@@ -56,10 +56,10 @@ const ApprovalAction: React.FC<ApprovalActionProps> = ({ pool, isLoading = false
               <Text>Claim & Withdraw</Text>
             </Button>
           </Dropdown>
-        </ActionDiv>
-    </Flex>
+        </ActionDiv> */}
+    </Flex> 
 
-    </>
+
   )
 }
 

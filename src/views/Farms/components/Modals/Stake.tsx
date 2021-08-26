@@ -59,10 +59,11 @@ const Stake: React.FC<StakeModalInterface> = ({ onDismiss, max, symbol, addLiqui
         onClick={onDismiss}
         disabled={pendingTx}
         >
-         Cancel
+         Approve
         </CancelButton>
         <DepositButton
-        // disabled={pendingTx || !valNumber.isFinite() || valNumber.eq(0) || valNumber.gt(fullBalanceNumber)}
+        // disable Deposit button if not yet approved
+        disabled={pendingTx || !valNumber.isFinite() || valNumber.eq(0) || valNumber.gt(fullBalanceNumber)}
         onClick={async () => {
           try {
             setPendingTx(true)
