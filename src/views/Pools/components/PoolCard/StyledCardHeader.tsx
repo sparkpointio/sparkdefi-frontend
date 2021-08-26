@@ -23,7 +23,8 @@ const StyledCardHeader: React.FC<{
 }> = ({ earningToken, stakingToken, isFinished = false, isAutoVault = false, isStaking = false }) => {
   const { t } = useTranslation()
   const isCakePool = earningToken.symbol === 'CAKE' && stakingToken.symbol === 'CAKE'
-  const background = isStaking ? 'bubblegum' : 'cardHeader'
+  // const background = isStaking ? 'bubblegum' : 'cardHeader'
+  const background = 'cardHeader'
 
 /* 
   const getHeadingPrefix = () => {

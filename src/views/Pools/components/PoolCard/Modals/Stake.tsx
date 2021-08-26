@@ -9,6 +9,8 @@ import { useSousUnstake } from 'hooks/useUnstake'
 import useTheme from 'hooks/useTheme'
 import useToast from 'hooks/useToast'
 import BigNumber from 'bignumber.js'
+import { useSousApprove } from 'hooks/useApprove'
+import { useERC20 } from 'hooks/useContract'
 import { getFullDisplayBalance, formatNumber, getDecimalAmount } from 'utils/formatBalance'
 import { Pool } from 'state/types'
 import ModalInput from 'components/ModalInput'
@@ -42,6 +44,8 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
   onDismiss,
 }) => {
   const { sousId, stakingToken, userData, stakingLimit, earningToken } = pool
+  const stakingTokenContract = useERC20(stakingToken.address ? getAddress(stakingToken.address) : '')
+  const { handleApprove, requestedApproval } = useSousApprove(stakingTokenContract, sousId, earningToken.symbol)
   const { t } = useTranslation()
   const { theme } = useTheme()
   const { onStake } = useSousStake(sousId, isBnbPool)
@@ -204,20 +208,20 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
         <Button
           isLoading={pendingTx}
           endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
-          onClick={handleApproveClick}
+          onClick={handleApprove}
           disabled={!stakeAmount || parseFloat(stakeAmount) === 0 || hasReachedStakeLimit}
           mt="24px"
           fullWidth
           marginRight="20px"
         >
-          {pendingTx ? t('Approving') : t('Approve')}
+         Approve
         </Button>
         <Button
           isLoading={pendingTx}
           // endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
           onClick={handleConfirmClick}
           // disabled={!stakeAmount || parseFloat(stakeAmount) === 0 || hasReachedStakeLimit}
-          disabled={!approvedTx}
+          // disabled={!approvedTx}
           mt="24px"
           fullWidth
           marginLeft="20px"
