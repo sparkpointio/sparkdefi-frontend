@@ -88,9 +88,6 @@ const CardActions: React.FC<CardActionsProps> = ({ pool, stakedBalance }) => {
             {isStaked ? t('Staked') : `${stakingToken.symbol}`}
           </InlineText>
         </Box> */}
-        {needsApproval ? (
-          <ApprovalAction pool={pool} isLoading={isLoading} />
-        ) : (
           <StyledFlex justifyContent="space-between" marginTop="10px">
              <StakeActions
             isLoading={isLoading}
@@ -109,7 +106,6 @@ const CardActions: React.FC<CardActionsProps> = ({ pool, stakedBalance }) => {
               isLoading={isLoading}
             /> */}
           </StyledFlex>
-        )}
       </Flex>
     </Flex>
   )
