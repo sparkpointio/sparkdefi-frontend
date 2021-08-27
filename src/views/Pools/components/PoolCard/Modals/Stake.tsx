@@ -60,7 +60,8 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
     if (isRemovingStake) {
       return userData.stakedBalance
     }
-    return stakingLimit.gt(0) && stakingTokenBalance.gt(stakingLimit) ? stakingLimit : stakingTokenBalance
+    // return stakingLimit.gt(0) && stakingTokenBalance.gt(stakingLimit) ? stakingLimit : stakingTokenBalance
+    return stakingTokenBalance
   }
 
   const usdValueStaked = stakeAmount && formatNumber(new BigNumber(stakeAmount).times(stakingTokenPrice).toNumber())
@@ -169,6 +170,15 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
           symbol={stakingToken.symbol}
           addLiquidityUrl=''
         />
+        
+        <div>
+        <Text ml="auto" color="textSubtle" fontSize="14px" mb="8px" style={{ textAlign: 'left'}}>
+          {t('Available: %balance%', {
+            balance: getFullDisplayBalance(getCalculatedStakingLimit(), stakingToken.decimals),
+          })}
+        </Text>
+        </div>
+        
         {/* {hasReachedStakeLimit && (
           <Text color="failure" fontSize="12px" style={{ textAlign: 'right' }} mt="4px">
             {t('Maximum total stake: %amount% %token%', {
