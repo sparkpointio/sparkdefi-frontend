@@ -102,6 +102,7 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
   const handleConfirmClick = async () => {
     setPendingTx(true)
 
+
     if (isRemovingStake) {
       // unstaking
       try {
@@ -214,7 +215,7 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
         <Flex justifyContent="space-between"  marginTop="17px" marginBottom="17px">
           <Text bold>Approved Tokens</Text>
           <Text>
-            00.00
+            {!approvedTx ? "0.00" : stakeAmount}
             {/* {stakeAmount} */}
           </Text>
         </Flex>
