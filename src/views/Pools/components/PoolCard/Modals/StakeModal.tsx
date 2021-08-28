@@ -64,6 +64,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
   const totalEarnedTokens = userData?.pendingReward ? getBalanceNumber(new BigNumber(userData.pendingReward)) : BIG_ZERO
   const [pendingTx, setPendingTx] = useState(false)
   const temp = new BigNumber(pool.tokenPerBlock).times( new BigNumber(userData.stakedBalance).div(pool.totalStaked)  ) 
+  const totalStaked = pool.totalStaked ? getBalanceNumber(new BigNumber(pool.totalStaked.toString()), stakingToken.decimals) : BIG_ZERO
 
   const rewardRate = pool?.tokenPerBlock ? getBalanceNumber(temp) : BIG_ZERO
   const [ onPresentStakeAction ] = useModal(<StakeTokenModal isBnbPool={isBnbPool} pool={pool} stakingTokenBalance={stakingTokenBalance} stakingTokenPrice={stakingTokenPrice} />)
@@ -150,18 +151,19 @@ const StakeModal: React.FC<StakeModalProps> = ({
        <Dropdown
           position="top"
           target={
-            <Button fullWidth variant="secondary"><Text>Withdraw</Text> {activeSelect ? <ChevronDown /> : <ChevronUp />}
-             {/* <Text>Withdraw</Text> {activeSelect ? <ChevronDown /> : <ChevronUp />} */}
+            // Disable component if total staked tokens is empty
+            <Button disabled={!totalStaked} fullWidth variant="secondary">
+              <Text>Withdraw</Text> {activeSelect ? <ChevronDown /> : <ChevronUp />}
             </Button>
           }
         >
-          {/* <Button fullWidth onClick={"onDismiss"}  disabled={rawEarningsBalance.eq(0) || pendingTx} > */}
-            <Button fullWidth>
-            <Text onClick={handleHarvestConfirm}>Claim</Text>
-          </Button>
-          <Button>
-            <Text onClick={handleUnstake}>Claim & Withdraw</Text>
-          </Button>
+            {/* Disable Claim & Withdraw if no staked tokens */}
+            <Button fullWidth disabled={!totalStaked}>
+              <Text onClick={handleHarvestConfirm}>Claim</Text>
+            </Button>
+            <Button disabled={!totalStaked}>
+              <Text onClick={handleUnstake}>Claim & Withdraw</Text>
+            </Button>
         </Dropdown>
   </Flex>
       </StyledFlex>
