@@ -171,6 +171,7 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
           addLiquidityUrl=''
         />
         
+        {/* Fetch and display actual balance */}
         <div>
         <Text ml="auto" color="textSubtle" fontSize="14px" mb="8px" style={{ textAlign: 'left'}}>
           {t('Available: %balance%', {
@@ -212,14 +213,17 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
 
         <Flex justifyContent="space-between"  marginTop="17px" marginBottom="17px">
           <Text bold>Approved Tokens</Text>
-          <Text>00.00</Text>
+          <Text>
+            00.00
+            {/* {stakeAmount} */}
+          </Text>
         </Flex>
         <Flex style={{width: '100%'}}>
         <Button
           isLoading={pendingTx}
-          endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
-          onClick={handleApprove}
-          disabled={!stakeAmount || parseFloat(stakeAmount) === 0 || hasReachedStakeLimit}
+          // endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
+          onClick={handleApproveClick}
+          disabled={!stakeAmount || parseFloat(stakeAmount) === 0 || hasReachedStakeLimit || approvedTx}
           mt="24px"
           fullWidth
           marginRight="20px"
@@ -228,10 +232,10 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
         </Button>
         <Button
           isLoading={pendingTx}
-          // endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
+          endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
           onClick={handleConfirmClick}
           // disabled={!stakeAmount || parseFloat(stakeAmount) === 0 || hasReachedStakeLimit}
-          // disabled={!approvedTx}
+          disabled={!approvedTx}
           mt="24px"
           fullWidth
           marginLeft="20px"
