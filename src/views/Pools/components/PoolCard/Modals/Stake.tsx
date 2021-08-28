@@ -53,7 +53,8 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
   const { onUnstake } = useSousUnstake(sousId, pool.enableEmergencyWithdraw)
   const { toastSuccess, toastError } = useToast()
   const [pendingTx, setPendingTx] = useState(false)
-  const [approvedTx, setApprovedTx] = useState(false)
+  // const [approvedTx, setApprovedTx] = useState(false)
+  const [isApproved, setIsApproved] = useState(false)
   const [stakeAmount, setStakeAmount] = useState('')
   const [hasReachedStakeLimit, setHasReachedStakedLimit] = useState(false)
   const [percent, setPercent] = useState(0)
@@ -71,7 +72,7 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
       const fullDecimalStakeAmount = getDecimalAmount(new BigNumber(stakeAmount), stakingToken.decimals)
       setHasReachedStakedLimit(fullDecimalStakeAmount.plus(userData.stakedBalance).gt(stakingLimit))
     }
-    setApprovedTx(userData.allowance.lt(stakingLimit))
+    setIsApproved(userData.allowance.lt(stakingLimit))
   }, [stakeAmount, stakingLimit, userData, stakingToken, isRemovingStake, setHasReachedStakedLimit])
 
   const handleStakeInputChange = (input: string) => {
@@ -96,9 +97,9 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
     setPercent(sliderPercent)
   }
 
-  const handleApproveClick = async () => {
-    setApprovedTx(true)
-  }
+  // const handleApproveClick = async () => {
+  //   setApprovedTx(true)
+  // }
 
   const handleConfirmClick = async () => {
     setPendingTx(true)
@@ -209,9 +210,9 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
         <Flex style={{width: '100%'}}>
         <Button
           isLoading={pendingTx}
-          endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
+          endIcon={requestedApproval ? <AutoRenewIcon spin color="currentColor" /> : null}
           onClick={handleApprove}
-          disabled={!approvedTx}
+          disabled={!isApproved}
           mt="24px"
           fullWidth
           marginRight="20px"
@@ -220,7 +221,7 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
         </Button>
         <Button
           isLoading={pendingTx}
-          // endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
+          endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
           onClick={handleConfirmClick}
           disabled={!stakeAmount || parseFloat(stakeAmount) === 0 || hasReachedStakeLimit}
           // disabled={!approvedTx}
