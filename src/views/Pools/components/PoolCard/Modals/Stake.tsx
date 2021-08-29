@@ -46,6 +46,7 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
   onDismiss,
 }) => {
   const { sousId, stakingToken, userData, stakingLimit, earningToken } = pool
+  console.log(pool)
   const stakingTokenContract = useERC20(stakingToken.address ? getAddress(stakingToken.address) : '')
   const { handleApprove, requestedApproval } = useSousApprove(stakingTokenContract, sousId, earningToken.symbol)
   const { t } = useTranslation()
@@ -252,6 +253,7 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
           endIcon={requestedApproval ? <AutoRenewIcon spin color="currentColor" /> : null}
           // onClick={handleApproveClick}
           // disabled={!stakeAmount || parseFloat(stakeAmount) === 0 || hasReachedStakeLimit || approvedTx}
+          onClick={handleApprove}
           disabled={!isApproved}
           mt="24px"
           fullWidth
@@ -265,6 +267,7 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
           onClick={handleConfirmClick}
           // disabled={!stakeAmount || parseFloat(stakeAmount) === 0 || hasReachedStakeLimit}
           disabled={!stakeAmount || parseFloat(stakeAmount) === 0 || hasReachedStakeLimit}
+          // disabled={!approvedTx}
           mt="24px"
           fullWidth
           marginLeft="20px"
