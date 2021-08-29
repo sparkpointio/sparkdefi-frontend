@@ -75,7 +75,7 @@ const CollectModal: React.FC<CollectModalProps> = ({
       try {
         await onReward()
         toastSuccess(
-          `${t('Harvested')}!`,
+          `${t('Claimed')}!`,
           t('Your %symbol% earnings have been sent to your wallet!', { symbol: earningToken.symbol }),
         )
         setPendingTx(false)
