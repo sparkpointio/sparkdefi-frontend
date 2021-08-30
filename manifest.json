@@ -1,0 +1,16 @@
+{
+  "short_name": "SparkDefi",
+  "name": "SparkDefi",
+  "description": "Refuel your rocket with SFUEL and travel to the moon with SparkDefi, the prodigious decentralized exchange on Binance Smart Chain",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "type": "image/x-icon",
+      "sizes": "256x256"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
