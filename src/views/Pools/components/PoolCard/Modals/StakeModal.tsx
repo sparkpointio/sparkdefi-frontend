@@ -64,6 +64,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
   const totalEarnedTokens = userData?.pendingReward ? getBalanceNumber(new BigNumber(userData.pendingReward)) : BIG_ZERO
   const [pendingTx, setPendingTx] = useState(false)
   const temp = new BigNumber(pool.tokenPerBlock).times( new BigNumber(userData.stakedBalance).div(pool.totalStaked)  ) 
+  const totalStaked = pool.totalStaked ? getBalanceNumber(new BigNumber(pool.totalStaked.toString()), stakingToken.decimals) : BIG_ZERO
 
   const rewardRate = pool?.tokenPerBlock ? getBalanceNumber(temp) : BIG_ZERO
   const [ onPresentStakeAction ] = useModal(<StakeTokenModal isBnbPool={isBnbPool} pool={pool} stakingTokenBalance={stakingTokenBalance} stakingTokenPrice={stakingTokenPrice} />)
@@ -74,7 +75,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
       try {
         await onReward()
         toastSuccess(
-          `${t('Harvested')}!`,
+          `${t('Claimed')}!`,
           t('Your %symbol% earnings have been sent to your wallet!', { symbol: earningToken.symbol }),
         )
         setPendingTx(false)
@@ -93,7 +94,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
         await onUnstake(totalStakedTokens.toFixed(4), stakingToken.decimals)
         toastSuccess(
           `${t('Unstaked')}!`,
-          t('Your %symbol% earnings have also been harvested to your wallet!', {
+          t('Your %symbol% earnings have also been claimed to your wallet!', {
             symbol: earningToken.symbol,
           }),
         )
@@ -117,17 +118,17 @@ const StakeModal: React.FC<StakeModalProps> = ({
       <StyledFlex marginTop="21px">
         <Flex flexDirection="column">
           <Text fontSize="24px">{totalStakingTokens.toFixed(4)}</Text>
-          <Text color="textSubtle">{pool.stakingToken.symbol} Tokens</Text>
+          <Text color="textSubtle" marginBottom="24px">{pool.stakingToken.symbol} Tokens</Text>
           <Button fullWidth as="a" href={`https://sparkswap.finance/#/swap/${pool.stakingToken.address[56]}`}>Add More</Button>
         </Flex>
         <Flex flexDirection="column">
           <Text fontSize="24px">{totalEarningTokens.toFixed(4)}</Text>
-          <Text color="textSubtle">{pool.earningToken.symbol} Tokens</Text>
+          <Text color="textSubtle" marginBottom="24px">{pool.earningToken.symbol} Tokens</Text>
           <Button fullWidth as="a" href={`https://sparkswap.finance/#/swap/${pool.earningToken.address[56]}`}>Add More</Button>
         </Flex>
         <Flex flexDirection="column">
           <Text fontSize="24px">{totalStakedTokens.toFixed(4)}</Text>
-          <Text color="textSubtle">{pool.stakingToken.symbol} Staked</Text>
+          <Text color="textSubtle" marginBottom="24px">{pool.stakingToken.symbol} Staked</Text>
           <Button fullWidth onClick={onPresentStakeAction}>Stake Tokens</Button>
         </Flex>
       </StyledFlex>
@@ -137,7 +138,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
       <StyledFlex marginTop="30px" marginBottom="20px">
         <Flex flexDirection="column">
           <Text fontSize="24px">{rewardRate.toFixed(4)}</Text>
-          <Text color="textSubtle" fontSize="17px">Your Rate {pool.earningToken.symbol}/block Tokens</Text>
+          <Text color="textSubtle" fontSize="17px">Your Rate {pool.earningToken.symbol}/block</Text>
         </Flex>
         <Flex flexDirection="column">
           <Text fontSize="24px">{totalEarnedTokens.toFixed(4)}</Text>
@@ -147,22 +148,28 @@ const StakeModal: React.FC<StakeModalProps> = ({
         onMouseEnter={() => setActiveSelect(true)}
         onMouseLeave={() => setActiveSelect(false)}>
       
-       <Dropdown
+       {userData.stakedBalance.eq(0) ? <Button disabled fullWidth> Withdraw </Button> : <Dropdown
           position="top"
           target={
-            <Button fullWidth variant="secondary"><Text>Withdraw</Text> {activeSelect ? <ChevronDown /> : <ChevronUp />}
-             {/* <Text>Withdraw</Text> {activeSelect ? <ChevronDown /> : <ChevronUp />} */}
+            // Disable component if total staked tokens is empty
+            <Button fullWidth variant="secondary">
+              <Text>Withdraw</Text> {activeSelect ? <ChevronDown /> : <ChevronUp />}
             </Button>
           }
         >
-          {/* <Button fullWidth onClick={"onDismiss"}  disabled={rawEarningsBalance.eq(0) || pendingTx} > */}
+            {/* Disable Claim & Withdraw if no staked tokens */}
             <Button fullWidth>
-            <Text onClick={handleHarvestConfirm}>Claim</Text>
-          </Button>
-          <Button>
-            <Text onClick={handleUnstake}>Claim & Withdraw</Text>
-          </Button>
+              <Text onClick={handleHarvestConfirm}>Claim</Text>
+            </Button>
+            <Button>
+              <Text onClick={handleUnstake}>Claim & Withdraw</Text>
+            </Button>
         </Dropdown>
+
+       }
+       
+
+       
   </Flex>
       </StyledFlex>
     </Flex>

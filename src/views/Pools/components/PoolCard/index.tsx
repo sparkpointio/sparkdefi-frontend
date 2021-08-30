@@ -29,7 +29,9 @@ const PoolCard: React.FC<{ pool: Pool; account: string }> = ({ pool, account }) 
 
   const rewardPerBlock = pool?.tokenPerBlock ? getBalanceNumber(new BigNumber(pool.tokenPerBlock.toString()), earningToken.decimals) : BIG_ZERO
   
-  
+  const temp = new BigNumber(pool.tokenPerBlock).times( new BigNumber(userData.stakedBalance).div(pool.totalStaked)  ) 
+  const rewardRate = pool?.tokenPerBlock ? getBalanceNumber(temp) : BIG_ZERO
+
   const { currentBlock } = useBlock()
   
   const { shouldShowBlockCountdown, blocksUntilStart, blocksRemaining, hasPoolStarted, blocksToDisplay } =
@@ -69,7 +71,7 @@ const PoolCard: React.FC<{ pool: Pool; account: string }> = ({ pool, account }) 
           </Flex>
           <Flex justifyContent="space-between" style={{textAlign: 'left'}}>
         <Text>{t('Your Rate')}</Text>
-        <Text>0.00</Text>
+        <Text>{rewardRate.toFixed(4)} {pool.earningToken.symbol}/block</Text>
       </Flex>
           <Flex mt="24px" flexDirection="column" marginTop="10px">
             {account ? (

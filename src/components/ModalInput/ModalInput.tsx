@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { Text, Button, Input, InputProps, Flex, Link } from '@sparkpointio/sparkswap-uikit'
 import { useTranslation } from 'contexts/Localization'
 import { BigNumber } from 'bignumber.js'
+import { getFullDisplayBalance } from 'utils/formatBalance'
 
 interface ModalInputProps {
   max: string
@@ -109,9 +110,11 @@ const ModalInput: React.FC<ModalInputProps> = ({
         </Flex>
       </StyledTokenInput>
       <Flex> 
-          <Text fontSize="14px" color="textSubtle">
-            {t('Available')}: {displayBalance(max)}
-          </Text>
+          {/* <Text fontSize="14px" color="textSubtle">
+            {t('Available')}: {getFullDisplayBalance}
+          </Text>  */}
+          
+
         </Flex>
       {/* {isBalanceZero && (
         <StyledErrorMessage fontSize="14px" color="failure">
