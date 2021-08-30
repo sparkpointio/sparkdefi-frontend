@@ -74,7 +74,8 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
     if (isRemovingStake) {
       return userData.stakedBalance
     }
-    return stakingLimit.gt(0) && stakingTokenBalance.gt(stakingLimit) ? userLimit : stakingTokenBalance
+    console.log(stakingLimit.gt(BIG_ZERO))
+    return stakingLimit.gt(BIG_ZERO) && stakingTokenBalance.gt(userLimit) ? userLimit : stakingTokenBalance
   }
   const usdValueStaked = stakeAmount && formatNumber(new BigNumber(stakeAmount).times(stakingTokenPrice).toNumber())
 
