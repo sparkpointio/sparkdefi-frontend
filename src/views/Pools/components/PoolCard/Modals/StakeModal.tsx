@@ -118,12 +118,12 @@ const StakeModal: React.FC<StakeModalProps> = ({
         <Flex flexDirection="column">
           <Text fontSize="24px">{totalStakingTokens.toFixed(4)}</Text>
           <Text color="textSubtle">{pool.stakingToken.symbol} Tokens</Text>
-          <Button fullWidth as="a" href={`https://sparkswap.finance/#/swap/${pool.stakingToken.address[56]}`}>Add More</Button>
+          <Button fullWidth>Add more</Button>
         </Flex>
         <Flex flexDirection="column">
           <Text fontSize="24px">{totalEarningTokens.toFixed(4)}</Text>
           <Text color="textSubtle">{pool.earningToken.symbol} Tokens</Text>
-          <Button fullWidth as="a" href={`https://sparkswap.finance/#/swap/${pool.earningToken.address[56]}`}>Add More</Button>
+          <Button fullWidth>Add More</Button>
         </Flex>
         <Flex flexDirection="column">
           <Text fontSize="24px">{totalStakedTokens.toFixed(4)}</Text>

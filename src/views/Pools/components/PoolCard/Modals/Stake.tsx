@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import styled from 'styled-components'
 import { Slider, BalanceInput, AutoRenewIcon, Link } from '@pancakeswap/uikit'
 import { Modal, Text, Flex, Image, Button} from '@sparkpointio/sparkswap-uikit'
@@ -24,6 +24,7 @@ interface StakeModalProps {
   stakingTokenPrice: number
   isRemovingStake?: boolean
   onDismiss?: () => void
+  isApprove?: boolean
 }
 
 const StyledLink = styled(Link)`
@@ -42,9 +43,10 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
   stakingTokenPrice,
   isRemovingStake = false,
   onDismiss,
+  isApprove = false,
 }) => {
   const { sousId, stakingToken, userData, stakingLimit, earningToken } = pool
-  console.log(pool)
+  const approveBtn = useRef(null);
   const stakingTokenContract = useERC20(stakingToken.address ? getAddress(stakingToken.address) : '')
   const { handleApprove, requestedApproval } = useSousApprove(stakingTokenContract, sousId, earningToken.symbol)
   const { t } = useTranslation()
@@ -54,18 +56,26 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
   const { toastSuccess, toastError } = useToast()
   const [pendingTx, setPendingTx] = useState(false)
   // const [approvedTx, setApprovedTx] = useState(false)
-  const [isApproved, setIsApproved] = useState(false)
+  const [isApproved, setIsApproved] = useState(isApprove)
   const [stakeAmount, setStakeAmount] = useState('')
   const [hasReachedStakeLimit, setHasReachedStakedLimit] = useState(false)
   const [percent, setPercent] = useState(0)
+  const userLimit = stakingLimit.minus(userData.stakedBalance);
   const getCalculatedStakingLimit = () => {
     if (isRemovingStake) {
       return userData.stakedBalance
     }
-    return stakingLimit.gt(0) && stakingTokenBalance.gt(stakingLimit) ? stakingLimit : stakingTokenBalance
+    return stakingLimit.gt(0) && stakingTokenBalance.gt(stakingLimit) ? userLimit : stakingTokenBalance
   }
 
+  
   const usdValueStaked = stakeAmount && formatNumber(new BigNumber(stakeAmount).times(stakingTokenPrice).toNumber())
+
+  useEffect(() => {
+    if (pendingTx === false){
+      setIsApproved(false)
+    }
+  }, [pendingTx])
 
   useEffect(() => {
     if (stakingLimit.gt(0) && !isRemovingStake) {
@@ -115,6 +125,7 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
           }),
         )
         setPendingTx(false)
+        setIsApproved(false)
         onDismiss()
       } catch (e) {
         toastError(t('Canceled'), t('Please try again and confirm the transaction.'))
@@ -138,6 +149,7 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
       }
     }
   }
+  
 
   return (
     <Modal title="" onDismiss={onDismiss}>
@@ -168,7 +180,7 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
           value={stakeAmount}
           onSelectMax={() => handleChangePercent(100)}
           onChange={e => handleStakeInputChange(e.currentTarget.value)}
-          max={getFullDisplayBalance(new BigNumber(stakingLimit), stakingToken.decimals, 0)}
+          max={getFullDisplayBalance(new BigNumber(userLimit), stakingToken.decimals, 0)}
           symbol={stakingToken.symbol}
           addLiquidityUrl=''
         />
@@ -212,7 +224,7 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
           isLoading={pendingTx}
           endIcon={requestedApproval ? <AutoRenewIcon spin color="currentColor" /> : null}
           onClick={handleApprove}
-          disabled={!isApproved}
+          disabled={!isApproved || !stakeAmount}
           mt="24px"
           fullWidth
           marginRight="20px"
@@ -223,7 +235,7 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
           isLoading={pendingTx}
           endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
           onClick={handleConfirmClick}
-          disabled={!stakeAmount || parseFloat(stakeAmount) === 0 || hasReachedStakeLimit}
+          disabled={!stakeAmount || parseFloat(stakeAmount) === 0 || hasReachedStakeLimit || isApproved}
           // disabled={!approvedTx}
           mt="24px"
           fullWidth
