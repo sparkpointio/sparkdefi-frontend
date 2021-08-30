@@ -19,7 +19,6 @@ import CardActions from './CardActions'
 
 const PoolCard: React.FC<{ pool: Pool; account: string }> = ({ pool, account }) => {
   const { sousId, stakingToken, earningToken, isFinished, userData, startBlock, endBlock } = pool
-  console.log(pool)
   const { t } = useTranslation()
   const stakedBalance = userData?.stakedBalance ? new BigNumber(userData.stakedBalance) : BIG_ZERO
   const accountHasStakedBalance = stakedBalance.gt(0)
@@ -65,10 +64,10 @@ const PoolCard: React.FC<{ pool: Pool; account: string }> = ({ pool, account }) 
               <Text>Reward per block</Text>
               <Text>{rewardPerBlock}</Text>
           </Flex>
-          <Flex justifyContent="space-between" style={{textAlign: 'left'}}>
+          {/* <Flex justifyContent="space-between" style={{textAlign: 'left'}}>
             <Text>APY</Text>
             <Text>0%</Text>
-          </Flex>
+          </Flex> */}
           <Flex justifyContent="space-between" style={{textAlign: 'left'}}>
         <Text>{t('Your Rate')}</Text>
         <Text>{rewardRate.toFixed(4)} {pool.earningToken.symbol}/block</Text>

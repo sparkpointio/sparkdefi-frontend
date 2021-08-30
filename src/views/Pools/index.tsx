@@ -245,12 +245,11 @@ const Pools: React.FC = () => {
           </Flex>
         */}
 
-          <div >
-          <Text fontSize="20px" marginLeft='24px' paddingBottom='17px'>
+        <div>
+          <Text fontSize="20px" marginLeft="24px" paddingBottom="17px">
             {' '}
-            Stake tokens to earn{' '} 
+            Stake tokens to earn{' '}
           </Text>
-        
 
           <FlexLayout>
             {/* <Route exact path={`${path}`}> */}
@@ -271,32 +270,35 @@ const Pools: React.FC = () => {
           </FlexLayout>
         </div>
 
-        <StyledHr />
-
         {/* ENDED  */}
-        <div style={{margin: '25px 0px', padding: '25px 0px'}}>
-          <Flex justifyContent="space-between" style={{ margin: '20px' }}>
-            <Flex flexDirection="column" mr={['8px', 0]}>
-              <Heading scale="md" color="text">
-                {t('Inactive Pools')}
-              </Heading>
-            </Flex>
-          </Flex>
+        {finishedPools.length !== 0 && (
+          <>
+            <StyledHr />
+            <div style={{ margin: '25px 0px', padding: '25px 0px' }}>
+              <Flex justifyContent="space-between" style={{ margin: '20px' }}>
+                <Flex flexDirection="column" mr={['8px', 0]}>
+                  <Heading scale="md" color="text">
+                    {t('Inactive Pools')}
+                  </Heading>
+                </Flex>
+              </Flex>
 
-          <FlexLayout>
-            {/* <Route path={`${path}/history`}> */}
-            {/* {stakedOnly
+              <FlexLayout>
+                {/* <Route path={`${path}/history`}> */}
+                {/* {stakedOnly
             ? orderBy(stakedOnlyFinishedPools, ['sortOrder'])
                 .slice(0, numberOfPoolsVisible)
                 .map((pool) => <PoolCard key={pool.sousId} pool={pool} account={account} />) */}
-            {orderBy(finishedPools, ['sortOrder'])
-              .slice(0, numberOfPoolsVisible)
-              .map((pool) => (
-                <PoolCard key={pool.sousId} pool={pool} account={account} />
-              ))}
-            {/* </Route> */}
-          </FlexLayout>
-        </div>
+                {orderBy(finishedPools, ['sortOrder'])
+                  .slice(0, numberOfPoolsVisible)
+                  .map((pool) => (
+                    <PoolCard key={pool.sousId} pool={pool} account={account} />
+                  ))}
+                {/* </Route> */}
+              </FlexLayout>
+            </div>
+          </>
+        )}
         <div ref={loadMoreRef} />
         {/* <Image
           mx="auto"
