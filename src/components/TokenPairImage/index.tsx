@@ -29,8 +29,8 @@ const getImageUrlFromToken = (token: Token) => {
 const TokenPairImage: React.FC<TokenPairImageProps> = ({ primaryToken, secondaryToken, ...props }) => {
   return (
     <PairLogoImg>
-      <StyledLogo src={getImageUrlFromToken(primaryToken)} alt="logo-img" />
       <StyledLogo src={getImageUrlFromToken(secondaryToken)} alt="logo-img" />
+      <StyledLogo src={getImageUrlFromToken(primaryToken)} alt="logo-img" />
     </PairLogoImg>
   )
 }
