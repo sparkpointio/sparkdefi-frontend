@@ -9,7 +9,7 @@ import { useSousUnstake } from 'hooks/useUnstake'
 import useTheme from 'hooks/useTheme'
 import useToast from 'hooks/useToast'
 import BigNumber from 'bignumber.js'
-import { useSousApprove } from 'hooks/useApprove'
+import { useSousApprove, useSousApproveWithAmount } from 'hooks/useApprove'
 import { useERC20 } from 'hooks/useContract'
 import { getFullDisplayBalance, formatNumber, getDecimalAmount } from 'utils/formatBalance'
 import { Pool } from 'state/types'
@@ -46,7 +46,6 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
   const { sousId, stakingToken, userData, stakingLimit, earningToken } = pool
   console.log(pool)
   const stakingTokenContract = useERC20(stakingToken.address ? getAddress(stakingToken.address) : '')
-  const { handleApprove, requestedApproval } = useSousApprove(stakingTokenContract, sousId, earningToken.symbol)
   const { t } = useTranslation()
   const { theme } = useTheme()
   const { onStake } = useSousStake(sousId, isBnbPool)
@@ -58,6 +57,7 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
   const [stakeAmount, setStakeAmount] = useState('')
   const [hasReachedStakeLimit, setHasReachedStakedLimit] = useState(false)
   const [percent, setPercent] = useState(0)
+  const { handleApprove, requestedApproval } = useSousApproveWithAmount(stakingTokenContract, sousId, earningToken.symbol, getDecimalAmount(new BigNumber(stakeAmount), stakingToken.decimals))
   const getCalculatedStakingLimit = () => {
     if (isRemovingStake) {
       return userData.stakedBalance
