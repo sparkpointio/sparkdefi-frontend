@@ -170,7 +170,7 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
         <Flex justifyContent="center">
           <Text color="textSubtle" fontSize="14px" mb="38px" mt="-48px" style={{ textAlign: 'center'}}>
             {t('Maximum stakable amount in this pool: %maxstake% %tokensymbol%', {
-              maxstake: new BigNumber(remainingStakeTokens).toString(),
+              maxstake: getFullDisplayBalance(stakingLimit, stakingToken.decimals),
               tokensymbol: pool.stakingToken.symbol
             })}
           </Text>
