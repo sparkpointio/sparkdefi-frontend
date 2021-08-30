@@ -19,7 +19,6 @@ import CardActions from './CardActions'
 
 const PoolCard: React.FC<{ pool: Pool; account: string }> = ({ pool, account }) => {
   const { sousId, stakingToken, earningToken, isFinished, userData, startBlock, endBlock } = pool
-  console.log(pool)
   const { t } = useTranslation()
   const stakedBalance = userData?.stakedBalance ? new BigNumber(userData.stakedBalance) : BIG_ZERO
   const accountHasStakedBalance = stakedBalance.gt(0)

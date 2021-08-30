@@ -50,6 +50,38 @@ const useTokenBalance = (tokenAddress: string) => {
   return balanceState
 }
 
+export const useTokenAllowance = (tokenAddress: string, allowedAddress: string) => {
+  const { NOT_FETCHED, SUCCESS, FAILED } = FetchStatus
+  const [balanceState, setBalanceState] = useState<UseTokenBalanceState>({
+    balance: BIG_ZERO,
+    fetchStatus: NOT_FETCHED,
+  })
+  const { account } = useWeb3React()
+  const { fastRefresh } = useRefresh()
+
+  useEffect(() => {
+    const fetchBalance = async () => {
+      const contract = getBep20Contract(tokenAddress)
+      try {
+        const res = await contract.methods.allowance(account, allowedAddress).call()
+        setBalanceState({ balance: new BigNumber(res), fetchStatus: SUCCESS })
+      } catch (e) {
+        console.error(e)
+        setBalanceState((prev) => ({
+          ...prev,
+          fetchStatus: FAILED,
+        }))
+      }
+    }
+
+    if (account) {
+      fetchBalance()
+    }
+  }, [account, tokenAddress, allowedAddress, fastRefresh, SUCCESS, FAILED])
+
+  return balanceState
+}
+
 export const useTotalSupply = () => {
   const { slowRefresh } = useRefresh()
   const [totalSupply, setTotalSupply] = useState<BigNumber>()
