@@ -6,13 +6,11 @@ const config: MenuEntry[] = [
     icon: "TradeIcon",
     href: "https://sparkswap.finance/#/swap",
   },
-  /*
   {
     label: "Farm",
     icon: "FarmIcon",
-    href: "/farms",
+    href: "https://app.srk.finance/#/stake",
   },
-  */
   {
     label: "Pool",
     icon: "PoolIcon",
@@ -24,9 +22,24 @@ const config: MenuEntry[] = [
     href: "https://app.srk.finance/#/bridge",
   },
   {
+    label: "Launch",
+    icon: "LaunchIcon",
+    href: "https://launch.sparkswap.finance/#/",
+  },
+  {
     label: "Info",
     icon: "InfoIcon",
     href: "https://sparkswap.info/#/home",
+  },
+  {
+    label: "Airdrop",
+    icon: "AirdropIcon",
+    href: "https://app.srk.finance/#/airdrop",
+  },
+  {
+    label: "Teams",
+    icon: "GroupsIcon",
+    href: "https://srk.finance/team",
   },
   {
     label: "Help",
