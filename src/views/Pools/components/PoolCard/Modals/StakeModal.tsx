@@ -148,23 +148,28 @@ const StakeModal: React.FC<StakeModalProps> = ({
         onMouseEnter={() => setActiveSelect(true)}
         onMouseLeave={() => setActiveSelect(false)}>
       
-       <Dropdown
+       {userData.stakedBalance.eq(0) ? <Button disabled fullWidth> Withdraw </Button> : <Dropdown
           position="top"
           target={
             // Disable component if total staked tokens is empty
-            <Button disabled={!totalStaked} fullWidth variant="secondary">
+            <Button fullWidth variant="secondary">
               <Text>Withdraw</Text> {activeSelect ? <ChevronDown /> : <ChevronUp />}
             </Button>
           }
         >
             {/* Disable Claim & Withdraw if no staked tokens */}
-            <Button fullWidth disabled={!totalStaked}>
+            <Button fullWidth>
               <Text onClick={handleHarvestConfirm}>Claim</Text>
             </Button>
-            <Button disabled={!totalStaked}>
+            <Button>
               <Text onClick={handleUnstake}>Claim & Withdraw</Text>
             </Button>
         </Dropdown>
+
+       }
+       
+
+       
   </Flex>
       </StyledFlex>
     </Flex>
