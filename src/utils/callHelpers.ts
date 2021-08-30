@@ -16,6 +16,12 @@ export const approve = async (lpContract, masterChefContract, account) => {
     .send({ from: account })
 }
 
+export const approveWithAmount = async (lpContract, masterChefContract, account, amount) => {
+  return lpContract.methods
+    .approve(masterChefContract.options.address, amount)
+    .send({ from: account })
+}
+
 export const stake = async (masterChefContract, pid, amount, account) => {
   if (pid === 0) {
     return masterChefContract.methods
