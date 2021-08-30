@@ -60,7 +60,9 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
   const [stakeAmount, setStakeAmount] = useState('')
   const [hasReachedStakeLimit, setHasReachedStakedLimit] = useState(false)
   const [percent, setPercent] = useState(0)
+ 
   const totalStakedTokens = userData?.stakedBalance ? getBalanceNumber(new BigNumber(userData.stakedBalance), stakingToken.decimals) : BIG_ZERO
+  const numTotalStaked = totalStakedTokens
   const totalStakingTokens = userData?.stakingTokenBalance ? getBalanceNumber(new BigNumber(userData.stakingTokenBalance), stakingToken.decimals) : BIG_ZERO
   const remainingStakeTokens = userData?.stakedBalance ? getBalanceNumber(new BigNumber(pool.stakingLimit.minus(userData.stakedBalance)), stakingToken.decimals) : BIG_ZERO
   const getCalculatedStakingLimit = () => {
