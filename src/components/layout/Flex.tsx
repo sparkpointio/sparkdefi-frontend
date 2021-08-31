@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 const FlexLayout = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   flex-wrap: wrap;
   & > * {
     min-width: 280px;
