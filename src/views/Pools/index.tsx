@@ -249,10 +249,22 @@ const Pools: React.FC = () => {
         */}
 
         <div>
-          <Text fontSize="20px" marginLeft="24px" paddingBottom="17px">
+          {/* <Text bold fontSize="20px" marginLeft="24px" paddingBottom="24px">
             {' '}
             Stake tokens to earn{' '}
-          </Text>
+          </Text> */}
+          <Heading scale="md" color="text" marginLeft="20px" paddingBottom="24px">
+              {t('Stake tokens to earn')}
+          </Heading>
+          
+          {/* Header title for Active Pools   */}
+          <Flex justifyContent="space-between" style={{ margin: '20px' }}>
+              <Flex flexDirection="column" mr={['8px', 0]}>
+                  <Heading scale="md" color="text">
+                    {t('Active Pools')}
+                  </Heading>
+              </Flex>
+          </Flex>
 
           <FlexLayout>
             {/* <Route exact path={`${path}`}> */}
@@ -272,6 +284,40 @@ const Pools: React.FC = () => {
             {/* </Route> */}
           </FlexLayout>
         </div>
+
+        {/* UPCOMING  */}
+          <>
+            <StyledHr />
+            <div style={{ margin: '25px 0px', padding: '25px 0px' }}>
+              <Flex justifyContent="space-between" style={{ margin: '20px' }}>
+                <Flex flexDirection="column" mr={['8px', 0]}>
+                  <Heading scale="md" color="text">
+                    {t('Coming Soon')}
+                  </Heading>
+                </Flex>
+              </Flex>
+
+              <div style={{ margin: '25px 20px', padding: '25px 0px' }}>
+                <Text>No Upcoming Pools</Text>
+              </div>
+
+              {/* Add and update function for upcoming pools */}
+              <FlexLayout>
+                {/* <Route path={`${path}/history`}> */}
+                {/* {stakedOnly
+            ? orderBy(stakedOnlyFinishedPools, ['sortOrder'])
+                .slice(0, numberOfPoolsVisible)
+                .map((pool) => <PoolCard key={pool.sousId} pool={pool} account={account} />) */}
+                {orderBy(finishedPools, ['sortOrder'])
+                  .slice(0, numberOfPoolsVisible)
+                  .map((pool) => (
+                    <PoolCard key={pool.sousId} pool={pool} account={account} />
+                  ))}
+                {/* </Route> */}
+              </FlexLayout>
+            </div>
+          </>
+        
 
         {/* ENDED  */}
         {finishedPools.length !== 0 && (
