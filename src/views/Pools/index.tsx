@@ -1,12 +1,13 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState, useContext} from 'react'
 import { useLocation } from 'react-router-dom'
-import styled from 'styled-components'
+import styled, { ThemeContext } from 'styled-components'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
 import { Heading, Flex, Image } from '@pancakeswap/uikit'
 import { Text } from '@sparkpointio/sparkswap-uikit'
 import orderBy from 'lodash/orderBy'
 import partition from 'lodash/partition'
+import { SvgIcon } from '@material-ui/core';
 import { useTranslation } from 'contexts/Localization'
 import usePersistState from 'hooks/usePersistState'
 import { usePools, useFetchCakeVault, useFetchPublicPoolsData, usePollFarmsData, useCakeVault } from 'state/hooks'
@@ -26,6 +27,8 @@ import HelpButton from './components/HelpButton'
 import PoolsTable from './components/PoolsTable/PoolsTable'
 import { ViewMode } from './components/ToggleView/ToggleView'
 import { getAprData, getCakeVaultEarnings } from './helpers'
+import { ReactComponent as PoolsDarkLogo } from './components/assets/pool-dark.svg';
+import { ReactComponent as PoolsLightLogo} from './components/assets/pool-light.svg';
 
 const CardLayout = styled(FlexLayout)`
   justify-content: center;
@@ -54,6 +57,7 @@ const ControlStretch = styled(Flex)`
 const NUMBER_OF_POOLS_VISIBLE = 12
 
 const Pools: React.FC = () => {
+  const theme = useContext(ThemeContext);
   const location = useLocation()
   const { t } = useTranslation()
   const { account } = useWeb3React()
@@ -209,22 +213,21 @@ const Pools: React.FC = () => {
 
   return (
     <>
-      {/* <PageHeader>
-        <Flex justifyContent="space-between" flexDirection={['column', null, 'row']}>
+      <PageHeader>
+        <Flex alignItems="center" justifyContent="space-between" flexDirection={['column', null, 'row']} style={{ minHeight: '20vh' }} padding="24px"> 
           <Flex flexDirection="column" mr={['8px', 0]}>
-            <Heading scale="md" color="text">
-              {t('Active Pools')}
-            </Heading>
-            <Heading scale="md" color="text">
-              {t('Stake LP tokens to earn')}
-            </Heading>
+            <Text color="text" fontSize="60px" bold marginBottom="10px">
+              <span style={{borderBottom: `2px solid ${theme.colors.primary}`}}>Pools</span>
+            </Text>
+            <Text color="text" fontSize="27px">
+            Earn SRK, SFUEL and other tokens by just staking!
+            </Text>
           </Flex>
-          <Flex flex="1" height="fit-content" justifyContent="center" alignItems="center" mt={['24px', null, '0']}>
-            <HelpButton />
-            <BountyCard />
+          <Flex style={{fontSize: '240px'}}>
+          <SvgIcon component={theme.isDark? PoolsDarkLogo : PoolsLightLogo} viewBox="0  0 384 512" style={{width: '500px'}} fontSize="inherit" />
           </Flex>
         </Flex>
-      </PageHeader> */}
+      </PageHeader>
       <Page>
         {/* <PoolTabButtons
           stakedOnly={stakedOnly}
