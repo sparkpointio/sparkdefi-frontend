@@ -1,5 +1,5 @@
 import React, { lazy } from 'react'
-import { Router, Redirect, Route, Switch } from 'react-router-dom'
+import { Router, Redirect, Route, Switch, HashRouter } from 'react-router-dom'
 import { ResetCSS } from '@sparkpointio/sparkswap-uikit'
 import BigNumber from 'bignumber.js'
 import useEagerConnect from 'hooks/useEagerConnect'
@@ -42,7 +42,7 @@ const App: React.FC = () => {
   usePollCoreFarmData()
 
   return (
-    <Router history={history}>
+    <HashRouter>
       <ResetCSS />
       <GlobalStyle />
       <Menu>
@@ -99,7 +99,7 @@ const App: React.FC = () => {
       </Menu>
       <EasterEgg iterations={2} />
       <ToastListener />
-    </Router>
+    </HashRouter>
   )
 }
 
