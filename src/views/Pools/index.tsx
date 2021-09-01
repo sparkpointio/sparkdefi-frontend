@@ -248,7 +248,7 @@ const Pools: React.FC = () => {
           </Flex>
         */}
 
-        <div>
+        { stakedOnlyOpenPools.length !== 0 && (<div>
           {/* <Text bold fontSize="20px" marginLeft="24px" paddingBottom="24px">
             {' '}
             Stake tokens to earn{' '}
@@ -283,10 +283,10 @@ const Pools: React.FC = () => {
             </>
             {/* </Route> */}
           </FlexLayout>
-        </div>
+        </div>)}
 
         {/* UPCOMING  */}
-          <>
+          {/* <>
             <StyledHr />
             <div style={{ margin: '25px 0px', padding: '25px 0px' }}>
               <Flex justifyContent="space-between" style={{ margin: '20px' }}>
@@ -299,24 +299,24 @@ const Pools: React.FC = () => {
 
               <div style={{ margin: '25px 20px', padding: '25px 0px' }}>
                 <Text>No Upcoming Pools</Text>
-              </div>
+              </div> */}
 
               {/* Add and update function for upcoming pools */}
-              <FlexLayout>
+              {/* <FlexLayout> */}
                 {/* <Route path={`${path}/history`}> */}
                 {/* {stakedOnly
             ? orderBy(stakedOnlyFinishedPools, ['sortOrder'])
                 .slice(0, numberOfPoolsVisible)
                 .map((pool) => <PoolCard key={pool.sousId} pool={pool} account={account} />) */}
-                {orderBy(finishedPools, ['sortOrder'])
+                {/* {orderBy(finishedPools, ['sortOrder'])
                   .slice(0, numberOfPoolsVisible)
                   .map((pool) => (
                     <PoolCard key={pool.sousId} pool={pool} account={account} />
-                  ))}
+                  ))} */}
                 {/* </Route> */}
-              </FlexLayout>
+              {/* </FlexLayout>
             </div>
-          </>
+          </> */}
         
 
         {/* ENDED  */}
@@ -327,7 +327,7 @@ const Pools: React.FC = () => {
               <Flex justifyContent="space-between" style={{ margin: '20px' }}>
                 <Flex flexDirection="column" mr={['8px', 0]}>
                   <Heading scale="md" color="text">
-                    {t('Inactive Pools')}
+                    {t('Upcoming Pools')}
                   </Heading>
                 </Flex>
               </Flex>
