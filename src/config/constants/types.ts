@@ -75,6 +75,7 @@ export interface PoolConfig {
   sortOrder?: number
   harvest?: boolean
   isFinished?: boolean
+  isComingSoon?: boolean
   enableEmergencyWithdraw?: boolean
 }
 

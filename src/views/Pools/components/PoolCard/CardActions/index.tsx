@@ -28,7 +28,7 @@ interface CardActionsProps {
 }
 
 const CardActions: React.FC<CardActionsProps> = ({ pool, stakedBalance }) => {
-  const { sousId, stakingToken, earningToken, harvest, poolCategory, userData, earningTokenPrice } = pool
+  const { sousId, stakingToken, earningToken, harvest, poolCategory, userData, earningTokenPrice, isComingSoon } = pool
   // getBalanceNumber(stakedBalance, stakingToken.decimals)
   // Pools using native BNB behave differently than pools using a token
   const isBnbPool = poolCategory === PoolCategory.BINANCE
@@ -66,13 +66,13 @@ const CardActions: React.FC<CardActionsProps> = ({ pool, stakedBalance }) => {
               <Box display="inline">
                 {/* <Text color="text" textTransform="uppercase"  bold fontSize="12px"> */}
                 <Text color="text" textTransform="uppercase" fontSize="12px">
-                  {`${totalStaked} ${stakingToken.symbol}`}
+                   {!isComingSoon && totalStaked} {isComingSoon && '-'} {stakingToken.symbol}
                 </Text>
               </Box>
               <Box display="inline">
                 {/* <Text color="text" textTransform="uppercase" bold fontSize="12px"> */}
                 <Text color="text" textTransform="uppercase" fontSize="12px">
-                  {`${totalEarned} ${earningToken.symbol}`}
+                   {!isComingSoon && totalEarned} {isComingSoon && '-'} {stakingToken.symbol}
                 </Text>
               </Box>
             </Flex>
