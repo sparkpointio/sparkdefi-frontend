@@ -19,6 +19,7 @@ import { StyledHr } from 'views/Farms/components/Divider'
 import SearchInput from 'components/SearchInput'
 import Select, { OptionProps } from 'components/Select/Select'
 import { Pool } from 'state/types'
+import useMedia from 'use-media';
 import PoolCard from './components/PoolCard'
 import CakeVaultCard from './components/CakeVaultCard'
 import PoolTabButtons from './components/PoolTabButtons'
@@ -69,6 +70,7 @@ const Pools: React.FC = () => {
   const [viewMode, setViewMode] = usePersistState(ViewMode.TABLE, { localStorageKey: 'pancake_farm_view' })
   const [searchQuery, setSearchQuery] = useState('')
   const [sortOption, setSortOption] = useState('hot')
+  const isMobile = useMedia({maxWidth: 500})
   const {
     userData: { cakeAtLastUserAction, userShares },
     fees: { performanceFee },
@@ -214,17 +216,17 @@ const Pools: React.FC = () => {
   return (
     <>
       <PageHeader>
-        <Flex alignItems="center" justifyContent="space-between" flexDirection={['column', null, 'row']} style={{ minHeight: '20vh' }} padding="24px"> 
+        <Flex alignItems="center" justifyContent="space-between" flexDirection={['column', null, 'row']} style={isMobile? { flexDirection: 'column-reverse'} : {minHeight: '20vh'}} padding="24px"> 
           <Flex flexDirection="column" mr={['8px', 0]}>
             <Text color="text" fontSize="60px" bold marginBottom="10px">
               <span style={{borderBottom: `2px solid ${theme.colors.primary}`}}>Pools</span>
             </Text>
-            <Text color="text" fontSize="27px">
-            Earn SRK, SFUEL and other tokens by just staking!
+            <Text color="text" style={isMobile? { fontSize: "17px" } : { fontSize: "27px" }}>
+                Earn SRK, SFUEL and other tokens by just staking!
             </Text>
           </Flex>
-          <Flex style={{fontSize: '240px'}}>
-          <SvgIcon component={theme.isDark? PoolsDarkLogo : PoolsLightLogo} viewBox="0  0 384 512" style={{width: '500px'}} fontSize="inherit" />
+          <Flex style={isMobile? {fontSize: '150px', margin: 'auto', marginTop: '20px', marginBottom: '20px' } : {fontSize: '240px'}}>
+              <SvgIcon component={theme.isDark? PoolsDarkLogo : PoolsLightLogo} viewBox="0  0 384 512" style={isMobile? {width: '200px'} : {width: '500px'}} fontSize="inherit" />
           </Flex>
         </Flex>
       </PageHeader>
