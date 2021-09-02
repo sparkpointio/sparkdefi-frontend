@@ -18,7 +18,7 @@ import CardActions from './CardActions'
 
 
 const PoolCard: React.FC<{ pool: Pool; account: string }> = ({ pool, account }) => {
-  const { sousId, stakingToken, earningToken, isFinished, userData, startBlock, endBlock } = pool
+  const { sousId, stakingToken, earningToken, isFinished, userData, startBlock, endBlock, isComingSoon } = pool
   const { t } = useTranslation()
   const stakedBalance = userData?.stakedBalance ? new BigNumber(userData.stakedBalance) : BIG_ZERO
   const accountHasStakedBalance = stakedBalance.gt(0)
@@ -27,15 +27,15 @@ const PoolCard: React.FC<{ pool: Pool; account: string }> = ({ pool, account }) 
   const totalStaked = pool.totalStaked ? getBalanceNumber(new BigNumber(pool.totalStaked.toString()), stakingToken.decimals) : BIG_ZERO
 
   const rewardPerBlock = pool?.tokenPerBlock ? getBalanceNumber(new BigNumber(pool.tokenPerBlock.toString()), earningToken.decimals) : BIG_ZERO
-  
-  const temp = new BigNumber(pool.tokenPerBlock).times( new BigNumber(userData.stakedBalance).div(pool.totalStaked)  ) 
+
+  const temp = new BigNumber(pool.tokenPerBlock).times( new BigNumber(userData.stakedBalance).div(pool.totalStaked)  )
   const rewardRate = pool?.tokenPerBlock ? getBalanceNumber(temp) : BIG_ZERO
 
   const { currentBlock } = useBlock()
-  
+
   const { shouldShowBlockCountdown, blocksUntilStart, blocksRemaining, hasPoolStarted, blocksToDisplay } =
   getPoolBlockInfo(pool, currentBlock)
-  
+
   return (
     <StyledCard
       isFinished={isFinished && sousId !== 0}
@@ -51,18 +51,18 @@ const PoolCard: React.FC<{ pool: Pool; account: string }> = ({ pool, account }) 
           <Flex justifyContent="space-between" style={{textAlign: 'left'}}>
             <Text>Remaining blocks</Text>
             <Link external href={getBscScanLink(hasPoolStarted ? endBlock : startBlock, 'countdown')}>
-              <Text>{`${blocksRemaining}`} blocks</Text>
+              <Text>{!isComingSoon && `${blocksRemaining}`} {isComingSoon && '-'} blocks</Text>
             </Link>
           </Flex>
 
           {/* <AprRow pool={pool} stakingTokenPrice={stakingTokenPrice} /> */}
           <Flex justifyContent="space-between" style={{textAlign: 'left'}}>
             <Text>Total Deposit</Text>
-            <Text>{`${totalStaked} ${stakingToken.symbol}`}</Text>
+            <Text>{!isComingSoon && `${totalStaked}`} {isComingSoon && '-'} ${stakingToken.symbol}</Text>
           </Flex>
           <Flex justifyContent="space-between" style={{textAlign: 'left'}}>
               <Text>Reward per block</Text>
-              <Text>{rewardPerBlock}</Text>
+              <Text>{!isComingSoon && rewardPerBlock} {isComingSoon && '-'}</Text>
           </Flex>
           {/* <Flex justifyContent="space-between" style={{textAlign: 'left'}}>
             <Text>APY</Text>
@@ -70,7 +70,7 @@ const PoolCard: React.FC<{ pool: Pool; account: string }> = ({ pool, account }) 
           </Flex> */}
           <Flex justifyContent="space-between" style={{textAlign: 'left'}}>
         <Text>{t('Your Rate')}</Text>
-        <Text>{rewardRate.toFixed(4)} {pool.earningToken.symbol}/block</Text>
+        <Text>{!isComingSoon && rewardRate.toFixed(4)} {isComingSoon && '-'} {pool.earningToken.symbol}/block</Text>
       </Flex>
           <Flex mt="24px" flexDirection="column" marginTop="10px">
             {account ? (
