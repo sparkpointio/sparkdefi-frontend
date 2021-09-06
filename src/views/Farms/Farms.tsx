@@ -361,10 +361,10 @@ const Farms: React.FC = () => {
         <Flex alignItems="center" justifyContent="space-between" flexDirection={['column', null, 'row']} style={isMobile? { flexDirection: 'column-reverse'} : {minHeight: '20vh'}} padding="24px"> 
           <Flex flexDirection="column" mr={['8px', 0]}>
             <Text color="text" fontSize="60px" bold marginBottom="10px">
-              <span style={{borderBottom: `2px solid ${theme.colors.primary}`}}>Pools</span>
+              <span style={{borderBottom: `2px solid ${theme.colors.primary}`}}>Farms</span>
             </Text>
             <Text color="text" style={isMobile? { fontSize: "17px" } : { fontSize: "27px" }}>
-                Earn SRK, SFUEL and other tokens by just staking!
+            Earn SRK, SFUEL and other tokens by staking Spark-LP tokens!
             </Text>
           </Flex>
           <Flex style={isMobile? {fontSize: '150px', margin: 'auto', marginTop: '20px', marginBottom: '20px' } : {fontSize: '240px'}}>
