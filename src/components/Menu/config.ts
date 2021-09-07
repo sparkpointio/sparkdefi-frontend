@@ -9,10 +9,10 @@ const config: MenuEntry[] = [
   {
     label: "Farm",
     icon: "FarmIcon",
-    href: "https://app.srk.finance/#/stake",
+    href: "/farms",
   },
   {
-    label: "Pool",
+    label: "Staking",
     icon: "PoolIcon",
     href: "/pools",
   },
