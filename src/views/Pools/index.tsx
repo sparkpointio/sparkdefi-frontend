@@ -88,6 +88,7 @@ const Pools: React.FC = () => {
 
   // TODO aren't arrays in dep array checked just by reference, i.e. it will rerender every time reference changes?
   const [finishedPools, openPools] = useMemo(() => partition(pools, (pool) => pool.isFinished), [pools])
+  const [upcomingPools, notUpcomingPools] = useMemo(() => partition(pools, (pool) => pool.isComingSoon), [pools])
   const stakedOnlyFinishedPools = useMemo(
     () =>
       finishedPools.filter((pool) => {
@@ -334,43 +335,37 @@ const Pools: React.FC = () => {
         </div>)}
 
         {/* UPCOMING  */}
-          {/* <>
-            <StyledHr />
+        {upcomingPools.length !== 0 && (
+          <>
+            <StyledHr style={{ marginTop: '35px'}}/>
             <div style={{ margin: '25px 0px', padding: '25px 0px' }}>
-              <Flex justifyContent="space-between" style={{ margin: '20px' }}>
+              {/* <Flex justifyContent="space-between" style={{ margin: '20px' }}>
                 <Flex flexDirection="column" mr={['8px', 0]}>
                   <Heading scale="md" color="text">
                     {t('Coming Soon')}
                   </Heading>
                 </Flex>
-              </Flex>
+              </Flex> */}
 
-              <div style={{ margin: '25px 20px', padding: '25px 0px' }}>
-                <Text>No Upcoming Pools</Text>
-              </div> */}
-
-              {/* Add and update function for upcoming pools */}
-              {/* <FlexLayout> */}
-                {/* <Route path={`${path}/history`}> */}
-                {/* {stakedOnly
-            ? orderBy(stakedOnlyFinishedPools, ['sortOrder'])
-                .slice(0, numberOfPoolsVisible)
-                .map((pool) => <PoolCard key={pool.sousId} pool={pool} account={account} />) */}
-                {/* {orderBy(finishedPools, ['sortOrder'])
+              <FlexLayout>
+                <Route path={`${path}/upcoming`}> 
+            
+                {orderBy(upcomingPools, ['sortOrder'])
                   .slice(0, numberOfPoolsVisible)
                   .map((pool) => (
                     <PoolCard key={pool.sousId} pool={pool} account={account} />
-                  ))} */}
-                {/* </Route> */}
-              {/* </FlexLayout>
+                  ))}
+                 </Route> 
+              </FlexLayout>
             </div>
-          </> */}
+          </>
+        )}
         
 
         {/* ENDED  */}
         {finishedPools.length !== 0 && (
           <>
-            <StyledHr style={{ marginTop: '35px'}}/>
+            {/* <StyledHr style={{ marginTop: '35px'}}/> */}
             <div style={{ margin: '25px 0px', padding: '25px 0px' }}>
               {/* <Flex justifyContent="space-between" style={{ margin: '20px' }}>
                 <Flex flexDirection="column" mr={['8px', 0]}>
