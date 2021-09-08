@@ -296,7 +296,7 @@ const Pools: React.FC = () => {
           </Flex>
         */}
 
-        { poolsToShow.length !== 0 && (<div>
+        { stakedOnlyOpenPools.length !== 0 && (<div>
           {/* <Text bold fontSize="20px" marginLeft="24px" paddingBottom="24px">
             {' '}
             Stake tokens to earn{' '}
