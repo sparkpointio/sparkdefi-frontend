@@ -228,21 +228,21 @@ const Pools: React.FC = () => {
                 Earn SRK, SFUEL and other tokens by just staking!
             </Text>
           </Flex>
-          <Flex style={isMobile? {fontSize: '150px', margin: 'auto', marginTop: '20px', marginBottom: '20px' } : {fontSize: '240px'}}>
-              <SvgIcon component={theme.isDark? PoolsDarkLogo : PoolsLightLogo} viewBox="0  0 384 512" style={isMobile? {width: '200px'} : {width: '500px'}} fontSize="inherit" />
+          <Flex style={isMobile? {fontSize: '150px', margin: 'auto', marginTop: '20px', marginBottom: '20px' } : {fontSize: '240px', marginRight: '-112px', position: 'relative'}}>
+              <SvgIcon component={theme.isDark? PoolsDarkLogo : PoolsLightLogo} viewBox="0  0 384 512" style={isMobile? {width: '200px'} : {width: '500px'}} fontSize="inherit"/>
           </Flex>
         </Flex>
       </PageHeader>
       <Page>
-        <Flex alignItems="center" justifyContent="space-between">
+        <Flex alignItems="center" justifyContent="space-between" style={isMobile? { flexDirection: 'column'} : { flexDirection: 'row' }}>
           <Flex>
-        <PoolTabButtons
-          stakedOnly={stakedOnly}
-          setStakedOnly={setStakedOnly}
-          hasStakeInFinishedPools={hasStakeInFinishedPools}
-          viewMode={viewMode}
-          setViewMode={setViewMode}
-        />
+          <PoolTabButtons
+              stakedOnly={stakedOnly}
+              setStakedOnly={setStakedOnly}
+              hasStakeInFinishedPools={hasStakeInFinishedPools}
+              viewMode={viewMode}
+              setViewMode={setViewMode}
+          />
          </Flex>
          <Flex alignItems="center" justifyContent="space-between" marginTop="16px">
         <SearchSortContainer>
@@ -274,7 +274,7 @@ const Pools: React.FC = () => {
                 />
               </ControlStretch>
             </PoolControls> */}
-            <PoolControls >
+            <PoolControls>
               <Text fontSize="12px" bold color="textSubtle" textTransform="uppercase" marginRight="12px" marginTop="12px">
                 {t('Search')}
               </Text>
