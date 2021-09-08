@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState, useContext} from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, Route, useRouteMatch } from 'react-router-dom'
 import styled, { ThemeContext } from 'styled-components'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
@@ -88,6 +88,7 @@ const Pools: React.FC = () => {
 
   // TODO aren't arrays in dep array checked just by reference, i.e. it will rerender every time reference changes?
   const [finishedPools, openPools] = useMemo(() => partition(pools, (pool) => pool.isFinished), [pools])
+  const [upcomingPools, notUpcomingPools] = useMemo(() => partition(pools, (pool) => pool.isComingSoon), [pools])
   const stakedOnlyFinishedPools = useMemo(
     () =>
       finishedPools.filter((pool) => {
@@ -212,6 +213,8 @@ const Pools: React.FC = () => {
   )
 
   const tableLayout = <PoolsTable pools={poolsToShow()} account={account} userDataLoaded={userDataLoaded} />
+  const { path, url, isExact } = useRouteMatch()
+
 
   return (
     <>
@@ -231,11 +234,55 @@ const Pools: React.FC = () => {
         </Flex>
       </PageHeader>
       <Page>
-        {/* <PoolTabButtons
+        <Flex alignItems="center" justifyContent="space-between">
+          <Flex>
+        <PoolTabButtons
           stakedOnly={stakedOnly}
           setStakedOnly={setStakedOnly}
           hasStakeInFinishedPools={hasStakeInFinishedPools}
-        /> */}
+          viewMode={viewMode}
+          setViewMode={setViewMode}
+        />
+         </Flex>
+         <Flex alignItems="center" justifyContent="space-between" marginTop="16px">
+        <SearchSortContainer>
+            {/* <PoolControls>
+              <Text fontSize="12px" bold color="textSubtle" textTransform="uppercase">
+                {t('Sort by')}
+              </Text>
+              <ControlStretch>
+                <Select
+                  options={[
+                    {
+                      label: t('Hot'),
+                      value: 'hot',
+                    },
+                    {
+                      label: t('APR'),
+                      value: 'apr',
+                    },
+                    {
+                      label: t('Earned'),
+                      value: 'earned',
+                    },
+                    {
+                      label: t('Total staked'),
+                      value: 'totalStaked',
+                    },
+                  ]}
+                  onChange={handleSortOptionChange}
+                />
+              </ControlStretch>
+            </PoolControls> */}
+            <PoolControls >
+              <Text fontSize="12px" bold color="textSubtle" textTransform="uppercase" marginRight="12px" marginTop="12px">
+                {t('Search')}
+              </Text>
+              <SearchInput onChange={handleChangeSearchQuery} placeholder="Search Pools" />
+            </PoolControls>
+          </SearchSortContainer>
+          </Flex>
+          </Flex>
         {/* 
         <div>
           <Flex justifyContent="space-between" style={{ margin: '20px' }}>
@@ -288,54 +335,48 @@ const Pools: React.FC = () => {
         </div>)}
 
         {/* UPCOMING  */}
-          {/* <>
-            <StyledHr />
+        {upcomingPools.length !== 0 && (
+          <>
+            <StyledHr style={{ marginTop: '35px'}}/>
             <div style={{ margin: '25px 0px', padding: '25px 0px' }}>
-              <Flex justifyContent="space-between" style={{ margin: '20px' }}>
+              {/* <Flex justifyContent="space-between" style={{ margin: '20px' }}>
                 <Flex flexDirection="column" mr={['8px', 0]}>
                   <Heading scale="md" color="text">
                     {t('Coming Soon')}
                   </Heading>
                 </Flex>
-              </Flex>
+              </Flex> */}
 
-              <div style={{ margin: '25px 20px', padding: '25px 0px' }}>
-                <Text>No Upcoming Pools</Text>
-              </div> */}
-
-              {/* Add and update function for upcoming pools */}
-              {/* <FlexLayout> */}
-                {/* <Route path={`${path}/history`}> */}
-                {/* {stakedOnly
-            ? orderBy(stakedOnlyFinishedPools, ['sortOrder'])
-                .slice(0, numberOfPoolsVisible)
-                .map((pool) => <PoolCard key={pool.sousId} pool={pool} account={account} />) */}
-                {/* {orderBy(finishedPools, ['sortOrder'])
+              <FlexLayout>
+                <Route path={`${path}/upcoming`}> 
+            
+                {orderBy(upcomingPools, ['sortOrder'])
                   .slice(0, numberOfPoolsVisible)
                   .map((pool) => (
                     <PoolCard key={pool.sousId} pool={pool} account={account} />
-                  ))} */}
-                {/* </Route> */}
-              {/* </FlexLayout>
+                  ))}
+                 </Route> 
+              </FlexLayout>
             </div>
-          </> */}
+          </>
+        )}
         
 
         {/* ENDED  */}
         {finishedPools.length !== 0 && (
           <>
-            <StyledHr />
+            {/* <StyledHr style={{ marginTop: '35px'}}/> */}
             <div style={{ margin: '25px 0px', padding: '25px 0px' }}>
-              <Flex justifyContent="space-between" style={{ margin: '20px' }}>
+              {/* <Flex justifyContent="space-between" style={{ margin: '20px' }}>
                 <Flex flexDirection="column" mr={['8px', 0]}>
                   <Heading scale="md" color="text">
                     {t('Upcoming Pools')}
                   </Heading>
                 </Flex>
-              </Flex>
+              </Flex> */}
 
               <FlexLayout>
-                {/* <Route path={`${path}/history`}> */}
+                <Route path={`${path}/history`}> 
                 {/* {stakedOnly
             ? orderBy(stakedOnlyFinishedPools, ['sortOrder'])
                 .slice(0, numberOfPoolsVisible)
@@ -345,11 +386,37 @@ const Pools: React.FC = () => {
                   .map((pool) => (
                     <PoolCard key={pool.sousId} pool={pool} account={account} />
                   ))}
-                {/* </Route> */}
+                 </Route> 
               </FlexLayout>
             </div>
           </>
         )}
+        {/* <Flex justifyContent="space-between" style={{ margin: '20px' }}>
+                <Flex flexDirection="column" mt={['8px', -10]}>
+                  <Heading scale="md" color="text">
+                    {t('Active Pools')}
+                  </Heading>
+                </Flex>
+              </Flex> */}
+              <div style={{ margin: '25px 0px', padding: '25px 0px' }}>
+              <FlexLayout>
+            <Route exact path={`${path}`}>
+            <>
+              {/* <CakeVaultCard pool={cakePoolData} showStakedOnly={stakedOnly} /> */}
+
+              {/* {stakedOnly
+                ? orderBy(stakedOnlyOpenPools, ['sortOrder'])
+                    .slice(0, numberOfPoolsVisible)
+                    .map((pool) => <PoolCard key={pool.sousId} pool={pool} account={account} />) */}
+              {orderBy(openPools, ['sortOrder'])
+                .slice(0, numberOfPoolsVisible)
+                .map((pool) => (
+                  <PoolCard key={pool.sousId} pool={pool} account={account} />
+                ))}
+            </>
+            </Route>
+          </FlexLayout>
+          </div>
         <div ref={loadMoreRef} />
         {/* <Image
           mx="auto"
