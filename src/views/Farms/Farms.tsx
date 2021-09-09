@@ -367,7 +367,7 @@ const Farms: React.FC = () => {
             Earn SRK, SFUEL and other tokens by staking Spark-LP tokens!
             </Text>
           </Flex>
-          <Flex style={isMobile? {fontSize: '150px', margin: 'auto', marginTop: '20px', marginBottom: '20px' } : {fontSize: '240px'}}>
+          <Flex style={isMobile? {fontSize: '150px', margin: 'auto', marginTop: '20px', marginBottom: '20px' } : {fontSize: '240px', marginRight: '-105px'}}>
               <SvgIcon component={theme.isDark? FarmsDarkLogo : FarmsLightLogo} viewBox="0  0 384 512" style={isMobile? {width: '200px'} : {width: '500px'}} fontSize="inherit" />
           </Flex>
         </Flex>
