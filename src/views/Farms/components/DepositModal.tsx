@@ -156,7 +156,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
       <ModalFooter>
         <DetailsCont>
           <Text bold fontSize="24px">
-            0.0000
+            {farm.userData.earnings}
           </Text>
           <Text color="textSubtle" fontSize="14px">{`Your Rate ${tokenReward}/week`}</Text>
         </DetailsCont>
