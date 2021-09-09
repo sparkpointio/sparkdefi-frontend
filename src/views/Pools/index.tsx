@@ -3,8 +3,8 @@ import { useLocation } from 'react-router-dom'
 import styled, { ThemeContext } from 'styled-components'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
-import { Heading, Flex, Image } from '@pancakeswap/uikit'
-import { Text } from '@sparkpointio/sparkswap-uikit'
+import { Heading, Image } from '@pancakeswap/uikit'
+import { Text, Button, Flex } from '@sparkpointio/sparkswap-uikit'
 import orderBy from 'lodash/orderBy'
 import partition from 'lodash/partition'
 import { SvgIcon } from '@material-ui/core';
@@ -212,6 +212,12 @@ const Pools: React.FC = () => {
   )
 
   const tableLayout = <PoolsTable pools={poolsToShow()} account={account} userDataLoaded={userDataLoaded} />
+  const StakingTab = ({index}) => (
+    <Flex>
+      <Button>Farms</Button>
+      <Button>Pools</Button>
+    </Flex>
+  ) 
 
   return (
     <>
@@ -224,6 +230,7 @@ const Pools: React.FC = () => {
             <Text color="text" style={isMobile? { fontSize: "17px" } : { fontSize: "27px" }}>
                 Earn SRK, SFUEL and other tokens by just staking!
             </Text>
+            <StakingTab />
           </Flex>
           <Flex style={isMobile? {fontSize: '150px', margin: 'auto', marginTop: '20px', marginBottom: '20px' } : {fontSize: '240px'}}>
               <SvgIcon component={theme.isDark? PoolsDarkLogo : PoolsLightLogo} viewBox="0  0 384 512" style={isMobile? {width: '200px'} : {width: '500px'}} fontSize="inherit" />
