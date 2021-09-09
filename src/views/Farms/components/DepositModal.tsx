@@ -114,7 +114,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
             {tokenReward}
           </Text>
           <ActionDiv style={{ paddingTop: '30px' }}>
-            <Button fullWidth as="a" href={addTokenUrl}>
+            <Button fullWidth as="a" target="_blank" href={addTokenUrl}>
               Add More
             </Button>
           </ActionDiv>
@@ -127,7 +127,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
             {tokenName} Tokens
           </Text>
           <ActionDiv style={{ paddingTop: '30px' }}>
-            <Button fullWidth as="a" href={addLiquidityUrl}>
+            <Button fullWidth as="a" target="_blank" href={addLiquidityUrl}>
               Add Liquidity
             </Button>
           </ActionDiv>
