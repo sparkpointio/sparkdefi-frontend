@@ -50,6 +50,11 @@ const Stake: React.FC<StakeModalInterface> = ({ onDismiss, max, symbol, addLiqui
           //  inputTitle={t('Stake')}
         />
       </Container>
+      <div>
+        <Text ml="auto" color="textSubtle" fontSize="14px" mb="8px" style={{ textAlign: 'left'}}>
+          Balance: {fullBalance} {symbol} Tokens
+        </Text>
+        </div>
       <StyledFlex justifyContent="space-between">
         <Text>Appoved tokens: </Text>
         <Text>00.00</Text>
