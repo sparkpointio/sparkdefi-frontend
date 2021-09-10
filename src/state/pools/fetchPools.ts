@@ -3,6 +3,7 @@ import poolsConfig from 'config/constants/pools'
 import sousChefABI from 'config/abi/sousChef.json'
 import cakeABI from 'config/abi/cake.json'
 import wbnbABI from 'config/abi/weth.json'
+import sousChefV2 from 'config/abi/sousChefV2.json'
 import multicall from 'utils/multicall'
 import { getAddress, getWbnbAddress } from 'utils/addressHelpers'
 import { BIG_ZERO } from 'utils/bigNumber'
@@ -43,9 +44,9 @@ export const fetchPoolsTotalStaking = async () => {
 
   const callsNonBnbPools = nonBnbPools.map((poolConfig) => {
     return {
-      address: getAddress(poolConfig.stakingToken.address),
-      name: 'balanceOf',
-      params: [getAddress(poolConfig.contractAddress)],
+      address: getAddress(poolConfig.contractAddress),
+      name: 'totalDeposit',
+      params: [],
     }
   })
 
@@ -57,7 +58,7 @@ export const fetchPoolsTotalStaking = async () => {
     }
   })
 
-  const nonBnbPoolsTotalStaked = await multicall(cakeABI, callsNonBnbPools)
+  const nonBnbPoolsTotalStaked = await multicall(sousChefV2, callsNonBnbPools)
   const bnbPoolsTotalStaked = await multicall(wbnbABI, callsBnbPools)
 
   return [
