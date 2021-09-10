@@ -17,6 +17,21 @@ const pools: PoolConfig[] = [
     isFinished: false,
     isComingSoon: false,
   },
+  {
+    sousId: 4,
+    stakingToken: tokens.sfuel,
+    earningToken: tokens.sfuel,
+    contractAddress: {
+      97: '',
+      56: '0xF129fFc097c0fFeF059da0dba38217CfBFc4ED4e',
+    },
+    poolCategory: PoolCategory.CORE,
+    harvest: true,
+    tokenPerBlock: '843881856540084',
+    sortOrder: 999,
+    isFinished: false,
+    isComingSoon: false,
+  },
   // Dummy Contract #1
   // {
   //   sousId: 4,
