@@ -134,6 +134,7 @@ const Pools: React.FC = () => {
   }, [observerIsSet])
 
   const showFinishedPools = location.pathname.includes('history')
+  const showUpcomingPools = location.pathname.includes('upcoming')
 
   const handleChangeSearchQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value)
@@ -184,7 +185,10 @@ const Pools: React.FC = () => {
 
   const poolsToShow = () => {
     let chosenPools = []
-    if (showFinishedPools) {
+    if (showUpcomingPools){
+      chosenPools = stakedOnly ? stakedOnlyFinishedPools : finishedPools // TODO: @koji @mat-ivan Please apply here how to filter upcoming pools
+    }
+    else if (showFinishedPools) {
       chosenPools = stakedOnly ? stakedOnlyFinishedPools : finishedPools
     } else {
       chosenPools = stakedOnly ? stakedOnlyOpenPools : openPools
@@ -297,126 +301,58 @@ const Pools: React.FC = () => {
           </Flex>
         */}
 
-        { stakedOnlyOpenPools.length !== 0 && (<div>
+        { !showFinishedPools && !showUpcomingPools && (<div>
           {/* <Text bold fontSize="20px" marginLeft="24px" paddingBottom="24px">
             {' '}
             Stake tokens to earn{' '}
           </Text> */}
-          <Heading scale="md" color="text" marginLeft="20px" paddingBottom="24px">
-              {t('Stake tokens to earn')}
-          </Heading>
+          <StyledHr style={{ marginTop: '35px'}}/>
           
           {/* Header title for Active Pools   */}
+          
           <Flex justifyContent="space-between" style={{ margin: '20px' }}>
               <Flex flexDirection="column" mr={['8px', 0]}>
                   <Heading scale="md" color="text">
-                    {t('Active Pools')}
+                    {t('Stake tokens to earn')}
                   </Heading>
               </Flex>
           </Flex>
-
-          <FlexLayout>
-            {/* <Route exact path={`${path}`}> */}
-            <>
-              {/* <CakeVaultCard pool={cakePoolData} showStakedOnly={stakedOnly} /> */}
-
-              {/* {stakedOnly
-                ? orderBy(stakedOnlyOpenPools, ['sortOrder'])
-                    .slice(0, numberOfPoolsVisible)
-                    .map((pool) => <PoolCard key={pool.sousId} pool={pool} account={account} />) */}
-              {orderBy(openPools, ['sortOrder'])
-                .slice(0, numberOfPoolsVisible)
-                .map((pool) => (
-                  <PoolCard key={pool.sousId} pool={pool} account={account} />
-                ))}
-            </>
-            {/* </Route> */}
-          </FlexLayout>
         </div>)}
 
         {/* UPCOMING  */}
-        {upcomingPools.length !== 0 && (
+        {showUpcomingPools && (
           <>
             <StyledHr style={{ marginTop: '35px'}}/>
-            <div style={{ margin: '25px 0px', padding: '25px 0px' }}>
-              {/* <Flex justifyContent="space-between" style={{ margin: '20px' }}>
-                <Flex flexDirection="column" mr={['8px', 0]}>
-                  <Heading scale="md" color="text">
-                    {t('Coming Soon')}
-                  </Heading>
-                </Flex>
-              </Flex> */}
-
-              <FlexLayout>
-                <Route path={`${path}/upcoming`}> 
             
-                {orderBy(upcomingPools, ['sortOrder'])
-                  .slice(0, numberOfPoolsVisible)
-                  .map((pool) => (
-                    <PoolCard key={pool.sousId} pool={pool} account={account} />
-                  ))}
-                 </Route> 
-              </FlexLayout>
-            </div>
+            <Flex justifyContent="space-between" style={{ margin: '20px' }}>
+              <Flex flexDirection="column" mr={['8px', 0]}>
+                  <Heading scale="md" color="text">
+                    {t('These pools are no longer distributing rewards. Please unstake your tokens.')}
+                  </Heading>
+              </Flex>
+            </Flex>
           </>
         )}
         
 
         {/* ENDED  */}
-        {finishedPools.length !== 0 && (
+        {showFinishedPools && (
           <>
-            {/* <StyledHr style={{ marginTop: '35px'}}/> */}
-            <div style={{ margin: '25px 0px', padding: '25px 0px' }}>
-              {/* <Flex justifyContent="space-between" style={{ margin: '20px' }}>
-                <Flex flexDirection="column" mr={['8px', 0]}>
-                  <Heading scale="md" color="text">
-                    {t('Upcoming Pools')}
-                  </Heading>
-                </Flex>
-              </Flex> */}
+            <StyledHr style={{ marginTop: '35px'}}/>
 
-              <FlexLayout>
-                <Route path={`${path}/history`}> 
-                {/* {stakedOnly
-            ? orderBy(stakedOnlyFinishedPools, ['sortOrder'])
-                .slice(0, numberOfPoolsVisible)
-                .map((pool) => <PoolCard key={pool.sousId} pool={pool} account={account} />) */}
-                {orderBy(finishedPools, ['sortOrder'])
-                  .slice(0, numberOfPoolsVisible)
-                  .map((pool) => (
-                    <PoolCard key={pool.sousId} pool={pool} account={account} />
-                  ))}
-                 </Route> 
-              </FlexLayout>
-            </div>
+            <Flex justifyContent="space-between" style={{ margin: '20px' }}>
+              <Flex flexDirection="column" mr={['8px', 0]}>
+                  <Heading scale="md" color="text">
+                    {t('These pools are coming in the near future. Stay tuned.')}
+                  </Heading>
+              </Flex>
+            </Flex>
           </>
         )}
-        {/* <Flex justifyContent="space-between" style={{ margin: '20px' }}>
-                <Flex flexDirection="column" mt={['8px', -10]}>
-                  <Heading scale="md" color="text">
-                    {t('Active Pools')}
-                  </Heading>
-                </Flex>
-              </Flex> */}
-              <div style={{ margin: '25px 0px', padding: '25px 0px' }}>
-              <FlexLayout>
-            <Route exact path={`${path}`}>
-            <>
-              {/* <CakeVaultCard pool={cakePoolData} showStakedOnly={stakedOnly} /> */}
 
-              {/* {stakedOnly
-                ? orderBy(stakedOnlyOpenPools, ['sortOrder'])
-                    .slice(0, numberOfPoolsVisible)
-                    .map((pool) => <PoolCard key={pool.sousId} pool={pool} account={account} />) */}
-              {orderBy(openPools, ['sortOrder'])
-                .slice(0, numberOfPoolsVisible)
-                .map((pool) => (
-                  <PoolCard key={pool.sousId} pool={pool} account={account} />
-                ))}
-            </>
-            </Route>
-          </FlexLayout>
-          </div>
+        {/* viewMode === ViewMode.CARD ? cardLayout : tableLayout */} 
+        {cardLayout}
+        
         <div ref={loadMoreRef} />
         {/* <Image
           mx="auto"
