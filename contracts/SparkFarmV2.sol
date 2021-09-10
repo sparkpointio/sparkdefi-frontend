@@ -650,6 +650,12 @@ contract StakingRewards is IStakingRewards, RewardsDistributionRecipient, Reentr
         emit AdminTokenRecovery(_tokenAddress, _tokenAmount);
     }
 
+    // EMERGENCY ONLY: Withdraw reward.
+    function emergencyRewardWithdraw(uint256 _amount) public onlyOwner rewardDone {
+        require(_amount <= rewardsToken.balanceOf(address(this)), 'SparkFarm: Not enough token/s');
+        rewardsToken.safeTransfer(address(msg.sender), _amount);
+    }
+
     /* ========== MODIFIERS ========== */
 
     modifier updateReward(address account) {
@@ -660,6 +666,11 @@ contract StakingRewards is IStakingRewards, RewardsDistributionRecipient, Reentr
             userRewardPerTokenPaid[account] = rewardPerTokenStored;
         }
         _;
+    }
+
+    modifier rewardDone {
+      require(periodFinish < block.timestamp, 'SparkFarm: Farm not yet ended');
+      _;
     }
 
     /* ========== EVENTS ========== */

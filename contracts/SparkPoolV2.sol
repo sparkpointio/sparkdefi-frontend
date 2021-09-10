@@ -906,6 +906,11 @@ contract SparkPoolV2 is Ownable, ReentrancyGuard {
         transferOwnership(_admin);
     }
 
+    modifier rewardDone {
+      require(bonusEndBlock <= block.number, 'SparkPoolV2: Pool not yet ended');
+      _;
+    }
+
     /*
      * @notice Deposit staked tokens and collect reward tokens (if any)
      * @param _amount: amount to withdraw (in rewardToken)
@@ -983,7 +988,8 @@ contract SparkPoolV2 is Ownable, ReentrancyGuard {
      * @notice Stop rewards
      * @dev Only callable by owner. Needs to be for emergency.
      */
-    function emergencyRewardWithdraw(uint256 _amount) external onlyOwner {
+    function emergencyRewardWithdraw(uint256 _amount) external onlyOwner rewardDone{
+        require(_amount <= rewardToken.balanceOf(address(this)), 'SparkPoolV2: Not enough token/s');
         rewardToken.safeTransfer(address(msg.sender), _amount);
     }
 
