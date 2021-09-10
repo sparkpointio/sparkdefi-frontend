@@ -327,7 +327,7 @@ const Pools: React.FC = () => {
             <Flex justifyContent="space-between" style={{ margin: '20px' }}>
               <Flex flexDirection="column" mr={['8px', 0]}>
                   <Heading scale="md" color="text">
-                    {t('These pools are no longer distributing rewards. Please unstake your tokens.')}
+                    {t('These pools are coming in the near future. Stay tuned.')}
                   </Heading>
               </Flex>
             </Flex>
@@ -343,7 +343,7 @@ const Pools: React.FC = () => {
             <Flex justifyContent="space-between" style={{ margin: '20px' }}>
               <Flex flexDirection="column" mr={['8px', 0]}>
                   <Heading scale="md" color="text">
-                    {t('These pools are coming in the near future. Stay tuned.')}
+                    {t('These pools are no longer distributing rewards. Please unstake your tokens.')}
                   </Heading>
               </Flex>
             </Flex>
