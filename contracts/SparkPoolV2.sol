@@ -1160,7 +1160,6 @@ contract SparkPoolV2Factory is Ownable {
     ) external onlyOwner {
         require(_stakedToken.totalSupply() >= 0);
         require(_rewardToken.totalSupply() >= 0);
-        require(_stakedToken != _rewardToken, "Tokens must be be different");
 
         bytes memory bytecode = type(SparkPoolV2).creationCode;
         bytes32 salt = keccak256(abi.encodePacked(_stakedToken, _rewardToken, _startBlock));
