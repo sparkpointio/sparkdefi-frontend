@@ -504,7 +504,7 @@ contract RewardsDistributionRecipient {
     }
 }
 
-contract StakingRewards is IStakingRewards, RewardsDistributionRecipient, ReentrancyGuard {
+contract StakingRewards is IStakingRewards, RewardsDistributionRecipient, ReentrancyGuard, Ownable {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
@@ -635,6 +635,21 @@ contract StakingRewards is IStakingRewards, RewardsDistributionRecipient, Reentr
         emit RewardAdded(reward);
     }
 
+    
+    // @notice It allows the admin to recover wrong tokens sent to the contract
+    // @param _tokenAddress: the address of the token to withdraw
+    // @param _tokenAmount: the number of tokens to withdraw
+    // @dev This function is only callable by admin.
+
+    function recoverWrongTokens(address _tokenAddress, uint256 _tokenAmount) external onlyOwner {
+        require(_tokenAddress != address(stakingToken), "Cannot be staked token");
+        require(_tokenAddress != address(rewardsToken), "Cannot be reward token");
+
+        IERC20(_tokenAddress).safeTransfer(address(msg.sender), _tokenAmount);
+
+        emit AdminTokenRecovery(_tokenAddress, _tokenAmount);
+    }
+
     /* ========== MODIFIERS ========== */
 
     modifier updateReward(address account) {
@@ -653,6 +668,7 @@ contract StakingRewards is IStakingRewards, RewardsDistributionRecipient, Reentr
     event Staked(address indexed user, uint256 amount);
     event Withdrawn(address indexed user, uint256 amount);
     event RewardPaid(address indexed user, uint256 reward);
+    event AdminTokenRecovery(address tokenRecovered, uint256 amount);
 }
 
 interface IUniswapV2ERC20 {
