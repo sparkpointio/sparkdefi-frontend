@@ -2,8 +2,8 @@ import React, { useEffect, useCallback, useState, useMemo, useRef, useContext } 
 import { Route, useRouteMatch, useLocation } from 'react-router-dom'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
-import { Image, RowType, Toggle } from '@pancakeswap/uikit'
-import { Text, Flex, Heading } from '@sparkpointio/sparkswap-uikit'
+import { Image, Flex, RowType, Toggle } from '@pancakeswap/uikit'
+import { Text, Heading } from '@sparkpointio/sparkswap-uikit'
 import styled, { ThemeContext } from 'styled-components'
 import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
@@ -239,15 +239,15 @@ const Farms: React.FC = () => {
         setNumberOfFarmsVisible((farmsCurrentlyVisible) => farmsCurrentlyVisible + NUMBER_OF_FARMS_VISIBLE)
       }
     }
-
-    if (!observerIsSet) {
-      const loadMoreObserver = new IntersectionObserver(showMoreFarms, {
-        rootMargin: '0px',
-        threshold: 1,
-      })
-      loadMoreObserver.observe(loadMoreRef.current)
-      setObserverIsSet(true)
-    }
+    // Uncomment this if !comingsoon
+    // if (!observerIsSet) {
+    //   const loadMoreObserver = new IntersectionObserver(showMoreFarms, {
+    //     rootMargin: '0px',
+    //     threshold: 1,
+    //   })
+    //   loadMoreObserver.observe(loadMoreRef.current)
+    //   setObserverIsSet(true)
+    // }
   }, [farmsStakedMemoized, observerIsSet])
 
   const rowData = farmsStakedMemoized.map((farm) => {
@@ -357,11 +357,11 @@ const Farms: React.FC = () => {
 
   return (
     <>
-     <PageHeader>
-        <Flex alignItems="center" justifyContent="space-between" flexDirection={['column', null, 'row']} style={isMobile? { flexDirection: 'column-reverse'} : {minHeight: '20vh'}} padding="24px"> 
+     <PageHeader background={theme.card.background}>
+        <Flex alignItems="center" justifyContent="space-between" flexDirection={['column', null, 'row']} style={isMobile? { flexDirection: 'column-reverse'} : {minHeight: '20vh'}}  padding="24px"> 
           <Flex flexDirection="column" mr={['8px', 0]}>
             <Text color="text" fontSize="60px" bold marginBottom="10px">
-              <span style={{borderBottom: `2px solid ${theme.colors.primary}`}}>Farms</span>
+              <span style={{borderBottom: `2px solid ${theme.colors.primary}`}}>Farms (Coming Soon) </span>
             </Text>
             <Text color="text" style={isMobile? { fontSize: "17px" } : { fontSize: "27px" }}>
             Earn SRK, SFUEL and other tokens by staking Spark-LP tokens!
@@ -373,10 +373,11 @@ const Farms: React.FC = () => {
         </Flex>
       </PageHeader>
       <Page>
-        {renderActiveContent()}
+        {/* {renderActiveContent()}
         <StyledHr />
         {renderInactiveContent()}
-        <div ref={loadMoreRef} />
+        <div ref={loadMoreRef} /> */}
+        
       </Page>
     </>
   )
