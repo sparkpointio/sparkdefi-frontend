@@ -7,7 +7,7 @@ const pools: PoolConfig[] = [
     stakingToken: tokens.srkb,
     earningToken: tokens.srkb,
     contractAddress: {
-      97: '',
+      97: '0x0dE59a7217deAa24f891797142F6fBf9CE78B698',
       56: '0x0dE59a7217deAa24f891797142F6fBf9CE78B698',
     },
     poolCategory: PoolCategory.CORE,
@@ -22,7 +22,7 @@ const pools: PoolConfig[] = [
     stakingToken: tokens.sfuel,
     earningToken: tokens.sfuel,
     contractAddress: {
-      97: '',
+      97: '0x54277Be7F64168E8713B710fbCcC5b2B663BD637',
       56: '0x54277Be7F64168E8713B710fbCcC5b2B663BD637',
     },
     poolCategory: PoolCategory.CORE,

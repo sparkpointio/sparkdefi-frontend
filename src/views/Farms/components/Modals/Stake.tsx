@@ -55,7 +55,7 @@ const Stake: React.FC<StakeModalInterface> = ({ onDismiss, max, symbol, addLiqui
         <Text>00.00</Text>
       </StyledFlex>
       <StyledFlex justifyContent="space-between">
-        <CancelButton 
+        <CancelButton
         onClick={onDismiss}
         disabled={pendingTx}
         >

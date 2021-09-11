@@ -3,9 +3,9 @@ const tokens = {
     symbol: 'SFUEL',
     address: {
       56: '0x37ac4d6140e54304d77437a5c11924f61a2d976f',
-      97: '',
+      97: '0x37ac4d6140e54304d77437a5c11924f61a2d976f',
     }
-  }, 
+  },
   bnb: {
     symbol: 'BNB',
     projectLink: 'https://www.binance.com/',
@@ -1598,7 +1598,7 @@ const tokens = {
     symbol: 'SRKb',
     address: {
       56: '0xc3440c10c4f36f354eb591b19fafb4906d449b75',
-      97: '0xe09b8661d80cf24db230a167969d18b94a5a3266',
+      97: '0xc3440c10c4f36f354eb591b19fafb4906d449b75',
     },
     decimals: 18,
     projectLink: 'https://sparkpoint.io/',

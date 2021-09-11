@@ -76,7 +76,7 @@ export const useSousApproveWithAmount = (lpContract: Contract, sousId, earningTo
   const handleApprove = useCallback(async () => {
     try {
       setRequestedApproval(true)
-      const tx = await approveWithAmount(lpContract, sousChefContract, account, stakingAmount)
+      const tx = await approveWithAmount(lpContract, sousChefContract, account, stakingAmount.toString())
       dispatch(updateUserAllowance(sousId, account))
       if (tx) {
         toastSuccess(
