@@ -1,2 +1,0 @@
-(this["webpackJsonppancake-frontend"]=this["webpackJsonppancake-frontend"]||[]).push([[17],{1151:function(n,e,a){"use strict";a.r(e);var t=a(975);e.default=t.Line}}]);
-//# sourceMappingURL=17.912eddc9.chunk.js.map
