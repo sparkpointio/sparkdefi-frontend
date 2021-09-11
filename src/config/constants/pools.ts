@@ -8,7 +8,7 @@ const pools: PoolConfig[] = [
     earningToken: tokens.srkb,
     contractAddress: {
       97: '',
-      56: '0xa2837f34a62ec26ddd4e7c2fa3c4d6f2ea1a6efb',
+      56: '0x0dE59a7217deAa24f891797142F6fBf9CE78B698',
     },
     poolCategory: PoolCategory.CORE,
     harvest: true,
@@ -23,7 +23,7 @@ const pools: PoolConfig[] = [
     earningToken: tokens.sfuel,
     contractAddress: {
       97: '',
-      56: '0xF129fFc097c0fFeF059da0dba38217CfBFc4ED4e',
+      56: '0x54277Be7F64168E8713B710fbCcC5b2B663BD637',
     },
     poolCategory: PoolCategory.CORE,
     harvest: true,
