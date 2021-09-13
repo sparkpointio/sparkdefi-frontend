@@ -52,7 +52,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
 }) => {
   const { sousId, stakingToken, userData, stakingLimit, earningToken } = pool
   const { onReward } = useSousHarvest(sousId, isBnbPool)
-  const { onUnstake } = useSousUnstake(sousId, pool.enableEmergencyWithdraw)
+  const { onUnstake } = useSousUnstake(sousId, false)
   const { t } = useTranslation()
   const { theme } = useTheme()
   const [activeSelect, setActiveSelect] = useState(false)
@@ -91,7 +91,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
     setPendingTx(true)
       // unstaking
       try {
-        await onUnstake(totalStakedTokens.toFixed(4), stakingToken.decimals)
+        await onUnstake(totalStakedTokens.toString(), stakingToken.decimals)
         toastSuccess(
           `${t('Unstaked')}!`,
           t('Your %symbol% earnings have also been claimed to your wallet!', {
