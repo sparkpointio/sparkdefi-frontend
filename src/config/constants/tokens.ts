@@ -4,7 +4,9 @@ const tokens = {
     address: {
       56: '0x37ac4d6140e54304d77437a5c11924f61a2d976f',
       97: '0x37ac4d6140e54304d77437a5c11924f61a2d976f',
-    }
+    },
+    decimals: 18,
+    projectLink: 'https://sparkpoint.io/',
   },
   bnb: {
     symbol: 'BNB',
