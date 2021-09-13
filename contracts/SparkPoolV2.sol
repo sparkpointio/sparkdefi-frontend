@@ -830,6 +830,9 @@ contract SparkPoolV2 is Ownable, ReentrancyGuard {
 
     // The precision factor
     uint256 public PRECISION_FACTOR;
+    
+    // The total staking token deposits
+    uint256 public totalDeposit;
 
     // The reward token
     IBEP20 public rewardToken;
@@ -898,12 +901,19 @@ contract SparkPoolV2 is Ownable, ReentrancyGuard {
         require(decimalsRewardToken < 30, "Must be inferior to 30");
 
         PRECISION_FACTOR = uint256(10**(uint256(30).sub(decimalsRewardToken)));
+        
+        totalDeposit = 0;
 
         // Set the lastRewardBlock as the startBlock
         lastRewardBlock = startBlock;
 
         // Transfer ownership to the admin address who becomes owner of the contract
         transferOwnership(_admin);
+    }
+
+    modifier rewardDone {
+      require(bonusEndBlock <= block.number, 'SparkPoolV2: Pool not yet ended');
+      _;
     }
 
     /*
@@ -928,6 +938,7 @@ contract SparkPoolV2 is Ownable, ReentrancyGuard {
 
         if (_amount > 0) {
             user.amount = user.amount.add(_amount);
+            totalDeposit = totalDeposit.add(_amount);
             stakedToken.safeTransferFrom(address(msg.sender), address(this), _amount);
         }
 
@@ -950,6 +961,7 @@ contract SparkPoolV2 is Ownable, ReentrancyGuard {
 
         if (_amount > 0) {
             user.amount = user.amount.sub(_amount);
+            totalDeposit = totalDeposit.sub(_amount);
             stakedToken.safeTransfer(address(msg.sender), _amount);
         }
 
@@ -971,6 +983,7 @@ contract SparkPoolV2 is Ownable, ReentrancyGuard {
         uint256 amountToTransfer = user.amount;
         user.amount = 0;
         user.rewardDebt = 0;
+        totalDeposit = totalDeposit.sub(amountToTransfer);
 
         if (amountToTransfer > 0) {
             stakedToken.safeTransfer(address(msg.sender), amountToTransfer);
@@ -983,7 +996,8 @@ contract SparkPoolV2 is Ownable, ReentrancyGuard {
      * @notice Stop rewards
      * @dev Only callable by owner. Needs to be for emergency.
      */
-    function emergencyRewardWithdraw(uint256 _amount) external onlyOwner {
+    function emergencyRewardWithdraw(uint256 _amount) external onlyOwner rewardDone{
+        require(_amount <= rewardToken.balanceOf(address(this)), 'SparkPoolV2: Not enough token/s');
         rewardToken.safeTransfer(address(msg.sender), _amount);
     }
 
@@ -1066,7 +1080,7 @@ contract SparkPoolV2 is Ownable, ReentrancyGuard {
      */
     function pendingReward(address _user) external view returns (uint256) {
         UserInfo storage user = userInfo[_user];
-        uint256 stakedTokenSupply = stakedToken.balanceOf(address(this));
+        uint256 stakedTokenSupply = totalDeposit;
         if (block.number > lastRewardBlock && stakedTokenSupply != 0) {
             uint256 multiplier = _getMultiplier(lastRewardBlock, block.number);
             uint256 tokenReward = multiplier.mul(rewardPerBlock);
@@ -1086,7 +1100,7 @@ contract SparkPoolV2 is Ownable, ReentrancyGuard {
             return;
         }
 
-        uint256 stakedTokenSupply = stakedToken.balanceOf(address(this));
+        uint256 stakedTokenSupply = totalDeposit;
 
         if (stakedTokenSupply == 0) {
             lastRewardBlock = block.number;
@@ -1146,7 +1160,6 @@ contract SparkPoolV2Factory is Ownable {
     ) external onlyOwner {
         require(_stakedToken.totalSupply() >= 0);
         require(_rewardToken.totalSupply() >= 0);
-        require(_stakedToken != _rewardToken, "Tokens must be be different");
 
         bytes memory bytecode = type(SparkPoolV2).creationCode;
         bytes32 salt = keccak256(abi.encodePacked(_stakedToken, _rewardToken, _startBlock));

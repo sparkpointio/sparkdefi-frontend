@@ -1,11 +1,14 @@
-import React, { useEffect, useCallback, useState, useMemo, useRef } from 'react'
+import React, { useEffect, useCallback, useState, useMemo, useRef, useContext } from 'react'
 import { Route, useRouteMatch, useLocation } from 'react-router-dom'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
-import { Image, Heading, RowType, Toggle, Text } from '@pancakeswap/uikit'
-import styled from 'styled-components'
+import { Image, RowType, Toggle } from '@pancakeswap/uikit'
+import { Text, Flex, Heading } from '@sparkpointio/sparkswap-uikit'
+import styled, { ThemeContext } from 'styled-components'
 import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
+import useMedia from 'use-media';
+import { SvgIcon } from '@material-ui/core';
 import { useFarms, usePollFarmsData, usePriceCakeBusd } from 'state/hooks'
 import usePersistState from 'hooks/usePersistState'
 import { Farm } from 'state/types'
@@ -25,6 +28,8 @@ import { RowProps } from './components/FarmTable/Row'
 import ToggleView from './components/ToggleView/ToggleView'
 import { DesktopColumnSchema, ViewMode } from './components/types'
 import { StyledHr } from './components/Divider'
+import { ReactComponent as FarmsDarkLogo } from './components/assets/farm-dark.svg';
+import { ReactComponent as FarmsLightLogo} from './components/assets/farm-light.svg';
 
 const ControlContainer = styled.div`
   display: flex;
@@ -110,11 +115,11 @@ const Farms: React.FC = () => {
   const [viewMode, setViewMode] = usePersistState(ViewMode.TABLE, { localStorageKey: 'pancake_farm_view' })
   const { account } = useWeb3React()
   const [sortOption, setSortOption] = useState('hot')
-
+  const theme = useContext(ThemeContext);
   const isArchived = pathname.includes('archived')
   const isInactive = pathname.includes('history')
   const isActive = !isInactive && !isArchived
-
+  const isMobile = useMedia({maxWidth: 500})
   usePollFarmsData(isArchived)
 
   // Users with no wallet connected should see 0 as Earned amount
@@ -352,6 +357,21 @@ const Farms: React.FC = () => {
 
   return (
     <>
+     <PageHeader>
+        <Flex alignItems="center" justifyContent="space-between" flexDirection={['column', null, 'row']} style={isMobile? { flexDirection: 'column-reverse'} : {minHeight: '20vh'}} padding="24px"> 
+          <Flex flexDirection="column" mr={['8px', 0]}>
+            <Text color="text" fontSize="60px" bold marginBottom="10px">
+              <span style={{borderBottom: `2px solid ${theme.colors.primary}`}}>Farms</span>
+            </Text>
+            <Text color="text" style={isMobile? { fontSize: "17px" } : { fontSize: "27px" }}>
+            Earn SRK, SFUEL and other tokens by staking Spark-LP tokens!
+            </Text>
+          </Flex>
+          <Flex style={isMobile? {fontSize: '150px', margin: 'auto', marginTop: '20px', marginBottom: '20px' } : {fontSize: '240px', marginRight: '-105px'}}>
+              <SvgIcon component={theme.isDark? FarmsDarkLogo : FarmsLightLogo} viewBox="0  0 384 512" style={isMobile? {width: '200px'} : {width: '500px'}} fontSize="inherit" />
+          </Flex>
+        </Flex>
+      </PageHeader>
       <Page>
         {renderActiveContent()}
         <StyledHr />

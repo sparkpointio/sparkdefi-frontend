@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState, useContext} from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, Route, useRouteMatch } from 'react-router-dom'
 import styled, { ThemeContext } from 'styled-components'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
@@ -88,6 +88,7 @@ const Pools: React.FC = () => {
 
   // TODO aren't arrays in dep array checked just by reference, i.e. it will rerender every time reference changes?
   const [finishedPools, openPools] = useMemo(() => partition(pools, (pool) => pool.isFinished), [pools])
+  const [upcomingPools, notUpcomingPools] = useMemo(() => partition(pools, (pool) => pool.isComingSoon), [pools])
   const stakedOnlyFinishedPools = useMemo(
     () =>
       finishedPools.filter((pool) => {
@@ -133,6 +134,7 @@ const Pools: React.FC = () => {
   }, [observerIsSet])
 
   const showFinishedPools = location.pathname.includes('history')
+  const showUpcomingPools = location.pathname.includes('upcoming')
 
   const handleChangeSearchQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value)
@@ -183,7 +185,10 @@ const Pools: React.FC = () => {
 
   const poolsToShow = () => {
     let chosenPools = []
-    if (showFinishedPools) {
+    if (showUpcomingPools){
+      chosenPools = stakedOnly ? stakedOnlyFinishedPools : finishedPools // TODO: @koji @mat-ivan Please apply here how to filter upcoming pools
+    }
+    else if (showFinishedPools) {
       chosenPools = stakedOnly ? stakedOnlyFinishedPools : finishedPools
     } else {
       chosenPools = stakedOnly ? stakedOnlyOpenPools : openPools
@@ -212,12 +217,8 @@ const Pools: React.FC = () => {
   )
 
   const tableLayout = <PoolsTable pools={poolsToShow()} account={account} userDataLoaded={userDataLoaded} />
-  const StakingTab = ({index}) => (
-    <Flex>
-      <Button>Farms</Button>
-      <Button>Pools</Button>
-    </Flex>
-  ) 
+  const { path, url, isExact } = useRouteMatch()
+
 
   return (
     <>
@@ -230,19 +231,62 @@ const Pools: React.FC = () => {
             <Text color="text" style={isMobile? { fontSize: "17px" } : { fontSize: "27px" }}>
                 Earn SRK, SFUEL and other tokens by just staking!
             </Text>
-            <StakingTab />
           </Flex>
-          <Flex style={isMobile? {fontSize: '150px', margin: 'auto', marginTop: '20px', marginBottom: '20px' } : {fontSize: '240px'}}>
-              <SvgIcon component={theme.isDark? PoolsDarkLogo : PoolsLightLogo} viewBox="0  0 384 512" style={isMobile? {width: '200px'} : {width: '500px'}} fontSize="inherit" />
+          <Flex style={isMobile? {fontSize: '150px', margin: 'auto', marginTop: '20px', marginBottom: '20px' } : {fontSize: '240px', marginRight: '-112px', position: 'relative'}}>
+              <SvgIcon component={theme.isDark? PoolsDarkLogo : PoolsLightLogo} viewBox="0  0 384 512" style={isMobile? {width: '200px'} : {width: '500px'}} fontSize="inherit"/>
           </Flex>
         </Flex>
       </PageHeader>
       <Page>
-        {/* <PoolTabButtons
-          stakedOnly={stakedOnly}
-          setStakedOnly={setStakedOnly}
-          hasStakeInFinishedPools={hasStakeInFinishedPools}
-        /> */}
+        <Flex alignItems="center" justifyContent="space-between" style={isMobile? { flexDirection: 'column'} : { flexDirection: 'row' }}>
+          <Flex>
+          <PoolTabButtons
+              stakedOnly={stakedOnly}
+              setStakedOnly={setStakedOnly}
+              hasStakeInFinishedPools={hasStakeInFinishedPools}
+              viewMode={viewMode}
+              setViewMode={setViewMode}
+          />
+         </Flex>
+         <Flex alignItems="center" justifyContent="space-between" marginTop="16px">
+        <SearchSortContainer>
+            {/* <PoolControls>
+              <Text fontSize="12px" bold color="textSubtle" textTransform="uppercase">
+                {t('Sort by')}
+              </Text>
+              <ControlStretch>
+                <Select
+                  options={[
+                    {
+                      label: t('Hot'),
+                      value: 'hot',
+                    },
+                    {
+                      label: t('APR'),
+                      value: 'apr',
+                    },
+                    {
+                      label: t('Earned'),
+                      value: 'earned',
+                    },
+                    {
+                      label: t('Total staked'),
+                      value: 'totalStaked',
+                    },
+                  ]}
+                  onChange={handleSortOptionChange}
+                />
+              </ControlStretch>
+            </PoolControls> */}
+            <PoolControls>
+              <Text fontSize="12px" bold color="textSubtle" textTransform="uppercase" marginRight="12px" marginTop="12px">
+                {t('Search')}
+              </Text>
+              <SearchInput onChange={handleChangeSearchQuery} placeholder="Search Pools" />
+            </PoolControls>
+          </SearchSortContainer>
+          </Flex>
+          </Flex>
         {/* 
         <div>
           <Flex justifyContent="space-between" style={{ margin: '20px' }}>
@@ -257,106 +301,58 @@ const Pools: React.FC = () => {
           </Flex>
         */}
 
-        { stakedOnlyOpenPools.length !== 0 && (<div>
+        { !showFinishedPools && !showUpcomingPools && (<div>
           {/* <Text bold fontSize="20px" marginLeft="24px" paddingBottom="24px">
             {' '}
             Stake tokens to earn{' '}
           </Text> */}
-          <Heading scale="md" color="text" marginLeft="20px" paddingBottom="24px">
-              {t('Stake tokens to earn')}
-          </Heading>
+          <StyledHr style={{ marginTop: '35px'}}/>
           
           {/* Header title for Active Pools   */}
+          
           <Flex justifyContent="space-between" style={{ margin: '20px' }}>
               <Flex flexDirection="column" mr={['8px', 0]}>
                   <Heading scale="md" color="text">
-                    {t('Active Pools')}
+                    {t('Stake tokens to earn')}
                   </Heading>
               </Flex>
           </Flex>
-
-          <FlexLayout>
-            {/* <Route exact path={`${path}`}> */}
-            <>
-              {/* <CakeVaultCard pool={cakePoolData} showStakedOnly={stakedOnly} /> */}
-
-              {/* {stakedOnly
-                ? orderBy(stakedOnlyOpenPools, ['sortOrder'])
-                    .slice(0, numberOfPoolsVisible)
-                    .map((pool) => <PoolCard key={pool.sousId} pool={pool} account={account} />) */}
-              {orderBy(openPools, ['sortOrder'])
-                .slice(0, numberOfPoolsVisible)
-                .map((pool) => (
-                  <PoolCard key={pool.sousId} pool={pool} account={account} />
-                ))}
-            </>
-            {/* </Route> */}
-          </FlexLayout>
         </div>)}
 
         {/* UPCOMING  */}
-          {/* <>
-            <StyledHr />
-            <div style={{ margin: '25px 0px', padding: '25px 0px' }}>
-              <Flex justifyContent="space-between" style={{ margin: '20px' }}>
-                <Flex flexDirection="column" mr={['8px', 0]}>
+        {showUpcomingPools && (
+          <>
+            <StyledHr style={{ marginTop: '35px'}}/>
+            
+            <Flex justifyContent="space-between" style={{ margin: '20px' }}>
+              <Flex flexDirection="column" mr={['8px', 0]}>
                   <Heading scale="md" color="text">
-                    {t('Coming Soon')}
+                    {t('These pools are coming in the near future. Stay tuned.')}
                   </Heading>
-                </Flex>
               </Flex>
-
-              <div style={{ margin: '25px 20px', padding: '25px 0px' }}>
-                <Text>No Upcoming Pools</Text>
-              </div> */}
-
-              {/* Add and update function for upcoming pools */}
-              {/* <FlexLayout> */}
-                {/* <Route path={`${path}/history`}> */}
-                {/* {stakedOnly
-            ? orderBy(stakedOnlyFinishedPools, ['sortOrder'])
-                .slice(0, numberOfPoolsVisible)
-                .map((pool) => <PoolCard key={pool.sousId} pool={pool} account={account} />) */}
-                {/* {orderBy(finishedPools, ['sortOrder'])
-                  .slice(0, numberOfPoolsVisible)
-                  .map((pool) => (
-                    <PoolCard key={pool.sousId} pool={pool} account={account} />
-                  ))} */}
-                {/* </Route> */}
-              {/* </FlexLayout>
-            </div>
-          </> */}
+            </Flex>
+          </>
+        )}
         
 
         {/* ENDED  */}
-        {finishedPools.length !== 0 && (
+        {showFinishedPools && (
           <>
-            <StyledHr />
-            <div style={{ margin: '25px 0px', padding: '25px 0px' }}>
-              <Flex justifyContent="space-between" style={{ margin: '20px' }}>
-                <Flex flexDirection="column" mr={['8px', 0]}>
-                  <Heading scale="md" color="text">
-                    {t('Upcoming Pools')}
-                  </Heading>
-                </Flex>
-              </Flex>
+            <StyledHr style={{ marginTop: '35px'}}/>
 
-              <FlexLayout>
-                {/* <Route path={`${path}/history`}> */}
-                {/* {stakedOnly
-            ? orderBy(stakedOnlyFinishedPools, ['sortOrder'])
-                .slice(0, numberOfPoolsVisible)
-                .map((pool) => <PoolCard key={pool.sousId} pool={pool} account={account} />) */}
-                {orderBy(finishedPools, ['sortOrder'])
-                  .slice(0, numberOfPoolsVisible)
-                  .map((pool) => (
-                    <PoolCard key={pool.sousId} pool={pool} account={account} />
-                  ))}
-                {/* </Route> */}
-              </FlexLayout>
-            </div>
+            <Flex justifyContent="space-between" style={{ margin: '20px' }}>
+              <Flex flexDirection="column" mr={['8px', 0]}>
+                  <Heading scale="md" color="text">
+                    {t('These pools are no longer distributing rewards. Please unstake your tokens.')}
+                  </Heading>
+              </Flex>
+            </Flex>
           </>
         )}
+
+        {/* viewMode === ViewMode.CARD ? cardLayout : tableLayout */} 
+        {cardLayout}
+        
         <div ref={loadMoreRef} />
         {/* <Image
           mx="auto"

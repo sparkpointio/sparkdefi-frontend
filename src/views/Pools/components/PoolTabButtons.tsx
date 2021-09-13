@@ -1,5 +1,5 @@
 import React from 'react'
-import { useRouteMatch, Link } from 'react-router-dom'
+import { useRouteMatch, Link, useLocation } from 'react-router-dom'
 import {
   ButtonMenu,
   ButtonMenuItem,
@@ -14,39 +14,60 @@ import ToggleView, { ViewMode } from './ToggleView/ToggleView'
 
 const PoolTabButtons = ({ stakedOnly, setStakedOnly, hasStakeInFinishedPools, viewMode, setViewMode }) => {
   const { url, isExact } = useRouteMatch()
+  const location = useLocation()
   const { isXs, isSm } = useMatchBreakpoints()
   const { t } = useTranslation()
 
   const viewModeToggle = <ToggleView viewMode={viewMode} onToggle={(mode: ViewMode) => setViewMode(mode)} />
 
+  let activeIndex
+  switch (location.pathname) {
+    case '/pools':
+      activeIndex = 0
+      break
+    case '/pools/history':
+      activeIndex = 1
+      break
+    case '/pools/upcoming':
+      activeIndex = 2
+      break
+    default:
+      activeIndex = 0
+      break
+  }
+
+
   const liveOrFinishedSwitch = (
-    <ButtonMenu activeIndex={isExact ? 0 : 1} size="sm" variant="subtle">
+    <ButtonMenu activeIndex={activeIndex} size="sm" variant="subtle">
       <ButtonMenuItem as={Link} to={`${url}`}>
-        {t('Live')}
+        {t('Active')}
       </ButtonMenuItem>
       <NotificationDot show={hasStakeInFinishedPools}>
         <ButtonMenuItem as={Link} to={`${url}/history`}>
-          {t('Finished')}
+          {t('Ended')}
         </ButtonMenuItem>
       </NotificationDot>
+      <ButtonMenuItem as={Link} to={`${url}/upcoming`}>
+        {t('Upcoming')}
+      </ButtonMenuItem>
     </ButtonMenu>
   )
 
-  const stakedOnlySwitch = (
-    <Flex mt={['4px', null, 0, null]} ml={[0, null, '24px', null]} justifyContent="center" alignItems="center">
+   const stakedOnlySwitch = (
+     <Flex mt={['4px', null, 0, null]} ml={[0, null, '24px', null]} justifyContent="center" alignItems="center">
       <Toggle checked={stakedOnly} onChange={() => setStakedOnly((prev) => !prev)} />
       <Text ml={['4px', '4px', '8px']}>{t('Staked only')}</Text>
-    </Flex>
-  )
+     </Flex>
+   )
 
   if (isXs || isSm) {
     return (
       <Flex flexDirection="column" alignItems="flex-start" mb="24px">
         <Flex style={{width: '100%' }}justifyContent="space-between">
-          {viewModeToggle}
+          {/* {viewModeToggle} */}
           {liveOrFinishedSwitch}
         </Flex>
-        {stakedOnlySwitch}
+        {/* {stakedOnlySwitch}  */}
       </Flex>
     )
   }
@@ -57,9 +78,9 @@ const PoolTabButtons = ({ stakedOnly, setStakedOnly, hasStakeInFinishedPools, vi
       justifyContent={['space-around', 'space-around', 'flex-start']}
       mb={['24px', '24px', '24px', '0px']}
     >
-      {viewModeToggle}
+      {/* {viewModeToggle} */}
       {liveOrFinishedSwitch}
-      {stakedOnlySwitch}
+      {/* {stakedOnlySwitch} */}
     </Flex>
   )
 }
