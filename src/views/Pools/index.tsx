@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState, useContext} from 'react'
+import React, { useEffect, useMemo, useRef, useState, useContext } from 'react'
 import { useLocation, Route, useRouteMatch } from 'react-router-dom'
 import styled, { ThemeContext } from 'styled-components'
 import BigNumber from 'bignumber.js'
@@ -7,7 +7,7 @@ import { Heading, Image } from '@pancakeswap/uikit'
 import { Text, Button, Flex } from '@sparkpointio/sparkswap-uikit'
 import orderBy from 'lodash/orderBy'
 import partition from 'lodash/partition'
-import { SvgIcon } from '@material-ui/core';
+import { SvgIcon } from '@material-ui/core'
 import { useTranslation } from 'contexts/Localization'
 import usePersistState from 'hooks/usePersistState'
 import { usePools, useFetchCakeVault, useFetchPublicPoolsData, usePollFarmsData, useCakeVault } from 'state/hooks'
@@ -19,7 +19,8 @@ import { StyledHr } from 'views/Farms/components/Divider'
 import SearchInput from 'components/SearchInput'
 import Select, { OptionProps } from 'components/Select/Select'
 import { Pool } from 'state/types'
-import useMedia from 'use-media';
+import useMedia from 'use-media'
+import PageNav from './components/PageNav'
 import PoolCard from './components/PoolCard'
 import CakeVaultCard from './components/CakeVaultCard'
 import PoolTabButtons from './components/PoolTabButtons'
@@ -28,8 +29,10 @@ import HelpButton from './components/HelpButton'
 import PoolsTable from './components/PoolsTable/PoolsTable'
 import { ViewMode } from './components/ToggleView/ToggleView'
 import { getAprData, getCakeVaultEarnings } from './helpers'
-import { ReactComponent as PoolsDarkLogo } from './components/assets/pool-dark.svg';
-import { ReactComponent as PoolsLightLogo} from './components/assets/pool-light.svg';
+import { ReactComponent as PoolsDarkLogo } from './components/assets/pool-dark.svg'
+import { ReactComponent as PoolsLightLogo } from './components/assets/pool-light.svg'
+import { ReactComponent as FarmsDarkLogo } from './components/assets/farm-dark.svg';
+import { ReactComponent as FarmsLightLogo} from './components/assets/farm-light.svg';
 
 const CardLayout = styled(FlexLayout)`
   justify-content: center;
@@ -54,11 +57,11 @@ const ControlStretch = styled(Flex)`
   }
 `
 
-
 const NUMBER_OF_POOLS_VISIBLE = 12
 
 const Pools: React.FC = () => {
-  const theme = useContext(ThemeContext);
+  const theme = useContext(ThemeContext)
+  const [activeIndex, setActiveIndex] = useState(0)
   const location = useLocation()
   const { t } = useTranslation()
   const { account } = useWeb3React()
@@ -70,7 +73,7 @@ const Pools: React.FC = () => {
   const [viewMode, setViewMode] = usePersistState(ViewMode.TABLE, { localStorageKey: 'pancake_farm_view' })
   const [searchQuery, setSearchQuery] = useState('')
   const [sortOption, setSortOption] = useState('hot')
-  const isMobile = useMedia({maxWidth: 500})
+  const isMobile = useMedia({ maxWidth: 500 })
   const {
     userData: { cakeAtLastUserAction, userShares },
     fees: { performanceFee },
@@ -123,15 +126,19 @@ const Pools: React.FC = () => {
       }
     }
 
-    if (!observerIsSet) {
-      const loadMoreObserver = new IntersectionObserver(showMorePools, {
-        rootMargin: '0px',
-        threshold: 1,
-      })
-      loadMoreObserver.observe(loadMoreRef.current)
-      setObserverIsSet(true)
+    if (activeIndex === 1)
+    {
+      if (!observerIsSet ) {
+        const loadMoreObserver = new IntersectionObserver(showMorePools, {
+          rootMargin: '0px',
+          threshold: 1,
+        })
+        loadMoreObserver.observe(loadMoreRef.current)
+        setObserverIsSet(true)
+      }
     }
-  }, [observerIsSet])
+    
+  }, [observerIsSet, activeIndex])
 
   const showFinishedPools = location.pathname.includes('history')
   const showUpcomingPools = location.pathname.includes('upcoming')
@@ -185,10 +192,9 @@ const Pools: React.FC = () => {
 
   const poolsToShow = () => {
     let chosenPools = []
-    if (showUpcomingPools){
+    if (showUpcomingPools) {
       chosenPools = stakedOnly ? stakedOnlyFinishedPools : finishedPools // TODO: @koji @mat-ivan Please apply here how to filter upcoming pools
-    }
-    else if (showFinishedPools) {
+    } else if (showFinishedPools) {
       chosenPools = stakedOnly ? stakedOnlyFinishedPools : finishedPools
     } else {
       chosenPools = stakedOnly ? stakedOnlyOpenPools : openPools
@@ -218,39 +224,79 @@ const Pools: React.FC = () => {
 
   const tableLayout = <PoolsTable pools={poolsToShow()} account={account} userDataLoaded={userDataLoaded} />
   const { path, url, isExact } = useRouteMatch()
-
+  const FarmsLogo = theme.isDark? FarmsDarkLogo:FarmsLightLogo;
+  const PoolsLogo = theme.isDark? PoolsDarkLogo:PoolsLightLogo;
+  const StakingLogo = activeIndex === 0? FarmsLogo : PoolsLogo
+  // insert pools component here
+  const FarmComponent = () => {
+    return <Text>Pools</Text>
+  }
 
   return (
     <>
       <PageHeader>
-        <Flex alignItems="center" justifyContent="space-between" flexDirection={['column', null, 'row']} style={isMobile? { flexDirection: 'column-reverse'} : {minHeight: '20vh'}} padding="24px"> 
-          <Flex flexDirection="column" mr={['8px', 0]}>
+        <Flex
+          alignItems="center"
+          justifyContent="space-between"
+          flexDirection={['column', null, 'row']}
+          style={isMobile ? { flexDirection: 'column-reverse' } : { minHeight: '20vh' }}
+          padding="24px"
+        >
+          <Flex flexDirection="column" mr={['8px', 0]} style={{ minWidth: '700px', maxWidth: '700px' }}>
             <Text color="text" fontSize="60px" bold marginBottom="10px">
-              <span style={{borderBottom: `2px solid ${theme.colors.primary}`}}>Pools</span>
+              <span style={{ borderBottom: `2px solid ${theme.colors.primary}` }}>
+                {' '}
+                {activeIndex === 0 ? 'Farms' : 'Pools'}
+              </span>
             </Text>
-            <Text color="text" style={isMobile? { fontSize: "17px" } : { fontSize: "27px" }}>
-                Earn SRK, SFUEL and other tokens by just staking!
+            <Text color="text" style={isMobile ? { fontSize: '17px' } : { fontSize: '27px' }}>
+              {activeIndex === 0
+                ? 'Earn SRK, SFUEL and other tokens by staking Spark-LP tokens!'
+                : 'Earn SRK, SFUEL and other tokens by just staking!'}
             </Text>
+            <PageNav activeIndex={activeIndex} setActiveIndex={setActiveIndex} />
           </Flex>
-          <Flex style={isMobile? {fontSize: '150px', margin: 'auto', marginTop: '20px', marginBottom: '20px' } : {fontSize: '240px', marginRight: '-112px', position: 'relative'}}>
-              <SvgIcon component={theme.isDark? PoolsDarkLogo : PoolsLightLogo} viewBox="0  0 384 512" style={isMobile? {width: '200px'} : {width: '500px'}} fontSize="inherit"/>
+          <Flex
+            style={
+              isMobile
+                ? { fontSize: '150px', margin: 'auto', marginTop: '20px', marginBottom: '20px' }
+                : { fontSize: '240px', marginRight: '-112px', position: 'relative' }
+            }
+          >
+            <SvgIcon
+              component={StakingLogo}
+              viewBox="0  0 384 512"
+              style={isMobile ? { width: '200px' } : { width: '500px' }}
+              fontSize="inherit"
+            />
           </Flex>
         </Flex>
       </PageHeader>
       <Page>
-        <Flex alignItems="center" justifyContent="space-between" style={isMobile? { flexDirection: 'column'} : { flexDirection: 'row' }}>
-          <Flex>
-          <PoolTabButtons
-              stakedOnly={stakedOnly}
-              setStakedOnly={setStakedOnly}
-              hasStakeInFinishedPools={hasStakeInFinishedPools}
-              viewMode={viewMode}
-              setViewMode={setViewMode}
-          />
-         </Flex>
-         <Flex alignItems="center" justifyContent="space-between" marginTop="16px">
-        <SearchSortContainer>
-            {/* <PoolControls>
+        {activeIndex === 0 ? (
+          <>
+            {' '}
+            <FarmComponent />
+          </>
+        ) : (
+          <>
+            <Flex
+              alignItems="center"
+              justifyContent="space-between"
+              style={isMobile ? { flexDirection: 'column' } : { flexDirection: 'row' }}
+            >
+              <Flex>
+                <PoolTabButtons
+                  stakedOnly={stakedOnly}
+                  setStakedOnly={setStakedOnly}
+                  hasStakeInFinishedPools={hasStakeInFinishedPools}
+                  viewMode={viewMode}
+                  setViewMode={setViewMode}
+                />
+              </Flex>
+              <Flex alignItems="center" justifyContent="space-between" marginTop="16px">
+                <SearchSortContainer>
+                  {/* <PoolControls>
               <Text fontSize="12px" bold color="textSubtle" textTransform="uppercase">
                 {t('Sort by')}
               </Text>
@@ -278,16 +324,23 @@ const Pools: React.FC = () => {
                 />
               </ControlStretch>
             </PoolControls> */}
-            <PoolControls>
-              <Text fontSize="12px" bold color="textSubtle" textTransform="uppercase" marginRight="12px" marginTop="12px">
-                {t('Search')}
-              </Text>
-              <SearchInput onChange={handleChangeSearchQuery} placeholder="Search Pools" />
-            </PoolControls>
-          </SearchSortContainer>
-          </Flex>
-          </Flex>
-        {/* 
+                  <PoolControls>
+                    <Text
+                      fontSize="12px"
+                      bold
+                      color="textSubtle"
+                      textTransform="uppercase"
+                      marginRight="12px"
+                      marginTop="12px"
+                    >
+                      {t('Search')}
+                    </Text>
+                    <SearchInput onChange={handleChangeSearchQuery} placeholder="Search Pools" />
+                  </PoolControls>
+                </SearchSortContainer>
+              </Flex>
+            </Flex>
+            {/* 
         <div>
           <Flex justifyContent="space-between" style={{ margin: '20px' }}>
             <Flex flexDirection="column" mr={['8px', 0]}>
@@ -301,60 +354,61 @@ const Pools: React.FC = () => {
           </Flex>
         */}
 
-        { !showFinishedPools && !showUpcomingPools && (<div>
-          {/* <Text bold fontSize="20px" marginLeft="24px" paddingBottom="24px">
+            {!showFinishedPools && !showUpcomingPools && (
+              <div>
+                {/* <Text bold fontSize="20px" marginLeft="24px" paddingBottom="24px">
             {' '}
             Stake tokens to earn{' '}
           </Text> */}
-          <StyledHr style={{ marginTop: '35px'}}/>
-          
-          {/* Header title for Active Pools   */}
-          
-          <Flex justifyContent="space-between" style={{ margin: '20px' }}>
-              <Flex flexDirection="column" mr={['8px', 0]}>
-                  <Heading scale="md" color="text">
-                    {t('Stake tokens to earn')}
-                  </Heading>
-              </Flex>
-          </Flex>
-        </div>)}
+                <StyledHr style={{ marginTop: '35px' }} />
 
-        {/* UPCOMING  */}
-        {showUpcomingPools && (
-          <>
-            <StyledHr style={{ marginTop: '35px'}}/>
-            
-            <Flex justifyContent="space-between" style={{ margin: '20px' }}>
-              <Flex flexDirection="column" mr={['8px', 0]}>
-                  <Heading scale="md" color="text">
-                    {t('These pools are coming in the near future. Stay tuned.')}
-                  </Heading>
-              </Flex>
-            </Flex>
-          </>
-        )}
-        
+                {/* Header title for Active Pools   */}
 
-        {/* ENDED  */}
-        {showFinishedPools && (
-          <>
-            <StyledHr style={{ marginTop: '35px'}}/>
+                <Flex justifyContent="space-between" style={{ margin: '20px' }}>
+                  <Flex flexDirection="column" mr={['8px', 0]}>
+                    <Heading scale="md" color="text">
+                      {t('Stake tokens to earn')}
+                    </Heading>
+                  </Flex>
+                </Flex>
+              </div>
+            )}
 
-            <Flex justifyContent="space-between" style={{ margin: '20px' }}>
-              <Flex flexDirection="column" mr={['8px', 0]}>
-                  <Heading scale="md" color="text">
-                    {t('These pools are no longer distributing rewards. Please unstake your tokens.')}
-                  </Heading>
-              </Flex>
-            </Flex>
-          </>
-        )}
+            {/* UPCOMING  */}
+            {showUpcomingPools && (
+              <>
+                <StyledHr style={{ marginTop: '35px' }} />
 
-        {/* viewMode === ViewMode.CARD ? cardLayout : tableLayout */} 
-        {cardLayout}
-        
-        <div ref={loadMoreRef} />
-        {/* <Image
+                <Flex justifyContent="space-between" style={{ margin: '20px' }}>
+                  <Flex flexDirection="column" mr={['8px', 0]}>
+                    <Heading scale="md" color="text">
+                      {t('These pools are coming in the near future. Stay tuned.')}
+                    </Heading>
+                  </Flex>
+                </Flex>
+              </>
+            )}
+
+            {/* ENDED  */}
+            {showFinishedPools && (
+              <>
+                <StyledHr style={{ marginTop: '35px' }} />
+
+                <Flex justifyContent="space-between" style={{ margin: '20px' }}>
+                  <Flex flexDirection="column" mr={['8px', 0]}>
+                    <Heading scale="md" color="text">
+                      {t('These pools are no longer distributing rewards. Please unstake your tokens.')}
+                    </Heading>
+                  </Flex>
+                </Flex>
+              </>
+            )}
+
+            {/* viewMode === ViewMode.CARD ? cardLayout : tableLayout */}
+            {cardLayout}
+
+            <div ref={loadMoreRef} />
+            {/* <Image
           mx="auto"
           mt="12px"
           src="/images/3d-syrup-bunnies.png"
@@ -362,6 +416,8 @@ const Pools: React.FC = () => {
           width={192}
           height={184.5}
         /> */}
+          </>
+        )}
       </Page>
     </>
   )
