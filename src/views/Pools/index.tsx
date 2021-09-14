@@ -223,7 +223,7 @@ const Pools: React.FC = () => {
   return (
     <>
       <PageHeader>
-        <Flex alignItems="center" justifyContent="space-between" flexDirection={['column', null, 'row']} style={isMobile? { flexDirection: 'column-reverse'} : {minHeight: '20vh'}} padding="24px"> 
+        <Flex alignItems="center" justifyContent="space-between" flexDirection={['column', null, 'row']} style={isMobile? { flexDirection: 'column-reverse'} : {minHeight: '20vh', marginLeft: '-12px'}} padding="24px"> 
           <Flex flexDirection="column" mr={['8px', 0]}>
             <Text color="text" fontSize="60px" bold marginBottom="10px">
               <span style={{borderBottom: `2px solid ${theme.colors.primary}`}}>Pools</span>
@@ -232,13 +232,13 @@ const Pools: React.FC = () => {
                 Earn SRK, SFUEL and other tokens by just staking!
             </Text>
           </Flex>
-          <Flex style={isMobile? {fontSize: '150px', margin: 'auto', marginTop: '20px', marginBottom: '20px' } : {fontSize: '240px', marginRight: '-112px', position: 'relative'}}>
+          <Flex style={isMobile? {fontSize: '150px', margin: 'auto', marginTop: '20px', marginBottom: '20px' } : {fontSize: '240px', marginRight: '-137px', position: 'relative'}}>
               <SvgIcon component={theme.isDark? PoolsDarkLogo : PoolsLightLogo} viewBox="0  0 384 512" style={isMobile? {width: '200px'} : {width: '500px'}} fontSize="inherit"/>
           </Flex>
         </Flex>
       </PageHeader>
       <Page>
-        <Flex alignItems="center" justifyContent="space-between" style={isMobile? { flexDirection: 'column'} : { flexDirection: 'row' }}>
+        <Flex alignItems="center" justifyContent="space-between" style={isMobile? { flexDirection: 'column'} : { flexDirection: 'row', marginLeft: '12px' }}>
           <Flex>
           <PoolTabButtons
               stakedOnly={stakedOnly}

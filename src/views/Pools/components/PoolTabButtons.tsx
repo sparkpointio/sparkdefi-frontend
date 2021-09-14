@@ -47,9 +47,9 @@ const PoolTabButtons = ({ stakedOnly, setStakedOnly, hasStakeInFinishedPools, vi
           {t('Ended')}
         </ButtonMenuItem>
       </NotificationDot>
-      <ButtonMenuItem as={Link} to={`${url}/upcoming`}>
+      {/* <ButtonMenuItem as={Link} to={`${url}/upcoming`}>
         {t('Upcoming')}
-      </ButtonMenuItem>
+      </ButtonMenuItem> */}
     </ButtonMenu>
   )
 
