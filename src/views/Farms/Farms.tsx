@@ -357,13 +357,8 @@ const Farms: React.FC = () => {
 
   return (
     <>
-<<<<<<< HEAD
      <PageHeader background={theme.card.background}>
-        <Flex alignItems="center" justifyContent="space-between" flexDirection={['column', null, 'row']} style={isMobile? { flexDirection: 'column-reverse'} : {minHeight: '20vh'}}  padding="24px"> 
-=======
-     <PageHeader>
         <Flex alignItems="center" justifyContent="space-between" flexDirection={['column', null, 'row']} style={isMobile? { flexDirection: 'column-reverse'} : {minHeight: '20vh', marginLeft: '-16px'}} padding="24px"> 
->>>>>>> develop
           <Flex flexDirection="column" mr={['8px', 0]}>
             <Text color="text" fontSize="60px" bold marginBottom="10px">
               <span style={{borderBottom: `2px solid ${theme.colors.primary}`}}>Farms (Coming Soon) </span>
