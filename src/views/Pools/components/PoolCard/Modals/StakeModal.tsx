@@ -52,7 +52,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
 }) => {
   const { sousId, stakingToken, userData, stakingLimit, earningToken } = pool
   const { onReward } = useSousHarvest(sousId, isBnbPool)
-  const { onUnstake } = useSousUnstake(sousId, pool.enableEmergencyWithdraw)
+  const { onUnstake } = useSousUnstake(sousId, false)
   const { t } = useTranslation()
   const { theme } = useTheme()
   const [activeSelect, setActiveSelect] = useState(false)
@@ -91,7 +91,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
     setPendingTx(true)
       // unstaking
       try {
-        await onUnstake(totalStakedTokens.toFixed(4), stakingToken.decimals)
+        await onUnstake(totalStakedTokens.toString(), stakingToken.decimals)
         toastSuccess(
           `${t('Unstaked')}!`,
           t('Your %symbol% earnings have also been claimed to your wallet!', {
@@ -115,7 +115,24 @@ const StakeModal: React.FC<StakeModalProps> = ({
     <Flex flexDirection="column" style={{marginTop: '-50px', width: "550px"}} >
       <Text fontSize="20px" marginBottom="10px" marginLeft="10px">Account Info</Text>
       <Text fontSize="15px" marginLeft="10px">Staking, balances & earnings</Text>
-      <StyledFlex marginTop="21px">
+
+      {/* Remove extra add liquidity button component when staking token symbol is equal to earning token symbol */}
+      {pool.stakingToken.symbol === pool.earningToken.symbol ? 
+        <StyledFlex marginTop="21px">
+        <Flex flexDirection="column">
+          <Text fontSize="24px">{totalStakingTokens.toFixed(4)}</Text>
+          <Text color="textSubtle" marginBottom="24px">{pool.stakingToken.symbol} Tokens</Text>
+          <Button fullWidth as="a" href={`https://sparkswap.finance/#/swap/${pool.stakingToken.address[56]}`}>Add More</Button>
+        </Flex>
+        <Flex flexDirection="column">
+          <Text fontSize="24px">{totalStakedTokens.toFixed(4)}</Text>
+          <Text color="textSubtle" marginBottom="24px">{pool.stakingToken.symbol} Staked</Text>
+          <Button fullWidth onClick={onPresentStakeAction}>Stake Tokens</Button>
+        </Flex>
+        </StyledFlex> :
+        
+        // Render two 'Add More' button components when staking token symbol is not equal to earning token symbol
+        <StyledFlex marginTop="21px">
         <Flex flexDirection="column">
           <Text fontSize="24px">{totalStakingTokens.toFixed(4)}</Text>
           <Text color="textSubtle" marginBottom="24px">{pool.stakingToken.symbol} Tokens</Text>
@@ -131,7 +148,9 @@ const StakeModal: React.FC<StakeModalProps> = ({
           <Text color="textSubtle" marginBottom="24px">{pool.stakingToken.symbol} Staked</Text>
           <Button fullWidth onClick={onPresentStakeAction}>Stake Tokens</Button>
         </Flex>
-      </StyledFlex>
+        </StyledFlex>
+      }
+      
       <StyledFlex >
       <hr style={{marginTop: '30px', border: 'none', borderTop: `2px solid ${theme.colors.primary}` }} />
       </StyledFlex>

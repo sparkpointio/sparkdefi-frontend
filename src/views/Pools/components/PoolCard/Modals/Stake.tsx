@@ -68,13 +68,11 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
   const totalStakingTokens = userData?.stakingTokenBalance ? getBalanceNumber(new BigNumber(userData.stakingTokenBalance), stakingToken.decimals) : BIG_ZERO
   const remainingStakeTokens = userData?.stakedBalance ? getBalanceNumber(new BigNumber(pool.stakingLimit.minus(userData.stakedBalance)), stakingToken.decimals) : BIG_ZERO
   const totalAllowance = useTokenAllowance(stakingToken.address[56], pool.contractAddress[56])
-  console.log(totalAllowance.balance.toString())
   const { handleApprove, requestedApproval } = useSousApproveWithAmount(stakingTokenContract, sousId, earningToken.symbol, getDecimalAmount(new BigNumber(stakeAmount), stakingToken.decimals))
   const getCalculatedStakingLimit = () => {
     if (isRemovingStake) {
       return userData.stakedBalance
     }
-    console.log(stakingLimit.gt(BIG_ZERO))
     return stakingLimit.gt(BIG_ZERO) && stakingTokenBalance.gt(userLimit) ? userLimit : stakingTokenBalance
   }
   const usdValueStaked = stakeAmount && formatNumber(new BigNumber(stakeAmount).times(stakingTokenPrice).toNumber())
@@ -84,8 +82,7 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
       const fullDecimalStakeAmount = getDecimalAmount(new BigNumber(stakeAmount), stakingToken.decimals)
       setHasReachedStakedLimit(fullDecimalStakeAmount.plus(userData.stakedBalance).gt(stakingLimit))
     }
-
-    setIsApproved(new BigNumber(getBalanceNumber(totalAllowance.balance, stakingToken.decimals)).gte(stakeAmount))
+    setIsApproved(totalAllowance.balance.gte(getDecimalAmount(new BigNumber(stakeAmount), stakingToken.decimals)))
   }, [requestedApproval, stakeAmount, stakingLimit, userData, stakingToken, isRemovingStake, totalAllowance, setHasReachedStakedLimit])
 
   const handleStakeInputChange = (input: string) => {
@@ -153,7 +150,7 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
       }
     }
   }
-  
+
 
   return (
     <Modal title="" onDismiss={onDismiss}>
@@ -174,7 +171,7 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
               tokensymbol: pool.stakingToken.symbol
             })}
           </Text>
-        </Flex> 
+        </Flex>
 
         <Flex alignItems="center" justifyContent="space-between" mb="8px">
           <Text bold>Stake amount</Text>
@@ -198,13 +195,13 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
           symbol={stakingToken.symbol}
           addLiquidityUrl=''
         />
-        
+
         {/* Fetch and display actual balance */}
-        
+
         <Text color="textSubtle" fontSize="14px" mb="8px" style={{ textAlign: 'left'}}>
           Remaining stakable amount: {remainingStakeTokens} {pool.stakingToken.symbol}
         </Text>
-        
+
 
         <div>
         <Text ml="auto" color="textSubtle" fontSize="14px" mb="8px" style={{ textAlign: 'left'}}>
@@ -214,9 +211,9 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
           Balance: {totalStakingTokens.toFixed(4)} {pool.stakingToken.symbol}
         </Text>
         </div>
-        
-        
-        
+
+
+
         {/* {hasReachedStakeLimit && (
           <Text color="failure" fontSize="12px" style={{ textAlign: 'right' }} mt="4px">
             {t('Maximum total stake: %amount% %token%', {

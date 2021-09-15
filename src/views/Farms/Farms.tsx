@@ -321,7 +321,7 @@ const Farms: React.FC = () => {
 
     return (
       <div>
-        <div style={{ marginTop: '-5px', marginLeft: '17px', marginBottom: '17px' }}>
+        <div style={{ marginTop: '-5px', marginLeft: '8px', marginBottom: '17px' }}>
           <Text fontSize="24px" bold>
             {' '}
             Active Liquidity Pools{' '} 
@@ -357,8 +357,13 @@ const Farms: React.FC = () => {
 
   return (
     <>
+<<<<<<< HEAD
      <PageHeader background={theme.card.background}>
         <Flex alignItems="center" justifyContent="space-between" flexDirection={['column', null, 'row']} style={isMobile? { flexDirection: 'column-reverse'} : {minHeight: '20vh'}}  padding="24px"> 
+=======
+     <PageHeader>
+        <Flex alignItems="center" justifyContent="space-between" flexDirection={['column', null, 'row']} style={isMobile? { flexDirection: 'column-reverse'} : {minHeight: '20vh', marginLeft: '-16px'}} padding="24px"> 
+>>>>>>> develop
           <Flex flexDirection="column" mr={['8px', 0]}>
             <Text color="text" fontSize="60px" bold marginBottom="10px">
               <span style={{borderBottom: `2px solid ${theme.colors.primary}`}}>Farms (Coming Soon) </span>
@@ -367,7 +372,7 @@ const Farms: React.FC = () => {
             Earn SRK, SFUEL and other tokens by staking Spark-LP tokens!
             </Text>
           </Flex>
-          <Flex style={isMobile? {fontSize: '150px', margin: 'auto', marginTop: '20px', marginBottom: '20px' } : {fontSize: '240px', marginRight: '-105px'}}>
+          <Flex style={isMobile? {fontSize: '150px', margin: 'auto', marginTop: '20px', marginBottom: '20px' } : {fontSize: '240px', marginRight: '-118px'}}>
               <SvgIcon component={theme.isDark? FarmsDarkLogo : FarmsLightLogo} viewBox="0  0 384 512" style={isMobile? {width: '200px'} : {width: '500px'}} fontSize="inherit" />
           </Flex>
         </Flex>
