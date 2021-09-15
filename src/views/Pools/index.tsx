@@ -32,7 +32,7 @@ import { ReactComponent as PoolsDarkLogo } from './components/assets/pool-dark.s
 import { ReactComponent as PoolsLightLogo} from './components/assets/pool-light.svg';
 
 const CardLayout = styled(FlexLayout)`
-  justify-content: center;
+  justify-content: flex-start;
 `
 
 const PoolControls = styled(Flex)`
@@ -306,7 +306,7 @@ const Pools: React.FC = () => {
             {' '}
             Stake tokens to earn{' '}
           </Text> */}
-          <StyledHr style={{ marginTop: '35px'}}/>
+          <StyledHr style={{ marginTop: '35px', width: '100%'}}/>
           
           {/* Header title for Active Pools   */}
           
@@ -351,8 +351,9 @@ const Pools: React.FC = () => {
         )}
 
         {/* viewMode === ViewMode.CARD ? cardLayout : tableLayout */} 
+       
         {cardLayout}
-        
+      
         <div ref={loadMoreRef} />
         {/* <Image
           mx="auto"
