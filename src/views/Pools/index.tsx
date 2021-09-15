@@ -306,7 +306,7 @@ const Pools: React.FC = () => {
             {' '}
             Stake tokens to earn{' '}
           </Text> */}
-          <StyledHr style={{ marginTop: '35px'}}/>
+          <StyledHr style={{ marginTop: '35px', width: '100%'}}/>
           
           {/* Header title for Active Pools   */}
           
