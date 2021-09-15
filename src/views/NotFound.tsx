@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Button, Heading, Text, LogoIcon } from '@pancakeswap/uikit'
+import {Button, Heading, Text } from '@sparkpointio/sparkswap-uikit'
 import Page from 'components/layout/Page'
 import { useTranslation } from 'contexts/Localization'
 
@@ -18,10 +18,10 @@ const NotFound = () => {
   return (
     <Page>
       <StyledNotFound>
-        <LogoIcon width="64px" mb="8px" />
-        <Heading scale="xxl">404</Heading>
+        <img src="/logo.png" alt="LogoIcon" width="64px" style= {{ marginBottom: '8px' }}/>
+        <Heading size="xxl">404</Heading>
         <Text mb="16px">{t('Oops, page not found.')}</Text>
-        <Button as="a" href="/" scale="sm">
+        <Button as="a" href="/" size="sm">
           {t('Back Home')}
         </Button>
       </StyledNotFound>
