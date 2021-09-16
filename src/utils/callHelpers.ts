@@ -1,8 +1,8 @@
 import BigNumber from 'bignumber.js'
 import { DEFAULT_GAS_LIMIT, DEFAULT_TOKEN_DECIMAL } from 'config'
 import { ethers } from 'ethers'
-import { Pair, TokenAmount, Token } from '@pancakeswap-libs/sdk'
-import { getLpContract, getMasterchefContract } from 'utils/contractHelpers'
+import { Pair, TokenAmount, Token, JSBI, WETH} from '@pancakeswap-libs/sdk'
+import { getLpContract, getLpStakingContract, getMasterchefContract } from 'utils/contractHelpers'
 import farms from 'config/constants/farms'
 import { getAddress, getCakeAddress } from 'utils/addressHelpers'
 import tokens from 'config/constants/tokens'
@@ -22,7 +22,15 @@ export const approveWithAmount = async (lpContract, masterChefContract, account,
     .send({ from: account })
 }
 
-export const stake = async (masterChefContract, pid, amount, account) => {
+export const stake = async (masterChefContract, pid, amount, account, useV2 = false) => {
+  if (useV2) {
+    return masterChefContract.methods
+      .stake(new BigNumber(amount).times(DEFAULT_TOKEN_DECIMAL).toString())
+      .send({ from: account, gas: DEFAULT_GAS_LIMIT })
+      .on('transactionHash', (tx) => {
+        return tx.transactionHash
+      })
+  }
   if (pid === 0) {
     return masterChefContract.methods
       .enterStaking(new BigNumber(amount).times(DEFAULT_TOKEN_DECIMAL).toString())
@@ -169,6 +177,46 @@ export const getUserStakeInCakeBnbLp = async (account: string, block?: number) =
     console.error(`CAKE-BNB LP error: ${error}`)
     return BIG_ZERO
   }
+}
+
+export const getLPStakingDetails = async (stakingAddresses, account: string) => {
+  try {
+    const contract = getLpStakingContract(getAddress(stakingAddresses))
+
+    return {
+      stakedTokens: await contract.methods.balanceOf(account).call(),
+      totalDeposits: await contract.methods.totalSupply().call(),
+      rewardRate: await contract.methods.rewardRate().call()
+    }
+  } catch (error) {
+    console.error(`LP Staking error: ${error}`)
+    return {
+      totalDeposits: '-'
+    }
+  }
+}
+
+const getHypotheticalRewardRate = async (
+  rewardsToken: Token,
+  rewardRate: TokenAmount,
+  totalSupply: TokenAmount,
+  stakedAmount: TokenAmount,
+  token0: Token,
+  token1: Token
+) => {
+  const dummyPair = new Pair(new TokenAmount(token0, '0'), new TokenAmount(token1, '0'));
+
+  const totalStakedAmount = new TokenAmount(
+    dummyPair.liquidityToken, JSBI.BigInt(totalSupply.raw));
+  // const rewardRate = await this.getRewardRate();
+
+  return new TokenAmount(
+    rewardsToken,
+    JSBI.greaterThan(totalStakedAmount.raw, JSBI.BigInt(0))
+      ? JSBI.divide(JSBI.multiply(rewardRate.raw, stakedAmount.raw), totalStakedAmount.raw)
+      : JSBI.BigInt(0)
+  )?.multiply(`${60 * 60 * 24 * 7}`)
+    ?.toSignificant(4)
 }
 
 /**

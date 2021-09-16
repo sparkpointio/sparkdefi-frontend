@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js'
 import React, { useState, useCallback, useMemo } from 'react'
+import { Contract } from 'web3-eth-contract'
 import { Modal, Text } from '@sparkpointio/sparkswap-uikit'
 import ModalInput from 'components/ModalInput'
 import { getFullDisplayBalance } from 'utils/formatBalance'
@@ -12,10 +13,11 @@ interface StakeModalInterface {
   placeholder?: string
   addLiquidityUrl?: string
   inputTitle?: string
-  onConfirm: (amount: string) => void
+  onConfirm: (amount: string, contract: Contract) => void
+  lpStakingContract?: Contract
 }
 
-const Stake: React.FC<StakeModalInterface> = ({ onDismiss, max, symbol, addLiquidityUrl, inputTitle, onConfirm, }) => {
+const Stake: React.FC<StakeModalInterface> = ({ onDismiss, max, symbol, addLiquidityUrl, inputTitle, onConfirm, lpStakingContract}) => {
   const [val, setVal] = useState('0')
   const [pendingTx, setPendingTx] = useState(false)
   const valNumber = new BigNumber(val)
@@ -33,6 +35,19 @@ const Stake: React.FC<StakeModalInterface> = ({ onDismiss, max, symbol, addLiqui
     },
     [setVal],
   )
+
+  const onClick = async () => {
+    try {
+      setPendingTx(true)
+      await onConfirm(val, lpStakingContract)
+      setPendingTx(false)
+      onDismiss()
+    }
+    catch (e) {
+      setPendingTx(false)
+    }
+  }
+
   const handleSelectMax = useCallback(() => {
     setVal(fullBalance)
   }, [fullBalance, setVal])
@@ -51,30 +66,19 @@ const Stake: React.FC<StakeModalInterface> = ({ onDismiss, max, symbol, addLiqui
         />
       </Container>
       <StyledFlex justifyContent="space-between">
-        <Text>Appoved tokens: </Text>
-        <Text>00.00</Text>
+        <Text>{ symbol } balance: </Text>
+        <Text>{ fullBalance }</Text>
       </StyledFlex>
       <StyledFlex justifyContent="space-between">
         <CancelButton
         onClick={onDismiss}
-        disabled={pendingTx}
         >
-         Approve
+         Close
         </CancelButton>
         <DepositButton
         // disable Deposit button if not yet approved
+        onClick={onClick}
         disabled={pendingTx || !valNumber.isFinite() || valNumber.eq(0) || valNumber.gt(fullBalanceNumber)}
-        onClick={async () => {
-          try {
-            setPendingTx(true)
-            await onConfirm(val)
-            setPendingTx(false)
-            onDismiss()
-          }
-          catch (e) {
-            setPendingTx(false)
-          }
-        }}
         >
         Deposit
         </DepositButton>

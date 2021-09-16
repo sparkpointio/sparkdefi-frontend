@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react'
 import { useWeb3React } from '@web3-react/core'
+import { Contract } from 'web3-eth-contract'
 import styled from 'styled-components'
 import BigNumber from 'bignumber.js'
 import { Button, Flex, Heading, IconButton, AddIcon, MinusIcon, useModal } from '@sparkpointio/sparkswap-uikit'
@@ -50,8 +51,8 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
   const { account } = useWeb3React()
   const lpPrice = useLpTokenPrice(tokenName)
 
-  const handleStake = async (amount: string) => {
-    await onStake(amount)
+  const handleStake = async (amount: string, contract?: Contract) => {
+    await onStake(amount, contract)
     dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
   }
 
@@ -71,7 +72,7 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
   const [onPresentDeposit] = useModal(
     <DepositModal
       max={tokenBalance}
-      onConfirm={onStake}
+      onConfirm={handleStake}
       tokenName={tokenName}
       addLiquidityUrl={addLiquidityUrl}
       addTokenUrl={addTokenUrl}

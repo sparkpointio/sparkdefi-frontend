@@ -11,20 +11,20 @@ import { getDecimalAmount } from 'utils/formatBalance'
 import { useMasterchef, useCake, useSousChef, useLottery, useCakeVaultContract } from './useContract'
 import useToast from './useToast'
 import useLastUpdated from './useLastUpdated'
+import { Address } from '../config/constants/types'
+import { getAddress } from '../utils/addressHelpers'
 
 // Approve a Farm
-export const useApprove = (lpContract: Contract) => {
+export const useApprove = (lpContract: Contract, contractAddress: Contract) => {
   const { account } = useWeb3React()
-  const masterChefContract = useMasterchef()
-
   const handleApprove = useCallback(async () => {
     try {
-      const tx = await approve(lpContract, masterChefContract, account)
+      const tx = await approve(lpContract, contractAddress, account)
       return tx
     } catch (e) {
       return false
     }
-  }, [account, lpContract, masterChefContract])
+  }, [account, lpContract, contractAddress])
 
   return { onApprove: handleApprove }
 }

@@ -1614,6 +1614,25 @@ const tokens = {
     decimals: 18,
     projectLink: 'https://sparkpoint.io/',
   },
+  own: {
+    symbol: 'OWN',
+    address: {
+      56: '0x7665cb7b0d01df1c9f9b9cc66019f00abd6959ba',
+      97: '0x7665cb7b0d01df1c9f9b9cc66019f00abd6959ba',
+    },
+    decimals: 18,
+    projectLink: 'https://ownly.io/',
+  },
+  kclp: {
+    symbol: 'OWN',
+    address: {
+      56: '0x47b8806c2891c4a92b5c590c32cfe1eb617648ef',
+      97: '0x7665cb7b0d01df1c9f9b9cc66019f00abd6959ba',
+    },
+    decimals: 18,
+    projectLink: 'https://kucoinlaunchpad.com/',
+  },
 }
 
 export default tokens
+

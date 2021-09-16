@@ -240,14 +240,14 @@ const Farms: React.FC = () => {
       }
     }
     // Uncomment this if !comingsoon
-    // if (!observerIsSet) {
-    //   const loadMoreObserver = new IntersectionObserver(showMoreFarms, {
-    //     rootMargin: '0px',
-    //     threshold: 1,
-    //   })
-    //   loadMoreObserver.observe(loadMoreRef.current)
-    //   setObserverIsSet(true)
-    // }
+    if (!observerIsSet) {
+      const loadMoreObserver = new IntersectionObserver(showMoreFarms, {
+        rootMargin: '0px',
+        threshold: 1,
+      })
+      loadMoreObserver.observe(loadMoreRef.current)
+      setObserverIsSet(true)
+    }
   }, [farmsStakedMemoized, observerIsSet])
 
   const rowData = farmsStakedMemoized.map((farm) => {
@@ -324,7 +324,7 @@ const Farms: React.FC = () => {
         <div style={{ marginTop: '-5px', marginLeft: '8px', marginBottom: '17px' }}>
           <Text fontSize="24px" bold>
             {' '}
-            Active Liquidity Pools{' '} 
+            Active Liquidity Pools{' '}
           </Text>
           <Text fontSize="16px">Stake LP tokens to earn</Text>
         </div>
@@ -358,7 +358,7 @@ const Farms: React.FC = () => {
   return (
     <>
      <PageHeader background={theme.card.background}>
-        <Flex alignItems="center" justifyContent="space-between" flexDirection={['column', null, 'row']} style={isMobile? { flexDirection: 'column-reverse'} : {minHeight: '20vh', marginLeft: '-16px'}} padding="24px"> 
+        <Flex alignItems="center" justifyContent="space-between" flexDirection={['column', null, 'row']} style={isMobile? { flexDirection: 'column-reverse'} : {minHeight: '20vh', marginLeft: '-16px'}} padding="24px">
           <Flex flexDirection="column" mr={['8px', 0]}>
             <Text color="text" fontSize="60px" bold marginBottom="10px">
               <span style={{borderBottom: `2px solid ${theme.colors.primary}`}}>Farms (Coming Soon) </span>
@@ -373,11 +373,11 @@ const Farms: React.FC = () => {
         </Flex>
       </PageHeader>
       <Page>
-        {/* {renderActiveContent()}
+         {renderActiveContent()}
         <StyledHr />
         {renderInactiveContent()}
-        <div ref={loadMoreRef} /> */}
-        
+        <div ref={loadMoreRef} />
+
       </Page>
     </>
   )

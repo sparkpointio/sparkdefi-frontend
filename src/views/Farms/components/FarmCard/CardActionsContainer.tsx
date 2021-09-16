@@ -45,20 +45,6 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidi
   const isApproved = account && allowance  // && allowance.isGreaterThan(0)
   const dispatch = useAppDispatch()
 
-  const lpContract = useERC20(lpAddress)
-
-  const { onApprove } = useApprove(lpContract)
-
-  const handleApprove = useCallback(async () => {
-    try {
-      setRequestedApproval(true)
-      await onApprove()
-      dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
-      setRequestedApproval(false)
-    } catch (e) {
-      console.error(e)
-    }
-  }, [onApprove, dispatch, account, pid])
   const renderDepositButton = () => {
     return (
       <StakeAction
@@ -70,7 +56,7 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidi
         addTokenUrl={addTokenUrl}
         farm={farm}
       />
-    ) 
+    )
   }
 
   return (

@@ -1,5 +1,6 @@
 import { useCallback } from 'react'
 import { useWeb3React } from '@web3-react/core'
+import { Contract } from 'web3-eth-contract'
 import { useAppDispatch } from 'state'
 import { updateUserStakedBalance, updateUserBalance } from 'state/actions'
 import { stake, sousStake, sousStakeBnb } from 'utils/callHelpers'
@@ -10,8 +11,8 @@ const useStake = (pid: number) => {
   const masterChefContract = useMasterchef()
 
   const handleStake = useCallback(
-    async (amount: string) => {
-      const txHash = await stake(masterChefContract, pid, amount, account)
+    async (amount: string, contract: Contract) => {
+      const txHash = await stake(contract?? masterChefContract, pid, amount, account, !!contract)
       console.info(txHash)
     },
     [account, masterChefContract, pid],

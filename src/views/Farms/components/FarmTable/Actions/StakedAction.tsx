@@ -11,7 +11,7 @@ import { fetchFarmUserDataAsync } from 'state/farms'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import { useTranslation } from 'contexts/Localization'
 import { useApprove } from 'hooks/useApprove'
-import { useERC20 } from 'hooks/useContract'
+import { useERC20, useLPStakingContract } from 'hooks/useContract'
 import { BASE_ADD_LIQUIDITY_URL } from 'config'
 import { useAppDispatch } from 'state'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
@@ -21,6 +21,8 @@ import useUnstake from 'hooks/useUnstake'
 import DepositModal from '../../DepositModal'
 import WithdrawModal from '../../WithdrawModal'
 import { ActionContainer, ActionTitles, ActionContent, Earned } from './styles'
+import { getAddress } from '../../../../../utils/addressHelpers'
+import { Contract } from 'web3-eth-contract'
 
 const IconButtonWrapper = styled.div`
   display: flex;
@@ -37,6 +39,7 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
   quoteToken,
   token,
   userDataReady,
+  stakingAddresses,
 }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
@@ -56,8 +59,8 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
   })
   const addLiquidityUrl = `${BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`
 
-  const handleStake = async (amount: string) => {
-    await onStake(amount)
+  const handleStake = async (amount: string, contract: Contract) => {
+    await onStake(amount, contract)
     dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
   }
 
@@ -81,8 +84,10 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
     <WithdrawModal max={stakedBalance} onConfirm={handleUnstake} tokenName={lpSymbol} />,
   )
   const lpContract = useERC20(lpAddress)
+  const lpStakingAddress = getAddress(stakingAddresses)
+  const lpStakingContract = useLPStakingContract(lpStakingAddress)
+  const { onApprove } = useApprove(lpContract, lpStakingContract)
   const dispatch = useAppDispatch()
-  const { onApprove } = useApprove(lpContract)
 
   const handleApprove = useCallback(async () => {
     try {

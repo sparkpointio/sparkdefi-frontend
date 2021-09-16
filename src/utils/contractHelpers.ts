@@ -33,6 +33,7 @@ import bunnyFactoryAbi from 'config/abi/bunnyFactory.json'
 import bunnySpecialAbi from 'config/abi/bunnySpecial.json'
 import bep20Abi from 'config/abi/erc20.json'
 import erc721Abi from 'config/abi/erc721.json'
+import lpStakingAbi from 'config/abi/lpStaking.json'
 import lpTokenAbi from 'config/abi/lpToken.json'
 import cakeAbi from 'config/abi/cake.json'
 import ifoV1Abi from 'config/abi/ifoV1.json'
@@ -77,6 +78,9 @@ export const getBep20Contract = (address: string, web3?: Web3) => {
 }
 export const getErc721Contract = (address: string, web3?: Web3) => {
   return getContract(erc721Abi, address, web3)
+}
+export const getLpStakingContract = (address: string, web3?: Web3) => {
+  return getContract(lpStakingAbi, address, web3)
 }
 export const getLpContract = (address: string, web3?: Web3) => {
   return getContract(lpTokenAbi, address, web3)
