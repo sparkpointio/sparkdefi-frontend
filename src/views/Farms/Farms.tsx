@@ -331,7 +331,7 @@ const Farms: React.FC = () => {
 
         <FlexLayout>
           {farmsList(activeFarms).map((farm) => (
-            <FarmCard key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} />
+            <FarmCard userDataReady={userDataReady} key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} />
           ))}
         </FlexLayout>
       </div>
@@ -348,7 +348,7 @@ const Farms: React.FC = () => {
 
         <FlexLayout>
             {farmsList(inactiveFarms).map((farm) => (
-              <FarmCard key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed/>
+              <FarmCard userDataReady={userDataReady} key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed/>
             ))}
         </FlexLayout>
       </div>

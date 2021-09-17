@@ -4,9 +4,12 @@ import erc20 from 'config/abi/erc20.json'
 import { getAddress, getMasterChefAddress } from 'utils/addressHelpers'
 import { BIG_TEN, BIG_ZERO } from 'utils/bigNumber'
 import multicall from 'utils/multicall'
+import lpStaking from 'config/abi/lpStaking.json'
 import { Farm, SerializedBigNumber } from '../types'
+import { DEFAULT_TOKEN_DECIMAL } from '../../config'
 
 type PublicFarmData = {
+  totalDeposits: SerializedBigNumber
   tokenAmountMc: SerializedBigNumber
   quoteTokenAmountMc: SerializedBigNumber
   tokenAmountTotal: SerializedBigNumber
@@ -19,7 +22,7 @@ type PublicFarmData = {
 }
 
 const fetchFarm = async (farm: Farm): Promise<PublicFarmData> => {
-  const { pid, lpAddresses, token, quoteToken } = farm
+  const { pid, lpAddresses, token, quoteToken, stakingAddresses } = farm
   const lpAddress = getAddress(lpAddresses)
   const calls = [
     // Balance of token in the LP contract
@@ -59,6 +62,18 @@ const fetchFarm = async (farm: Farm): Promise<PublicFarmData> => {
 
   const [tokenBalanceLP, quoteTokenBalanceLP, lpTokenBalanceMC, lpTotalSupply, tokenDecimals, quoteTokenDecimals] =
     await multicall(erc20, calls)
+  const lpStakingCalls = [
+    // Total deposits in staking address
+    {
+      address: getAddress(stakingAddresses),
+      name: 'totalSupply',
+    },
+  ]
+  const [totalSupply] =
+    await multicall(lpStaking, lpStakingCalls)
+
+  // Total Deposits in staking address
+  const totalDeposits = new BigNumber(totalSupply).div(BIG_TEN.pow(18))
 
   // Ratio in % of LP tokens that are staked in the MC, vs the total number in circulation
   const lpTokenRatio = new BigNumber(lpTokenBalanceMC).div(new BigNumber(lpTotalSupply))
@@ -94,6 +109,7 @@ const fetchFarm = async (farm: Farm): Promise<PublicFarmData> => {
   const poolWeight = totalAllocPoint ? allocPoint.div(new BigNumber(totalAllocPoint)) : BIG_ZERO
 
   return {
+    totalDeposits: totalDeposits.toJSON(),
     tokenAmountMc: tokenAmountMc.toJSON(),
     quoteTokenAmountMc: quoteTokenAmountMc.toJSON(),
     tokenAmountTotal: tokenAmountTotal.toJSON(),

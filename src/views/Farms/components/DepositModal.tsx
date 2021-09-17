@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Contract } from 'web3-eth-contract'
 import { useWeb3React } from '@web3-react/core'
 import { Button, Dropdown, Modal, Text, useModal } from '@sparkpointio/sparkswap-uikit'
@@ -11,8 +11,7 @@ import { useAppDispatch } from 'state'
 import { Farm } from 'state/types'
 import { fetchFarmUserDataAsync } from 'state/farms'
 import { getAddress } from 'utils/addressHelpers'
-import { BIG_ZERO } from 'utils/bigNumber'
-import { getBalanceAmount, getBalanceNumber, getFullDisplayBalance } from 'utils/formatBalance'
+import { getBalanceNumber } from 'utils/formatBalance'
 import { useTranslation } from 'contexts/Localization'
 import WithdrawModal from './WithdrawModal'
 import Container, { ActionDiv, DetailsCont, ModalFooter } from './Styled'
@@ -28,37 +27,26 @@ interface DepositModalProps {
   tokenName?: string
   addLiquidityUrl?: string
   addTokenUrl?: string
-  tokenReward?: string
-  tokenRewardAddress?: string
-  tokenBalance?: string
-  stakedBalance?: string
-  tokenEarnings?: string
   farm?: Farm
   handleUnstake?: (amount: string) => void
   maxStake?: BigNumber
 }
 
-const DepositModal: React.FC<DepositModalProps> = ({
-                                                     max,
-                                                     onConfirm,
-                                                     onDismiss,
-                                                     tokenName = '',
-                                                     addLiquidityUrl,
-                                                     addTokenUrl,
-                                                     tokenReward,
-                                                     tokenEarnings,
-                                                     tokenRewardAddress,
-                                                     handleUnstake,
-                                                     farm,
-                                                     maxStake,
-                                                   }) => {
+const DepositModal: React.FC<DepositModalProps> = (
+  {
+    max,
+    onConfirm,
+    onDismiss,
+    tokenName = '',
+    addLiquidityUrl,
+    addTokenUrl,
+    handleUnstake,
+    farm,
+    maxStake,
+  }) => {
   const [requestedApproval, setRequestedApproval] = useState(false)
-  const [pendingTx, setPendingTx] = useState(false)
   const { t } = useTranslation()
   const [activeSelect, setActiveSelect] = useState(false)
-  const fullBalance = useMemo(() => {
-    return getFullDisplayBalance(max)
-  }, [max])
   const {
     allowance,
     tokenBalance,
@@ -67,12 +55,14 @@ const DepositModal: React.FC<DepositModalProps> = ({
   } = farm.userData || {}
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
-  const RewardTokenBalance = useTokenBalance(tokenRewardAddress)
-  const formatTokenBalance = getBalanceNumber(RewardTokenBalance.balance)
-  const formatLPTokenBalance = getBalanceNumber(new BigNumber(tokenBalance))
   const { pid, lpAddresses } = farm
   const lpAddress = getAddress(lpAddresses)
   const lpContract = useERC20(lpAddress)
+  const RewardTokenBalance = useTokenBalance(getAddress(farm.quoteToken.address))
+  const formatTokenBalance = getBalanceNumber(RewardTokenBalance.balance)
+  const formatLPTokenBalance = getBalanceNumber(new BigNumber(tokenBalance))
+  const formatStakedTokenBalance = getBalanceNumber(new BigNumber(stakedBalance))
+  const formatTokenEarnings = getBalanceNumber(new BigNumber(earnings))
 
   const [isApproved, setIsApproved] = useState(account && allowance && (new BigNumber(allowance)).isGreaterThan(0))
   const lpStakingAddress = getAddress(farm.stakingAddresses)
@@ -89,9 +79,9 @@ const DepositModal: React.FC<DepositModalProps> = ({
       console.error(e)
     }
   }, [onApprove, dispatch, account, pid])
-  const rawEarningsBalance = account ? getBalanceAmount(new BigNumber(earnings)) : BIG_ZERO
   const [onPresentStake] = useModal(
-    <StakeModal onConfirm={onConfirm} lpStakingContract={lpStakingContract} max={max} symbol={tokenName} addLiquidityUrl={addLiquidityUrl}
+    <StakeModal onConfirm={onConfirm} lpStakingContract={lpStakingContract} max={max} symbol={tokenName}
+                addLiquidityUrl={addLiquidityUrl}
                 inputTitle={t('Stake')} />,
   )
 
@@ -108,10 +98,10 @@ const DepositModal: React.FC<DepositModalProps> = ({
       <Container>
         <DetailsCont>
           <Text bold fontSize='24px'>
-            {formatTokenBalance === 0 ? '0.0000' : formatTokenBalance}
+            {formatTokenBalance ?? '0.0000'}
           </Text>
           <Text color='textSubtle' fontSize='14px'>
-            {tokenReward}
+            {farm.quoteToken.symbol}
           </Text>
           <ActionDiv style={{ paddingTop: '30px' }}>
             <Button fullWidth as='a' target='_blank' href={addTokenUrl}>
@@ -121,7 +111,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
         </DetailsCont>
         <DetailsCont>
           <Text bold fontSize='24px'>
-            {tokenBalance === '0' ? '0.0000' : formatLPTokenBalance}
+            {formatLPTokenBalance ?? '0.0000'}
           </Text>
           <Text color='textSubtle' fontSize='14px'>
             {tokenName} Tokens
@@ -134,7 +124,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
         </DetailsCont>
         <DetailsCont>
           <Text bold fontSize='24px'>
-            {stakedBalance === '0' ? '0.0000' : { stakedBalance }}
+            {formatStakedTokenBalance ?? '0.0000'}
           </Text>
           <Text color='textSubtle' fontSize='14px'>
             Your {tokenName} Deposits
@@ -159,13 +149,13 @@ const DepositModal: React.FC<DepositModalProps> = ({
           <Text bold fontSize='24px'>
             0.0000
           </Text>
-          <Text color='textSubtle' fontSize='14px'>{`Your Rate ${tokenReward}/week`}</Text>
+          <Text color='textSubtle' fontSize='14px'>{`Your Rate ${farm.quoteToken.symbol}/week`}</Text>
         </DetailsCont>
         <DetailsCont>
           <Text bold fontSize='24px'>
-            {tokenEarnings === '0' ? '0.0000' : tokenEarnings}
+            {formatTokenEarnings ?? '0.0000'}
           </Text>
-          <Text color='textSubtle' fontSize='14px'>{`${tokenReward} Token Earnings`}</Text>
+          <Text color='textSubtle' fontSize='14px'>{`${farm.quoteToken.symbol} Token Earnings`}</Text>
         </DetailsCont>
         <DetailsCont
           style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}

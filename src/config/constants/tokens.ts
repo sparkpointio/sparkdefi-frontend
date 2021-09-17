@@ -1609,7 +1609,7 @@ const tokens = {
     symbol: 'TTKb',
     address: {
       56: '0x9ee47c9630a41525c139ef9ca42ba3b238ecfecf',
-      97: '0xac9b89c1049b358277ca1d76f6c18f10f3d8128e',
+      97: '0x9ee47c9630a41525c139ef9ca42ba3b238ecfecf',
     },
     decimals: 18,
     projectLink: 'https://sparkpoint.io/',
@@ -1624,10 +1624,10 @@ const tokens = {
     projectLink: 'https://ownly.io/',
   },
   kclp: {
-    symbol: 'OWN',
+    symbol: 'KCLP',
     address: {
       56: '0x47b8806c2891c4a92b5c590c32cfe1eb617648ef',
-      97: '0x7665cb7b0d01df1c9f9b9cc66019f00abd6959ba',
+      97: '0x47b8806c2891c4a92b5c590c32cfe1eb617648ef',
     },
     decimals: 18,
     projectLink: 'https://kucoinlaunchpad.com/',

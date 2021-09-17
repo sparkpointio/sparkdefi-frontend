@@ -14,10 +14,12 @@ import useStake from 'hooks/useStake'
 import useUnstake from 'hooks/useUnstake'
 import { Farm } from 'state/types'
 import { getBalanceAmount, getBalanceNumber, getFullDisplayBalance } from 'utils/formatBalance'
+import Loading from 'components/Loading'
 import DepositModal from '../DepositModal'
 import WithdrawModal from '../WithdrawModal'
 
 interface FarmCardActionsProps {
+  userDataReady?: boolean
   stakedBalance?: BigNumber
   tokenBalance?: BigNumber
   tokenName?: string
@@ -42,6 +44,7 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
   addLiquidityUrl,
   addTokenUrl,
   farm,
+  userDataReady
 }) => {
   const { t } = useTranslation()
   const { onStake } = useStake(pid)
@@ -76,11 +79,6 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
       tokenName={tokenName}
       addLiquidityUrl={addLiquidityUrl}
       addTokenUrl={addTokenUrl}
-      tokenReward={farm.quoteToken.symbol}
-      tokenRewardAddress={farm.quoteToken.address[97]}
-      tokenBalance={farm.userData.tokenBalance}
-      stakedBalance={farm.userData.stakedBalance}
-      tokenEarnings={farm.userData.earnings}
       farm={farm}
       handleUnstake={handleUnstake}
       maxStake={stakedBalance}
@@ -97,7 +95,7 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
         disabled={['history', 'archived'].some((item) => location.pathname.includes(item))}
         fullWidth
       >
-        {t('Deposit')}
+        {userDataReady? t('Deposit') : <Loading /> }
       </Button>
     )
   }

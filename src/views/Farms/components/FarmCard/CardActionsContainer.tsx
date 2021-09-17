@@ -21,13 +21,14 @@ export interface FarmWithStakedValue extends Farm {
 }
 
 interface FarmCardActionsProps {
+  userDataReady:boolean
   farm: FarmWithStakedValue
   account?: string
   addLiquidityUrl?: string
   addTokenUrl?: string
 }
 
-const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidityUrl, addTokenUrl }) => {
+const CardActions: React.FC<FarmCardActionsProps> = ({ userDataReady, farm, account, addLiquidityUrl, addTokenUrl }) => {
   const { t } = useTranslation()
   const [requestedApproval, setRequestedApproval] = useState(false)
   const { pid, lpAddresses } = farm
@@ -48,6 +49,7 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidi
   const renderDepositButton = () => {
     return (
       <StakeAction
+        userDataReady={userDataReady}
         stakedBalance={stakedBalance}
         tokenBalance={tokenBalance}
         tokenName={farm.lpSymbol}

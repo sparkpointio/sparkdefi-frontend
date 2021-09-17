@@ -12,13 +12,15 @@ import DetailsSection from './DetailsSection'
 import CardHeading from './CardHeading'
 import CardActionsContainer from './CardActionsContainer'
 import ApyButton from './ApyButton'
+import { getBalanceAmount } from '../../../../utils/formatBalance'
 
 export interface FarmWithStakedValue extends Farm {
+  totalDeposits?: string
   apr?: number
   liquidity?: BigNumber
 }
 
-const AccentGradient = keyframes`  
+const AccentGradient = keyframes`
   0% {
     background-position: 50% 0%;
   }
@@ -70,22 +72,20 @@ const ExpandingWrapper = styled.div<{ expanded: boolean }>`
 `
 
 interface FarmCardProps {
+  userDataReady: boolean
   farm: FarmWithStakedValue
   removed: boolean
   cakePrice?: BigNumber
   account?: string
 }
 
-const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }) => {
+const FarmCard: React.FC<FarmCardProps> = ({ userDataReady, farm, removed, cakePrice, account }) => {
   const { t } = useTranslation()
   const [showExpandableSection, setShowExpandableSection] = useState(false)
-  const totalValueFormatted =
-    farm.liquidity && farm.liquidity.gt(0)
-      ? `$${farm.liquidity.toNumber().toLocaleString(undefined, { maximumFractionDigits: 0 })}`
-      : ''
   const farmImage = farm.lpSymbol.split(' ')[0].toLocaleLowerCase()
+  const formatTotalDeposits = new BigNumber(farm.totalDeposits)
   const lpLabel = farm.lpSymbol && farm.lpSymbol.toUpperCase().replace('PANCAKE', '')
-  const earnLabel = farm.dual ? farm.dual.earnLabel : 'CAKE'
+  const earnLabel = farm.quoteToken.symbol
   const farmAPR = farm.apr && farm.apr.toLocaleString('en-US', { maximumFractionDigits: 2 })
   const liquidityUrlPathParts = getLiquidityUrlPathParts({
     quoteTokenAddress: farm.quoteToken.address,
@@ -130,10 +130,10 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
       )} */}
 
 
-      
+
       <Flex justifyContent="space-between" style={{textAlign: 'left'}}>
         <Text>{t('Total Deposit')}</Text>
-        <Text color="textSubtle">{totalValueFormatted}</Text>
+        <Text color="textSubtle">{formatTotalDeposits.toFixed(4)}</Text>
       </Flex>
       <Flex justifyContent="space-between">
         <Text>{t('Pool Rate')}</Text>
@@ -141,17 +141,17 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
       </Flex>
       <Flex justifyContent="space-between">
         <Text>{t('APR')}</Text>
-        <Text color="textSubtle">0%</Text>
+        <Text color="textSubtle">--</Text>
       </Flex>
       <Flex justifyContent="space-between">
         <Text>{t('Your Rate')}</Text>
-        <Text color="textSubtle">{farm.userData.earnings}</Text>
+        <Text color="textSubtle">--</Text>
       </Flex>
       <Flex justifyContent="space-between">
         <Text>{t('Duration')}</Text>
-        <Text color="textSubtle">{earnLabel}</Text>
+        <Text color="textSubtle">Days</Text>
       </Flex>
-      <CardActionsContainer farm={farm} account={account} addLiquidityUrl={addLiquidityUrl} addTokenUrl={AddTokenUrl} />
+      <CardActionsContainer userDataReady={userDataReady} farm={farm} account={account} addLiquidityUrl={addLiquidityUrl} addTokenUrl={AddTokenUrl} />
       {/* <Divider /> */}
       {/* <ExpandableSectionButton
         onClick={() => setShowExpandableSection(!showExpandableSection)}
