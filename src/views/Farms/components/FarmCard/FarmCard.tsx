@@ -88,12 +88,11 @@ const FarmCard: React.FC<FarmCardProps> = ({ userDataReady, farm, removed, cakeP
   const earnLabel = farm.quoteToken.symbol
   const farmAPR = farm.apr && farm.apr.toLocaleString('en-US', { maximumFractionDigits: 2 })
   const liquidityUrlPathParts = getLiquidityUrlPathParts({
-    quoteTokenAddress: farm.quoteToken.address,
-    tokenAddress: farm.token.address,
+    mainTokenAddress: farm.token.address,
+    pairTokenAddress: farm.pairToken.address,
   })
 
-  // const addLiquidityUrl = `${BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`
-  const addLiquidityUrl = `${BASE_ADD_LIQUIDITY_URL}`
+  const addLiquidityUrl = `${farm.liquidityUrl?? BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`
   const AddTokenUrl = `${BASE_EXCHANGE_URL}/#/swap/${farm.token.address[56]}`
   const lpAddress = farm.lpAddresses[process.env.REACT_APP_CHAIN_ID]
   const isPromotedFarm = farm.token.symbol === 'CAKE'

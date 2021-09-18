@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react'
 import styled from 'styled-components'
 import { Button, useModal, IconButton, AddIcon, MinusIcon, Skeleton, Text } from '@pancakeswap/uikit'
 import { useLocation } from 'react-router-dom'
+import { Contract } from 'web3-eth-contract'
 import { BigNumber } from 'bignumber.js'
 import UnlockButton from 'components/UnlockButton'
 import Balance from 'components/Balance'
@@ -22,7 +23,6 @@ import DepositModal from '../../DepositModal'
 import WithdrawModal from '../../WithdrawModal'
 import { ActionContainer, ActionTitles, ActionContent, Earned } from './styles'
 import { getAddress } from '../../../../../utils/addressHelpers'
-import { Contract } from 'web3-eth-contract'
 
 const IconButtonWrapper = styled.div`
   display: flex;
@@ -36,8 +36,8 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
   pid,
   lpSymbol,
   lpAddresses,
-  quoteToken,
   token,
+  pairToken,
   userDataReady,
   stakingAddresses,
 }) => {
@@ -54,8 +54,8 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
 
   const lpAddress = lpAddresses[process.env.REACT_APP_CHAIN_ID]
   const liquidityUrlPathParts = getLiquidityUrlPathParts({
-    quoteTokenAddress: quoteToken.address,
-    tokenAddress: token.address,
+    mainTokenAddress: token.address,
+    pairTokenAddress: pairToken.address,
   })
   const addLiquidityUrl = `${BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`
 

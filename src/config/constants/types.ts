@@ -56,9 +56,11 @@ export interface FarmConfig {
   lpAddresses: Address
   stakingAddresses: Address
   token: Token
+  pairToken: Token
   quoteToken: Token
   multiplier?: string
   isCommunity?: boolean
+  liquidityUrl?: string
   dual?: {
     rewardPerBlock: number
     earnLabel: string

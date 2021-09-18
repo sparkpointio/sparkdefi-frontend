@@ -112,7 +112,7 @@ const Farms: React.FC = () => {
   const { data: farmsLP, userDataLoaded } = useFarms()
   const cakePrice = usePriceCakeBusd()
   const [query, setQuery] = useState('')
-  const [viewMode, setViewMode] = usePersistState(ViewMode.TABLE, { localStorageKey: 'pancake_farm_view' })
+  const [viewMode, setViewMode] = usePersistState(ViewMode.CARD, { localStorageKey: 'sparkswap_farm_view' })
   const { account } = useWeb3React()
   const [sortOption, setSortOption] = useState('hot')
   const theme = useContext(ThemeContext);
@@ -289,53 +289,64 @@ const Farms: React.FC = () => {
   })
 
 
-  const renderActiveContent = (): JSX.Element => {
-    // if (viewMode === ViewMode.TABLE && rowData.length) {
-    //   const columnSchema = DesktopColumnSchema
+  const renderContent = (): JSX.Element => {
+    if (viewMode === ViewMode.TABLE && rowData.length) {
+      const columnSchema = DesktopColumnSchema
 
-    //   const columns = columnSchema.map((column) => ({
-    //     id: column.id,
-    //     name: column.name,
-    //     label: column.label,
-    //     sort: (a: RowType<RowProps>, b: RowType<RowProps>) => {
-    //       switch (column.name) {
-    //         case 'farm':
-    //           return b.id - a.id
-    //         case 'apr':
-    //           if (a.original.apr.value && b.original.apr.value) {
-    //             return Number(a.original.apr.value) - Number(b.original.apr.value)
-    //           }
+      const columns = columnSchema.map((column) => ({
+        id: column.id,
+        name: column.name,
+        label: column.label,
+        sort: (a: RowType<RowProps>, b: RowType<RowProps>) => {
+          switch (column.name) {
+            case 'farm':
+              return b.id - a.id
+            case 'apr':
+              if (a.original.apr.value && b.original.apr.value) {
+                return Number(a.original.apr.value) - Number(b.original.apr.value)
+              }
 
-    //           return 0
-    //         case 'earned':
-    //           return a.original.earned.earnings - b.original.earned.earnings
-    //         default:
-    //           return 1
-    //       }
-    //     },
-    //     sortable: column.sortable,
-    //   }))
+              return 0
+            case 'earned':
+              return a.original.earned.earnings - b.original.earned.earnings
+            default:
+              return 1
+          }
+        },
+        sortable: column.sortable,
+      }))
 
-    //   return <Table data={rowData} columns={columns} userDataReady={userDataReady} />
-    // }
+      return <Table data={rowData} columns={columns} userDataReady={userDataReady} />
+    }
 
     return (
       <div>
-        <div style={{ marginTop: '-5px', marginLeft: '8px', marginBottom: '17px' }}>
-          <Text fontSize="24px" bold>
-            {' '}
-            Active Liquidity Pools{' '}
-          </Text>
-          <Text fontSize="16px">Stake LP tokens to earn</Text>
-        </div>
-
         <FlexLayout>
-          {farmsList(activeFarms).map((farm) => (
-            <FarmCard userDataReady={userDataReady} key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} />
-          ))}
+          <Route exact path={`${path}`}>
+            {farmsStakedMemoized.map((farm) => (
+              <FarmCard userDataReady={userDataReady} key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} />
+            ))}
+          </Route>
+          <Route exact path={`${path}/history`}>
+            {farmsStakedMemoized.map((farm) => (
+              <FarmCard userDataReady={userDataReady} key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed />
+            ))}
+          </Route>
+          <Route exact path={`${path}/archived`}>
+            {farmsStakedMemoized.map((farm) => (
+              <FarmCard userDataReady={userDataReady} key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed />
+            ))}
+          </Route>
+          {/* {farmsList(activeFarms).map((farm) => ( */}
+          {/*  <FarmCard userDataReady={userDataReady} key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} /> */}
+          {/* ))} */}
         </FlexLayout>
       </div>
     )
+  }
+
+  const handleSortOptionChange = (option: OptionProps): void => {
+    setSortOption(option.value)
   }
 
   const renderInactiveContent = (): JSX.Element => {
@@ -373,9 +384,52 @@ const Farms: React.FC = () => {
         </Flex>
       </PageHeader>
       <Page>
-         {renderActiveContent()}
-        <StyledHr />
-        {renderInactiveContent()}
+        <ControlContainer>
+          <ViewControls>
+            {/* <ToggleView viewMode={viewMode} onToggle={(mode: ViewMode) => setViewMode(mode)} /> */}
+            <ToggleWrapper>
+              <Toggle checked={stakedOnly} onChange={() => setStakedOnly(!stakedOnly)} scale="sm" />
+              <Text> {t('Staked only')}</Text>
+            </ToggleWrapper>
+            <FarmTabButtons hasStakeInFinishedFarms={stakedInactiveFarms.length > 0} />
+          </ViewControls>
+          <FilterContainer>
+            <LabelWrapper>
+              <Text textTransform="uppercase">{t('Sort by')}</Text>
+              <Select
+                options={[
+                  {
+                    label: t('Hot'),
+                    value: 'hot',
+                  },
+                  {
+                    label: t('APR'),
+                    value: 'apr',
+                  },
+                  {
+                    label: t('Multiplier'),
+                    value: 'multiplier',
+                  },
+                  {
+                    label: t('Earned'),
+                    value: 'earned',
+                  },
+                  {
+                    label: t('Liquidity'),
+                    value: 'liquidity',
+                  },
+                ]}
+                onChange={handleSortOptionChange}
+              />
+            </LabelWrapper>
+            <LabelWrapper style={{ marginLeft: 16 }}>
+              <Text textTransform="uppercase">{t('Search')}</Text>
+              <SearchInput onChange={handleChangeQuery} placeholder="Search Farms" />
+            </LabelWrapper>
+          </FilterContainer>
+        </ControlContainer>
+
+         {renderContent()}
         <div ref={loadMoreRef} />
 
       </Page>
