@@ -2,8 +2,7 @@ import BigNumber from 'bignumber.js'
 import React, { useCallback, useState } from 'react'
 import { Contract } from 'web3-eth-contract'
 import { useWeb3React } from '@web3-react/core'
-import { Button, Dropdown, Modal, Text, useModal } from '@sparkpointio/sparkswap-uikit'
-import { ChevronDown, ChevronUp } from 'react-feather'
+import { Button, Modal, Text, useModal } from '@sparkpointio/sparkswap-uikit'
 import { useApprove } from 'hooks/useApprove'
 import { useERC20, useLPStakingContract } from 'hooks/useContract'
 import useTokenBalance from 'hooks/useTokenBalance'
@@ -11,7 +10,7 @@ import { useAppDispatch } from 'state'
 import { Farm } from 'state/types'
 import { fetchFarmUserDataAsync } from 'state/farms'
 import { getAddress } from 'utils/addressHelpers'
-import { getBalanceNumber } from 'utils/formatBalance'
+import { getBalanceAmount } from 'utils/formatBalance'
 import { useTranslation } from 'contexts/Localization'
 import WithdrawModal from './WithdrawModal'
 import Container, { ActionDiv, DetailsCont, ModalFooter } from './Styled'
@@ -59,10 +58,10 @@ const DepositModal: React.FC<DepositModalProps> = (
   const lpAddress = getAddress(lpAddresses)
   const lpContract = useERC20(lpAddress)
   const RewardTokenBalance = useTokenBalance(getAddress(farm.quoteToken.address))
-  const formatTokenBalance = getBalanceNumber(RewardTokenBalance.balance)
-  const formatLPTokenBalance = getBalanceNumber(new BigNumber(tokenBalance))
-  const formatStakedTokenBalance = getBalanceNumber(new BigNumber(stakedBalance))
-  const formatTokenEarnings = getBalanceNumber(new BigNumber(earnings))
+  const formatTokenBalance = getBalanceAmount(RewardTokenBalance.balance).toFixed(6)
+  const formatLPTokenBalance = getBalanceAmount(new BigNumber(tokenBalance)).toFixed(6)
+  const formatStakedTokenBalance = getBalanceAmount(new BigNumber(stakedBalance)).toFixed(6)
+  const formatTokenEarnings = getBalanceAmount(new BigNumber(earnings)).toFixed(6)
 
   const [isApproved, setIsApproved] = useState(account && allowance && (new BigNumber(allowance)).isGreaterThan(0))
   const lpStakingAddress = getAddress(farm.stakingAddresses)
@@ -80,14 +79,20 @@ const DepositModal: React.FC<DepositModalProps> = (
     }
   }, [onApprove, dispatch, account, pid])
   const [onPresentStake] = useModal(
-    <StakeModal onConfirm={onConfirm} lpStakingContract={lpStakingContract} max={max} symbol={tokenName}
-                addLiquidityUrl={addLiquidityUrl}
-                inputTitle={t('Stake')} />,
+    <StakeModal
+      pid={pid}
+      onConfirm={onConfirm} lpStakingContract={lpStakingContract} max={max} symbol={tokenName}
+      addLiquidityUrl={addLiquidityUrl}
+      inputTitle={t('Stake')} />,
   )
 
   const [onPresentClaim] = useModal(<ClaimModal />)
   const [onPresentWithdraw] = useModal(
-    <WithdrawModal max={maxStake} onConfirm={handleUnstake} tokenName={tokenName} />,
+    <WithdrawModal
+      farm={farm}
+      staked={formatStakedTokenBalance}
+      earnings={formatTokenEarnings}
+      max={maxStake} onConfirm={handleUnstake} tokenName={tokenName} />,
   )
 
   return (
@@ -103,9 +108,9 @@ const DepositModal: React.FC<DepositModalProps> = (
           <Text color='textSubtle' fontSize='14px'>
             {farm.quoteToken.symbol}
           </Text>
-          <ActionDiv style={{ paddingTop: '30px' }}>
+          <ActionDiv style={{ padding: '0px' }}>
             <Button fullWidth as='a' target='_blank' href={addTokenUrl}>
-              Add More
+              Get {farm.quoteToken.symbol}
             </Button>
           </ActionDiv>
         </DetailsCont>
@@ -116,9 +121,9 @@ const DepositModal: React.FC<DepositModalProps> = (
           <Text color='textSubtle' fontSize='14px'>
             {tokenName} Tokens
           </Text>
-          <ActionDiv style={{ paddingTop: '30px' }}>
+          <ActionDiv style={{ padding: '0px' }}>
             <Button fullWidth as='a' target='_blank' href={addLiquidityUrl}>
-              Add Liquidity
+              Get {tokenName}
             </Button>
           </ActionDiv>
         </DetailsCont>
@@ -129,10 +134,10 @@ const DepositModal: React.FC<DepositModalProps> = (
           <Text color='textSubtle' fontSize='14px'>
             Your {tokenName} Deposits
           </Text>
-          <ActionDiv style={{ paddingTop: '30px' }}>
+          <ActionDiv style={{ padding: '0px' }}>
             {isApproved ?
               <Button fullWidth onClick={onPresentStake}>
-                Stake Tokens
+                Stake {tokenName}
               </Button>
               :
               <Button fullWidth onClick={handleApprove} disabled={requestedApproval}>
@@ -162,21 +167,9 @@ const DepositModal: React.FC<DepositModalProps> = (
           onMouseEnter={() => setActiveSelect(true)}
           onMouseLeave={() => setActiveSelect(false)}
         >
-          <Dropdown
-            position='top'
-            target={
-              <Button variant='secondary' onClick={onDismiss}>
-                <Text>Withdraw</Text> {activeSelect ? <ChevronDown /> : <ChevronUp />}
-              </Button>
-            }
-          >
-            <Button fullWidth onClick={onPresentClaim}>
-              <Text>Claim</Text>
-            </Button>
-            <Button fullWidth onClick={onDismiss}>
-              <Text>Claim & Withdraw</Text>
-            </Button>
-          </Dropdown>
+          <Button fullWidth onClick={onPresentWithdraw}>
+            <Text>Claim & Withdraw</Text>
+          </Button>
         </DetailsCont>
       </ModalFooter>
     </Modal>

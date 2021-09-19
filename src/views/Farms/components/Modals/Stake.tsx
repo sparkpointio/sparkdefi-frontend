@@ -1,12 +1,18 @@
 import BigNumber from 'bignumber.js'
-import React, { useState, useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
+import { useWeb3React } from '@web3-react/core'
 import { Contract } from 'web3-eth-contract'
 import { Modal, Text } from '@sparkpointio/sparkswap-uikit'
 import ModalInput from 'components/ModalInput'
 import { getFullDisplayBalance } from 'utils/formatBalance'
 import Container, { CancelButton, DepositButton, StyledFlex } from './Styled'
+import useToast from '../../../../hooks/useToast'
+import { useTranslation } from '../../../../contexts/Localization'
+import { useAppDispatch } from '../../../../state'
+import { fetchFarmUserDataAsync } from '../../../../state/farms'
 
 interface StakeModalInterface {
+  pid: number,
   onDismiss?: () => void
   max: BigNumber
   symbol: string
@@ -17,13 +23,18 @@ interface StakeModalInterface {
   lpStakingContract?: Contract
 }
 
-const Stake: React.FC<StakeModalInterface> = ({ onDismiss, max, symbol, addLiquidityUrl, inputTitle, onConfirm, lpStakingContract}) => {
+const Stake: React.FC<StakeModalInterface> = ({ pid, onDismiss, max, symbol, addLiquidityUrl, inputTitle, onConfirm, lpStakingContract}) => {
   const [val, setVal] = useState('0')
   const [pendingTx, setPendingTx] = useState(false)
   const valNumber = new BigNumber(val)
   const fullBalance = useMemo(() => {
     return getFullDisplayBalance(max)
   }, [max])
+
+  const { toastError, toastSuccess } = useToast()
+  const { t } = useTranslation()
+  const dispatch = useAppDispatch()
+  const { account } = useWeb3React()
 
   const fullBalanceNumber = new BigNumber(fullBalance)
 
@@ -41,11 +52,21 @@ const Stake: React.FC<StakeModalInterface> = ({ onDismiss, max, symbol, addLiqui
       setPendingTx(true)
       await onConfirm(val, lpStakingContract)
       setPendingTx(false)
+      toastSuccess(
+        `${t('Staked')}!`,
+        t('Your %symbol% tokens have been staked to the pool!', { 'symbol': symbol }),
+      )
       onDismiss()
-    }
-    catch (e) {
+    } catch (e) {
+      toastError(
+        t('Error'),
+        t('Please try again. Confirm the transaction and make sure you are paying enough gas!'),
+      )
+      console.error(e)
+    } finally {
       setPendingTx(false)
     }
+    dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
   }
 
   const handleSelectMax = useCallback(() => {
@@ -71,14 +92,14 @@ const Stake: React.FC<StakeModalInterface> = ({ onDismiss, max, symbol, addLiqui
       </StyledFlex>
       <StyledFlex justifyContent="space-between">
         <CancelButton
-        onClick={onDismiss}
+          onClick={onDismiss}
         >
          Close
         </CancelButton>
         <DepositButton
-        // disable Deposit button if not yet approved
-        onClick={onClick}
-        disabled={pendingTx || !valNumber.isFinite() || valNumber.eq(0) || valNumber.gt(fullBalanceNumber)}
+          onClick={onClick}
+          // disable Deposit button if not yet approved
+          disabled={pendingTx || !valNumber.isFinite() || valNumber.eq(0) || valNumber.gt(fullBalanceNumber)}
         >
         Deposit
         </DepositButton>

@@ -1,19 +1,29 @@
 import BigNumber from 'bignumber.js'
 import React, { useCallback, useMemo, useState } from 'react'
-import { Button, Modal, Text, Flex } from '@sparkpointio/sparkswap-uikit'
-import ModalActions from 'components/ModalActions'
-import ModalInput from 'components/ModalInput'
+import { Button, Flex, Modal, Text } from '@sparkpointio/sparkswap-uikit'
 import { useTranslation } from 'contexts/Localization'
 import { getFullDisplayBalance } from 'utils/formatBalance'
+import useToast from '../../../hooks/useToast'
 
 interface WithdrawModalProps {
+  farm?: any,
+  staked?: any,
+  earnings?: any,
   max: BigNumber
   onConfirm: (amount: string) => void
   onDismiss?: () => void
   tokenName?: string
 }
 
-const WithdrawModal: React.FC<WithdrawModalProps> = ({ onConfirm, onDismiss, max, tokenName = '' }) => {
+const WithdrawModal: React.FC<WithdrawModalProps> = (
+  {
+    farm,
+    staked,
+    earnings,
+    onConfirm,
+    onDismiss,
+    max, tokenName = '',
+  }) => {
   const [val, setVal] = useState('')
   const [pendingTx, setPendingTx] = useState(false)
   const { t } = useTranslation()
@@ -23,6 +33,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onConfirm, onDismiss, max
 
   const valNumber = new BigNumber(val)
   const fullBalanceNumber = new BigNumber(fullBalance)
+  const { toastError, toastSuccess } = useToast()
 
   const handleChange = useCallback(
     (e: React.FormEvent<HTMLInputElement>) => {
@@ -38,7 +49,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onConfirm, onDismiss, max
   }, [fullBalance, setVal])
 
   return (
-    <Modal title="" onDismiss={onDismiss}>
+    <Modal title='' onDismiss={onDismiss}>
       {/* <ModalInput
         onSelectMax={handleSelectMax}
         onChange={handleChange}
@@ -64,15 +75,31 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onConfirm, onDismiss, max
           {pendingTx ? t('Pending Confirmation') : t('Confirm')}
         </Button>
       </ModalActions> */}
-      <Flex marginTop="-10px" style={{width: '450px'}} alignItems="center" flexDirection="column">
+      <Flex marginTop='-10px' style={{ width: '450px' }} alignItems='center' flexDirection='column'>
         <Text>You will be claiming the reward amount of </Text>
-        <Text fontSize="28px" bold>78.912 SRK Tokens</Text>
-        <Text fontSize="28px" bold>AND</Text>
-        <Text>withdrawing the staked amount of</Text>
-        <Text fontSize="28px" bold>678.910 SRK-ETH LP Tokens</Text>
+        <Text fontSize='28px' bold>{earnings} {farm.quoteToken.symbol}</Text>
+        <Text>and withdrawing the staked amount of</Text>
+        <Text fontSize='28px' bold>{staked} {farm.lpSymbol}</Text>
       </Flex>
-      <Flex justifyContent="center" margin="24px" padding="0px 35px">
-        <Button fullWidth>Confirm</Button>
+      <Flex justifyContent='center' margin='24px' padding='0px 35px'>
+        <Button
+          disabled={pendingTx}
+          fullWidth onClick={async () => {
+          setPendingTx(true)
+          try {
+            await onConfirm(val)
+            toastSuccess(t('Unstaked!'), t('Your LPs and earnings have been transferred to your wallet'))
+            onDismiss()
+          } catch (e) {
+            toastError(
+              t('Error'),
+              t('Please try again. Confirm the transaction and make sure you are paying enough gas!'),
+            )
+            console.error(e)
+          } finally {
+            setPendingTx(false)
+          }
+        }}>Confirm</Button>
       </Flex>
     </Modal>
   )

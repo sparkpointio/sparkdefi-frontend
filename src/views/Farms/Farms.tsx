@@ -130,9 +130,8 @@ const Farms: React.FC = () => {
   useEffect(() => {
     setStakedOnly(!isActive)
   }, [isActive])
-
-  const activeFarms = farmsLP.filter((farm) => farm.pid !== 0 && farm.multiplier !== '0X' && !isArchivedPid(farm.pid))
-  const inactiveFarms = farmsLP.filter((farm) => farm.pid !== 0 && farm.multiplier === '0X' && !isArchivedPid(farm.pid))
+  const activeFarms = farmsLP.filter((farm) => farm.pid !== 0 && !farm.hasEnded && !isArchivedPid(farm.pid))
+  const inactiveFarms = farmsLP.filter((farm) => farm.pid !== 0 && farm.hasEnded && !isArchivedPid(farm.pid))
   const archivedFarms = farmsLP.filter((farm) => isArchivedPid(farm.pid))
 
   const stakedOnlyFarms = activeFarms.filter(
@@ -320,7 +319,7 @@ const Farms: React.FC = () => {
     }
 
     return (
-      <div>
+      <div>A
         <FlexLayout>
           <Route exact path={`${path}`}>
             {farmsStakedMemoized.map((farm) => (
@@ -402,14 +401,14 @@ const Farms: React.FC = () => {
                     label: t('Hot'),
                     value: 'hot',
                   },
-                  {
-                    label: t('APR'),
-                    value: 'apr',
-                  },
-                  {
-                    label: t('Multiplier'),
-                    value: 'multiplier',
-                  },
+                  // {
+                  //   label: t('APR'),
+                  //   value: 'apr',
+                  // },
+                  // {
+                  //   label: t('Multiplier'),
+                  //   value: 'multiplier',
+                  // },
                   {
                     label: t('Earned'),
                     value: 'earned',

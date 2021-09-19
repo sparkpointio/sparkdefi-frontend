@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js'
 import masterchefABI from 'config/abi/masterchef.json'
+import { now } from 'lodash'
 import erc20 from 'config/abi/erc20.json'
 import { getAddress, getMasterChefAddress } from 'utils/addressHelpers'
 import { BIG_TEN, BIG_ZERO } from 'utils/bigNumber'
@@ -10,6 +11,8 @@ import { DEFAULT_TOKEN_DECIMAL } from '../../config'
 
 type PublicFarmData = {
   totalDeposits: SerializedBigNumber
+  hasEnded: boolean
+  remainingDays: string
   tokenAmountMc: SerializedBigNumber
   quoteTokenAmountMc: SerializedBigNumber
   tokenAmountTotal: SerializedBigNumber
@@ -68,12 +71,21 @@ const fetchFarm = async (farm: Farm): Promise<PublicFarmData> => {
       address: getAddress(stakingAddresses),
       name: 'totalSupply',
     },
+    // Total deposits in staking address
+    {
+      address: getAddress(stakingAddresses),
+      name: 'periodFinish',
+    },
   ]
-  const [totalSupply] =
+  const [totalSupply, periodFinish] =
     await multicall(lpStaking, lpStakingCalls)
 
   // Total Deposits in staking address
   const totalDeposits = new BigNumber(totalSupply).div(BIG_TEN.pow(18))
+
+  const endDate = (new Date(0)).setUTCSeconds(periodFinish);
+  const hasEnded = endDate < now();
+  const remainingDays = (Math.max(0, Math.ceil(((((endDate - now()) / 1000) / 60) / 60) / 24))).toString();
 
   // Ratio in % of LP tokens that are staked in the MC, vs the total number in circulation
   const lpTokenRatio = new BigNumber(lpTokenBalanceMC).div(new BigNumber(lpTotalSupply))
@@ -110,6 +122,8 @@ const fetchFarm = async (farm: Farm): Promise<PublicFarmData> => {
 
   return {
     totalDeposits: totalDeposits.toJSON(),
+    'hasEnded': hasEnded,
+    'remainingDays': remainingDays,
     tokenAmountMc: tokenAmountMc.toJSON(),
     quoteTokenAmountMc: quoteTokenAmountMc.toJSON(),
     tokenAmountTotal: tokenAmountTotal.toJSON(),

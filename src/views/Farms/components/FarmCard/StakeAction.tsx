@@ -11,12 +11,13 @@ import { useAppDispatch } from 'state'
 import { fetchFarmUserDataAsync } from 'state/farms'
 import { useLpTokenPrice } from 'state/hooks'
 import useStake from 'hooks/useStake'
-import useUnstake from 'hooks/useUnstake'
+import useUnstake, { useExit } from 'hooks/useUnstake'
 import { Farm } from 'state/types'
 import { getBalanceAmount, getBalanceNumber, getFullDisplayBalance } from 'utils/formatBalance'
 import Loading from 'components/Loading'
 import DepositModal from '../DepositModal'
 import WithdrawModal from '../WithdrawModal'
+import { getAddress } from '../../../../utils/addressHelpers'
 
 interface FarmCardActionsProps {
   userDataReady?: boolean
@@ -48,7 +49,7 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
 }) => {
   const { t } = useTranslation()
   const { onStake } = useStake(pid)
-  const { onUnstake } = useUnstake(pid)
+  const { onUnstake } = useExit(getAddress(farm.stakingAddresses))
   const location = useLocation()
   const dispatch = useAppDispatch()
   const { account } = useWeb3React()

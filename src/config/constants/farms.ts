@@ -17,6 +17,8 @@ const farms: FarmConfig[] = [
     quoteToken: tokens.wbnb,
   },
   */
+
+  // OWN - BNB - OWN
   {
     pid: 251,
     lpSymbol: 'OWN-BNB LP',
@@ -32,6 +34,7 @@ const farms: FarmConfig[] = [
     pairToken: tokens.wbnb,
     quoteToken: tokens.own,
   },
+  // KCLP - BUSD - SFUEL
   {
     pid: 252,
     lpSymbol: 'KCLP-BUSD LP',
@@ -47,6 +50,7 @@ const farms: FarmConfig[] = [
     pairToken: tokens.busd,
     quoteToken: tokens.sfuel,
   },
+  // KCLP - BUSD - KCLP
   {
     pid: 253,
     lpSymbol: 'KCLP-BUSD LP',
@@ -57,38 +61,6 @@ const farms: FarmConfig[] = [
     stakingAddresses: {
       97: '',
       56: '0x64f30722ce788c31dc28f09A6Ce3eA33f742B1D2',
-    },
-    token: tokens.kclp,
-    pairToken: tokens.busd,
-    quoteToken: tokens.kclp,
-    liquidityUrl: PANCAKE_ADD_LIQUIDITY_URL,
-  },
-  {
-    pid: 254,
-    lpSymbol: 'KCLP-BUSsD LP',
-    lpAddresses: {
-      97: '',
-      56: '0x9f6b80e3867ab402081574e9e0a3be6fdf4ae95b',
-    },
-    stakingAddresses: {
-      97: '',
-      56: '0xD8B5ee2C85469d5296609A81Dfa50b9a99c9d844',
-    },
-    token: tokens.kclp,
-    pairToken: tokens.busd,
-    quoteToken: tokens.kclp,
-    liquidityUrl: PANCAKE_ADD_LIQUIDITY_URL,
-  },
-  {
-    pid: 255,
-    lpSymbol: 'KCLP-BUSsD LP',
-    lpAddresses: {
-      97: '',
-      56: '0x9f6b80e3867ab402081574e9e0a3be6fdf4ae95b',
-    },
-    stakingAddresses: {
-      97: '',
-      56: '0xD8B5ee2C85469d5296609A81Dfa50b9a99c9d844',
     },
     token: tokens.kclp,
     pairToken: tokens.busd,

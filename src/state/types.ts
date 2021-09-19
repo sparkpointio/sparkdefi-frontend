@@ -17,6 +17,8 @@ export type TranslatableText =
 export type SerializedBigNumber = string
 
 export interface Farm extends FarmConfig {
+  hasEnded?: boolean
+  remainingDays?: string
   tokenAmountMc?: SerializedBigNumber
   quoteTokenAmountMc?: SerializedBigNumber
   tokenAmountTotal?: SerializedBigNumber

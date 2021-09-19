@@ -2,8 +2,20 @@ import { useCallback } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import { useAppDispatch } from 'state'
 import { updateUserBalance, updateUserPendingReward } from 'state/actions'
-import { soushHarvest, soushHarvestBnb, harvest } from 'utils/callHelpers'
-import { useMasterchef, useSousChef } from './useContract'
+import { soushHarvest, soushHarvestBnb, harvest, claim } from 'utils/callHelpers'
+import { useLPStakingContract, useMasterchef, useSousChef } from './useContract'
+
+export const useClaim = (stakingContract: string) => {
+  const { account } = useWeb3React()
+  const contract = useLPStakingContract(stakingContract)
+
+  const handleClaim = useCallback(async () => {
+    const txHash = await claim(contract, account)
+    return txHash
+  }, [account, contract])
+
+  return { onReward: handleClaim }
+}
 
 export const useHarvest = (farmPid: number) => {
   const { account } = useWeb3React()
