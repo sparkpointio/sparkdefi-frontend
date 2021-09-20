@@ -7,15 +7,29 @@ const config: MenuEntry[] = [
     href: "https://sparkswap.finance/#/swap",
   },
   {
-    label: "Farm",
-    icon: "FarmIcon",
-    href: "https://app.srk.finance/#/stake",
+    label: "Staking",
+    icon: "staking",
+    items: [
+      {
+        label: "Farms",
+        href: "/farms",
+      },
+      {
+        label: "Pools",
+        href: "/pools",
+      },
+    ],
   },
-  {
-    label: "Pool",
-    icon: "PoolIcon",
-    href: "/pools",
-  },
+  // {
+  //   label: "Farm",
+  //   icon: "FarmIcon",
+  //   href: "https://app.srk.finance/#/stake",
+  // },
+  // {
+  //   label: "Pool",
+  //   icon: "PoolIcon",
+  //   href: "/pools",
+  // },
   {
     label: "Bridge",
     icon: "BridgeIcon",
