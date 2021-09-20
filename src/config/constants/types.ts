@@ -11,6 +11,7 @@ export interface Token {
   decimals?: number
   projectLink?: string
   busdPrice?: string
+  iconExtension?: string | 'svg'
 }
 
 export enum PoolIds {

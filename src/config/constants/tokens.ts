@@ -1603,6 +1603,7 @@ const tokens = {
       97: '0xC3440c10c4F36f354eB591B19FafB4906d449B75',
     },
     decimals: 18,
+    iconExtension: 'png',
     projectLink: 'https://sparkpoint.io/',
   },
   ttkb: {
@@ -1621,6 +1622,7 @@ const tokens = {
       97: '0x7665CB7b0d01Df1c9f9B9cC66019F00aBD6959bA',
     },
     decimals: 18,
+    iconExtension: 'png',
     projectLink: 'https://ownly.io/',
   },
   kclp: {
@@ -1630,6 +1632,7 @@ const tokens = {
       97: '0x47b8806C2891c4a92b5c590C32CFE1Eb617648EF',
     },
     decimals: 18,
+    iconExtension: 'png',
     projectLink: 'https://kucoinlaunchpad.com/',
   },
 }

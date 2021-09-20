@@ -108,6 +108,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ userDataReady, farm, removed, cakeP
         rewardToken={farm.quoteToken.symbol}
         token={farm.token}
         quoteToken={farm.quoteToken}
+        pairToken={farm.pairToken}
       />
       <hr style={{ width: '100%', border: 'none', backgroundColor: theme.colors.primary, height: '2px' }} />
       {/* {!removed && (
