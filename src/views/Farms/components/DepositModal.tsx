@@ -63,7 +63,7 @@ const DepositModal: React.FC<DepositModalProps> = (
   const formatStakedTokenBalance = getBalanceAmount(new BigNumber(stakedBalance)).toFixed(6)
   const formatTokenEarnings = getBalanceAmount(new BigNumber(earnings)).toFixed(6)
 
-  const [isApproved, setIsApproved] = useState(account && allowance && (new BigNumber(allowance)).isGreaterThan(0))
+  const [isApproved, setIsApproved] = useState(account && allowance && (new BigNumber(allowance)).isGreaterThanOrEqualTo(tokenBalance))
   const lpStakingAddress = getAddress(farm.stakingAddresses)
   const lpStakingContract = useLPStakingContract(lpStakingAddress)
   const { onApprove } = useApprove(lpContract, lpStakingContract)

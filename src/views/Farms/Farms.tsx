@@ -114,7 +114,7 @@ const Farms: React.FC = () => {
   const [query, setQuery] = useState('')
   const [viewMode, setViewMode] = usePersistState(ViewMode.CARD, { localStorageKey: 'sparkswap_farm_view' })
   const { account } = useWeb3React()
-  const [sortOption, setSortOption] = useState('hot')
+  const [sortOption, setSortOption] = useState('Earned')
   const theme = useContext(ThemeContext);
   const isArchived = pathname.includes('archived')
   const isInactive = pathname.includes('history')
@@ -162,6 +162,7 @@ const Farms: React.FC = () => {
         const lowercaseQuery = latinise(query.toLowerCase())
         farmsToDisplayWithAPR = farmsToDisplayWithAPR.filter((farm: FarmWithStakedValue) => {
           return latinise(farm.lpSymbol.toLowerCase()).includes(lowercaseQuery)
+            || latinise(farm.quoteToken.symbol.toLowerCase()).includes(lowercaseQuery)
         })
       }
       return farmsToDisplayWithAPR
@@ -185,6 +186,12 @@ const Farms: React.FC = () => {
       switch (sortOption) {
         case 'apr':
           return orderBy(farms, (farm: FarmWithStakedValue) => farm.apr, 'desc')
+        case 'duration':
+          return orderBy(
+            farms,
+            (farm: FarmWithStakedValue) => (farm.remainingDays ? Number(farm.remainingDays) : 0),
+            'desc',
+          )
         case 'multiplier':
           return orderBy(
             farms,
@@ -397,10 +404,10 @@ const Farms: React.FC = () => {
               <Text textTransform="uppercase">{t('Sort by')}</Text>
               <Select
                 options={[
-                  {
-                    label: t('Hot'),
-                    value: 'hot',
-                  },
+                  // {
+                  //   label: t('Hot'),
+                  //   value: 'hot',
+                  // },
                   // {
                   //   label: t('APR'),
                   //   value: 'apr',
@@ -412,6 +419,10 @@ const Farms: React.FC = () => {
                   {
                     label: t('Earned'),
                     value: 'earned',
+                  },
+                  {
+                    label: t('Duration'),
+                    value: 'duration',
                   },
                   {
                     label: t('Liquidity'),
