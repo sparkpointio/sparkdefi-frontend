@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js'
 import React, { useCallback, useState } from 'react'
 import { Contract } from 'web3-eth-contract'
 import { useWeb3React } from '@web3-react/core'
-import { Button, Modal, Text, useModal } from '@sparkpointio/sparkswap-uikit'
+import { Button, Modal, Skeleton, Text, useModal } from '@sparkpointio/sparkswap-uikit'
 import { useApprove } from 'hooks/useApprove'
 import { useERC20, useLPStakingContract } from 'hooks/useContract'
 import useTokenBalance from 'hooks/useTokenBalance'
@@ -17,6 +17,7 @@ import Container, { ActionDiv, DetailsCont, ModalFooter } from './Styled'
 import { ModalHr } from './Divider'
 import StakeModal from './Modals/Stake'
 import ClaimModal from './Modals/ClaimModal'
+import { calculateUserRewardRate } from '../../../utils/farmHelpers'
 
 
 interface DepositModalProps {
@@ -52,16 +53,17 @@ const DepositModal: React.FC<DepositModalProps> = (
     stakedBalance,
     earnings,
   } = farm.userData || {}
+  const userRate = calculateUserRewardRate(farm);
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
   const { pid, lpAddresses } = farm
   const lpAddress = getAddress(lpAddresses)
   const lpContract = useERC20(lpAddress)
   const RewardTokenBalance = useTokenBalance(getAddress(farm.quoteToken.address))
-  const formatTokenBalance = getBalanceAmount(RewardTokenBalance.balance).toFixed(6)
-  const formatLPTokenBalance = getBalanceAmount(new BigNumber(tokenBalance)).toFixed(6)
-  const formatStakedTokenBalance = getBalanceAmount(new BigNumber(stakedBalance)).toFixed(6)
-  const formatTokenEarnings = getBalanceAmount(new BigNumber(earnings)).toFixed(6)
+  const formatTokenBalance = getBalanceAmount(RewardTokenBalance.balance).toFormat(6)
+  const formatLPTokenBalance = getBalanceAmount(new BigNumber(tokenBalance)).toFormat(6)
+  const formatStakedTokenBalance = getBalanceAmount(new BigNumber(stakedBalance)).toFormat(6)
+  const formatTokenEarnings = getBalanceAmount(new BigNumber(earnings)).toFormat(6)
 
   const [isApproved, setIsApproved] = useState(account && allowance && (new BigNumber(allowance)).isGreaterThanOrEqualTo(tokenBalance))
   const lpStakingAddress = getAddress(farm.stakingAddresses)
@@ -103,7 +105,7 @@ const DepositModal: React.FC<DepositModalProps> = (
       <Container>
         <DetailsCont>
           <Text bold fontSize='24px'>
-            {formatTokenBalance ?? '0.0000'}
+            {formatTokenBalance ?? <Skeleton width={60} display='inline-block' />}
           </Text>
           <Text color='textSubtle' fontSize='14px'>
             {farm.quoteToken.symbol}
@@ -116,7 +118,7 @@ const DepositModal: React.FC<DepositModalProps> = (
         </DetailsCont>
         <DetailsCont>
           <Text bold fontSize='24px'>
-            {formatLPTokenBalance ?? '0.0000'}
+            {formatLPTokenBalance ??  <Skeleton width={60} display='inline-block' />}
           </Text>
           <Text color='textSubtle' fontSize='14px'>
             {tokenName} Tokens
@@ -129,7 +131,7 @@ const DepositModal: React.FC<DepositModalProps> = (
         </DetailsCont>
         <DetailsCont>
           <Text bold fontSize='24px'>
-            {formatStakedTokenBalance ?? '0.0000'}
+            {formatStakedTokenBalance ?? <Skeleton width={60} display='inline-block' />}
           </Text>
           <Text color='textSubtle' fontSize='14px'>
             Your {tokenName} Deposits
@@ -152,13 +154,13 @@ const DepositModal: React.FC<DepositModalProps> = (
       <ModalFooter>
         <DetailsCont>
           <Text bold fontSize='24px'>
-            0.0000
+            {userRate}
           </Text>
           <Text color='textSubtle' fontSize='14px'>{`Your Rate ${farm.quoteToken.symbol}/week`}</Text>
         </DetailsCont>
         <DetailsCont>
           <Text bold fontSize='24px'>
-            {formatTokenEarnings ?? '0.0000'}
+            {formatTokenEarnings ?? <Skeleton width={60} display='inline-block' />}
           </Text>
           <Text color='textSubtle' fontSize='14px'>{`${farm.quoteToken.symbol} Token Earnings`}</Text>
         </DetailsCont>

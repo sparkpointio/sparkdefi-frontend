@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js'
 import masterchefABI from 'config/abi/masterchef.json'
+import { JSBI } from '@pancakeswap-libs/sdk'
 import { now } from 'lodash'
 import erc20 from 'config/abi/erc20.json'
 import { getAddress, getMasterChefAddress } from 'utils/addressHelpers'
@@ -8,9 +9,12 @@ import multicall from 'utils/multicall'
 import lpStaking from 'config/abi/lpStaking.json'
 import { Farm, SerializedBigNumber } from '../types'
 import { DEFAULT_TOKEN_DECIMAL } from '../../config'
+import { getBalanceAmount } from '../../utils/formatBalance'
 
 type PublicFarmData = {
   totalDeposits: SerializedBigNumber
+  rewardRate: SerializedBigNumber
+  totalRewardRate: SerializedBigNumber
   hasEnded: boolean
   remainingDays: string
   tokenAmountMc: SerializedBigNumber
@@ -76,12 +80,21 @@ const fetchFarm = async (farm: Farm): Promise<PublicFarmData> => {
       address: getAddress(stakingAddresses),
       name: 'periodFinish',
     },
+    {
+      address: getAddress(stakingAddresses),
+      name: 'rewardRate',
+    },
   ]
-  const [totalSupply, periodFinish] =
+  const [totalSupply, periodFinish, rewardRate] =
     await multicall(lpStaking, lpStakingCalls)
 
   // Total Deposits in staking address
-  const totalDeposits = new BigNumber(totalSupply).div(BIG_TEN.pow(18))
+  const totalDeposits = new BigNumber(totalSupply)
+
+  // total reward rate
+  const totalRewardRate = new BigNumber(rewardRate).times(60 * 60 * 24 * 7)
+
+  // console.log(totalRewardRate)
 
   const endDate = (new Date(0)).setUTCSeconds(periodFinish);
   const hasEnded = endDate < now();
@@ -122,6 +135,8 @@ const fetchFarm = async (farm: Farm): Promise<PublicFarmData> => {
 
   return {
     totalDeposits: totalDeposits.toJSON(),
+    'rewardRate': new BigNumber(rewardRate).toJSON(),
+    'totalRewardRate': totalRewardRate.toJSON(),
     'hasEnded': hasEnded,
     'remainingDays': remainingDays,
     tokenAmountMc: tokenAmountMc.toJSON(),

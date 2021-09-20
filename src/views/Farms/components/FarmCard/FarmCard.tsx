@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import styled, { keyframes, ThemeContext } from 'styled-components'
-import { Flex, Text } from '@pancakeswap/uikit'
+import { Flex, Skeleton, Text } from '@sparkpointio/sparkswap-uikit'
 import { Farm } from 'state/types'
 import { useTranslation } from 'contexts/Localization'
 import { BASE_ADD_LIQUIDITY_URL, BASE_EXCHANGE_URL } from 'config'
@@ -10,12 +10,9 @@ import CardHeading from './CardHeading'
 import CardActionsContainer from './CardActionsContainer'
 import HarvestAction from '../FarmTable/Actions/HarvestAction'
 import { getAddress } from '../../../../utils/addressHelpers'
-import ExpandableSectionButton from '../../../../components/ExpandableSectionButton'
-import DetailsSection from './DetailsSection'
-import { getBscScanAddressUrl } from '../../../../utils/bscscan'
+import { getBalanceAmount } from '../../../../utils/formatBalance'
 
 export interface FarmWithStakedValue extends Farm {
-  totalDeposits?: string
   apr?: number
   liquidity?: BigNumber
 }
@@ -83,7 +80,8 @@ const FarmCard: React.FC<FarmCardProps> = ({ userDataReady, farm, removed, cakeP
   const { t } = useTranslation()
   const [showExpandableSection, setShowExpandableSection] = useState(false)
   const farmImage = farm.lpSymbol.split(' ')[0].toLocaleLowerCase()
-  const formatTotalDeposits = new BigNumber(farm.totalDeposits)
+  const formatTotalDeposits = getBalanceAmount(new BigNumber(farm.totalDeposits ?? 0)).toFormat(4)
+  const formatTotalRewardRate = getBalanceAmount(new BigNumber(farm.totalRewardRate ?? 0)).toFormat(4)
   const lpLabel = farm.lpSymbol && farm.lpSymbol.toUpperCase().replace('PANCAKE', '')
   const earnLabel = farm.quoteToken.symbol
   const farmAPR = farm.apr && farm.apr.toLocaleString('en-US', { maximumFractionDigits: 2 })
@@ -131,7 +129,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ userDataReady, farm, removed, cakeP
 
       <Flex justifyContent='space-between' style={{ textAlign: 'left' }}>
         <Text>{t('Total Deposits')}</Text>
-        <Text color='textSubtle'>{formatTotalDeposits.toFixed(4)}</Text>
+        <Text color='textSubtle'>{farm.totalDeposits ? formatTotalDeposits : <Skeleton width={60} display='inline-block' />}</Text>
       </Flex>
       <Flex>
         <HarvestAction stakingContract={getAddress(farm.stakingAddresses)}
@@ -144,15 +142,16 @@ const FarmCard: React.FC<FarmCardProps> = ({ userDataReady, farm, removed, cakeP
       </Flex>
       <Flex justifyContent='space-between'>
         <Text>{t('Rate')}</Text>
-        <Text color='textSubtle'>-- {earnLabel} / week</Text>
+        <Text color='textSubtle'>
+          {formatTotalRewardRate ?? <Skeleton width={60} display='inline-block' />} {earnLabel} / week</Text>
       </Flex>
       <Flex justifyContent='space-between'>
         <Text>{t('Duration')}</Text>
-        <Text color='textSubtle'>{farm.remainingDays} Days</Text>
+        <Text color='textSubtle'>{farm.remainingDays ??  <Skeleton width={60} display='inline-block' />} Days</Text>
       </Flex>
       <CardActionsContainer userDataReady={userDataReady} farm={farm} account={account}
                             addLiquidityUrl={addLiquidityUrl} addTokenUrl={AddTokenUrl} />
-       {/* <Divider />
+      {/* <Divider />
        <ExpandableSectionButton
         onClick={() => setShowExpandableSection(!showExpandableSection)}
         expanded={showExpandableSection}

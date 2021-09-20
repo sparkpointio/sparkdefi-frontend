@@ -18,9 +18,11 @@ import Loading from 'components/Loading'
 import DepositModal from '../DepositModal'
 import WithdrawModal from '../WithdrawModal'
 import { getAddress } from '../../../../utils/addressHelpers'
+import { calculateUserRewardRate } from '../../../../utils/farmHelpers'
 
 interface FarmCardActionsProps {
   userDataReady?: boolean
+  userRate?:string,
   stakedBalance?: BigNumber
   tokenBalance?: BigNumber
   tokenName?: string

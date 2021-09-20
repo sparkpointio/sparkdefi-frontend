@@ -38,8 +38,6 @@ const CardHeading: React.FC<ExpandableSectionProps> = ({
   token,
   quoteToken
 }) => {
-  console.log(lpLabel)
-  console.log(farmSymbol)
   return (
     <Wrapper justifyContent="space-between" alignItems="center" mb="12px">
       <Flex flexDirection="row" alignItems="">

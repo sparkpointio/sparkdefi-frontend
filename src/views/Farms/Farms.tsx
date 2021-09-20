@@ -9,6 +9,7 @@ import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
 import useMedia from 'use-media';
 import { SvgIcon } from '@material-ui/core';
+import { Token } from '@pancakeswap-libs/sdk'
 import { useFarms, usePollFarmsData, usePriceCakeBusd } from 'state/hooks'
 import usePersistState from 'hooks/usePersistState'
 import { Farm } from 'state/types'
@@ -30,6 +31,8 @@ import { DesktopColumnSchema, ViewMode } from './components/types'
 import { StyledHr } from './components/Divider'
 import { ReactComponent as FarmsDarkLogo } from './components/assets/farm-dark.svg';
 import { ReactComponent as FarmsLightLogo} from './components/assets/farm-light.svg';
+import tokens from '../../config/constants/tokens'
+import { getAddress } from '../../utils/addressHelpers'
 
 const ControlContainer = styled.div`
   display: flex;

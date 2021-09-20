@@ -205,7 +205,7 @@ export const getLPStakingDetails = async (stakingAddresses, account: string) => 
     return {
       stakedTokens: await contract.methods.balanceOf(account).call(),
       totalDeposits: await contract.methods.totalSupply().call(),
-      rewardRate: await contract.methods.rewardRate().call()
+      rewardRate: await contract.methods.rewardRate().call(),
     }
   } catch (error) {
     console.error(`LP Staking error: ${error}`)
@@ -213,29 +213,6 @@ export const getLPStakingDetails = async (stakingAddresses, account: string) => 
       totalDeposits: '-'
     }
   }
-}
-
-const getHypotheticalRewardRate = async (
-  rewardsToken: Token,
-  rewardRate: TokenAmount,
-  totalSupply: TokenAmount,
-  stakedAmount: TokenAmount,
-  token0: Token,
-  token1: Token
-) => {
-  const dummyPair = new Pair(new TokenAmount(token0, '0'), new TokenAmount(token1, '0'));
-
-  const totalStakedAmount = new TokenAmount(
-    dummyPair.liquidityToken, JSBI.BigInt(totalSupply.raw));
-  // const rewardRate = await this.getRewardRate();
-
-  return new TokenAmount(
-    rewardsToken,
-    JSBI.greaterThan(totalStakedAmount.raw, JSBI.BigInt(0))
-      ? JSBI.divide(JSBI.multiply(rewardRate.raw, stakedAmount.raw), totalStakedAmount.raw)
-      : JSBI.BigInt(0)
-  )?.multiply(`${60 * 60 * 24 * 7}`)
-    ?.toSignificant(4)
 }
 
 /**
