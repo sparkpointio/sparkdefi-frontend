@@ -91,7 +91,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
     setPendingTx(true)
       // unstaking
       try {
-        await onUnstake(totalStakedTokens.toString(), stakingToken.decimals)
+        await onUnstake(getFullDisplayBalance(new BigNumber(userData.stakedBalance), stakingToken.decimals, 18) , stakingToken.decimals)
         toastSuccess(
           `${t('Unstaked')}!`,
           t('Your %symbol% earnings have also been claimed to your wallet!', {
