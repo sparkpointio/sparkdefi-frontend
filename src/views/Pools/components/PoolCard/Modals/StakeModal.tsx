@@ -11,7 +11,7 @@ import useTheme from 'hooks/useTheme'
 import useToast from 'hooks/useToast'
 import { useSousHarvest } from 'hooks/useHarvest'
 import BigNumber from 'bignumber.js'
-import { getFullDisplayBalance, formatNumber, getDecimalAmount, getBalanceNumber } from 'utils/formatBalance'
+import { getFullDisplayBalance, formatNumber, getBalanceNumber } from 'utils/formatBalance'
 import { BIG_ZERO } from 'utils/bigNumber'
 import useTokenBalance from 'hooks/useTokenBalance'
 import { Pool } from 'state/types'
@@ -58,15 +58,14 @@ const StakeModal: React.FC<StakeModalProps> = ({
   const [activeSelect, setActiveSelect] = useState(false)
   const { balance: earnedTokenBalance } = useTokenBalance(pool.earningToken.address[56])
   const { toastSuccess, toastError } = useToast()
-  const totalStakingTokens = userData?.stakingTokenBalance ? getBalanceNumber(new BigNumber(userData.stakingTokenBalance), stakingToken.decimals) : BIG_ZERO
-  const totalStakedTokens = userData?.stakedBalance ? getBalanceNumber(new BigNumber(userData.stakedBalance), stakingToken.decimals) : BIG_ZERO
-  const totalEarningTokens = earnedTokenBalance ? getBalanceNumber(new BigNumber(earnedTokenBalance)) : BIG_ZERO
-  const totalEarnedTokens = userData?.pendingReward ? getBalanceNumber(new BigNumber(userData.pendingReward)) : BIG_ZERO
+  const totalStakingTokens = userData?.stakingTokenBalance ? getBalanceNumber(new BigNumber(userData.stakingTokenBalance), stakingToken.decimals) : 0
+  const totalStakedTokens = userData?.stakedBalance ? getBalanceNumber(new BigNumber(userData.stakedBalance), stakingToken.decimals) : 0
+  const totalEarningTokens = earnedTokenBalance ? getBalanceNumber(new BigNumber(earnedTokenBalance)) : 0
+  const totalEarnedTokens = userData?.pendingReward ? getBalanceNumber(new BigNumber(userData.pendingReward)) : 0
   const [pendingTx, setPendingTx] = useState(false)
   const temp = new BigNumber(pool.tokenPerBlock).times( new BigNumber(userData.stakedBalance).div(pool.totalStaked)  ) 
-  const totalStaked = pool.totalStaked ? getBalanceNumber(new BigNumber(pool.totalStaked.toString()), stakingToken.decimals) : BIG_ZERO
 
-  const rewardRate = pool?.tokenPerBlock ? getBalanceNumber(temp) : BIG_ZERO
+  const rewardRate = pool?.tokenPerBlock ? getBalanceNumber(temp) : 0
   const [ onPresentStakeAction ] = useModal(<StakeTokenModal isBnbPool={isBnbPool} pool={pool} stakingTokenBalance={stakingTokenBalance} stakingTokenPrice={stakingTokenPrice} />)
   
   const handleHarvestConfirm = async () => {
@@ -120,12 +119,12 @@ const StakeModal: React.FC<StakeModalProps> = ({
       {pool.stakingToken.symbol === pool.earningToken.symbol ? 
         <StyledFlex marginTop="21px">
         <Flex flexDirection="column">
-          <Text fontSize="24px">{totalStakingTokens.toFixed(4)}</Text>
+          <Text fontSize="24px">{formatNumber(totalStakingTokens,2,5)}</Text>
           <Text color="textSubtle" marginBottom="24px">{pool.stakingToken.symbol} Tokens</Text>
           <Button fullWidth as="a" href={`https://sparkswap.finance/#/swap/${pool.stakingToken.address[56]}`}>Add More</Button>
         </Flex>
         <Flex flexDirection="column">
-          <Text fontSize="24px">{totalStakedTokens.toFixed(4)}</Text>
+          <Text fontSize="24px">{formatNumber(totalStakedTokens,2,5)}</Text>
           <Text color="textSubtle" marginBottom="24px">{pool.stakingToken.symbol} Staked</Text>
           <Button fullWidth onClick={onPresentStakeAction}>Stake Tokens</Button>
         </Flex>
@@ -134,17 +133,17 @@ const StakeModal: React.FC<StakeModalProps> = ({
         // Render two 'Add More' button components when staking token symbol is not equal to earning token symbol
         <StyledFlex marginTop="21px">
         <Flex flexDirection="column">
-          <Text fontSize="24px">{totalStakingTokens.toFixed(4)}</Text>
+          <Text fontSize="24px">{formatNumber(totalStakingTokens,2,5)}</Text>
           <Text color="textSubtle" marginBottom="24px">{pool.stakingToken.symbol} Tokens</Text>
           <Button fullWidth as="a" href={`https://sparkswap.finance/#/swap/${pool.stakingToken.address[56]}`}>Add More</Button>
         </Flex>
         <Flex flexDirection="column">
-          <Text fontSize="24px">{totalEarningTokens.toFixed(4)}</Text>
+          <Text fontSize="24px">{formatNumber(totalEarningTokens,2,5)}</Text>
           <Text color="textSubtle" marginBottom="24px">{pool.earningToken.symbol} Tokens</Text>
           <Button fullWidth as="a" href={`https://sparkswap.finance/#/swap/${pool.earningToken.address[56]}`}>Add More</Button>
         </Flex>
         <Flex flexDirection="column">
-          <Text fontSize="24px">{totalStakedTokens.toFixed(4)}</Text>
+          <Text fontSize="24px">{formatNumber(totalStakedTokens,2,5)}</Text>
           <Text color="textSubtle" marginBottom="24px">{pool.stakingToken.symbol} Staked</Text>
           <Button fullWidth onClick={onPresentStakeAction}>Stake Tokens</Button>
         </Flex>
@@ -156,11 +155,11 @@ const StakeModal: React.FC<StakeModalProps> = ({
       </StyledFlex>
       <StyledFlex marginTop="30px" marginBottom="20px">
         <Flex flexDirection="column">
-          <Text fontSize="24px">{rewardRate.toFixed(4)}</Text>
+          <Text fontSize="24px">{formatNumber(rewardRate,2,10)}</Text>
           <Text color="textSubtle" fontSize="17px">Your Rate {pool.earningToken.symbol}/block</Text>
         </Flex>
         <Flex flexDirection="column">
-          <Text fontSize="24px">{totalEarnedTokens.toFixed(4)}</Text>
+          <Text fontSize="24px">{formatNumber(totalEarnedTokens,2,5)}</Text>
           <Text color="textSubtle" fontSize="17px">{pool.earningToken.symbol} Token Earnings</Text>
         </Flex>
         <Flex flexDirection="column" mb="16px" marginLeft="5px"
