@@ -53,7 +53,7 @@ const DepositModal: React.FC<DepositModalProps> = (
     stakedBalance,
     earnings,
   } = farm.userData || {}
-  const userRate = calculateUserRewardRate(farm);
+  const userRate = calculateUserRewardRate(farm)
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
   const { pid, lpAddresses } = farm
@@ -118,7 +118,7 @@ const DepositModal: React.FC<DepositModalProps> = (
         </DetailsCont>
         <DetailsCont>
           <Text bold fontSize='24px'>
-            {formatLPTokenBalance ??  <Skeleton width={60} display='inline-block' />}
+            {formatLPTokenBalance ?? <Skeleton width={60} display='inline-block' />}
           </Text>
           <Text color='textSubtle' fontSize='14px'>
             {tokenName} Tokens

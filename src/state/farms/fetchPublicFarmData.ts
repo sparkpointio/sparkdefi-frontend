@@ -1,6 +1,5 @@
 import BigNumber from 'bignumber.js'
 import masterchefABI from 'config/abi/masterchef.json'
-import { JSBI } from '@pancakeswap-libs/sdk'
 import { now } from 'lodash'
 import erc20 from 'config/abi/erc20.json'
 import { getAddress, getMasterChefAddress } from 'utils/addressHelpers'
@@ -8,8 +7,6 @@ import { BIG_TEN, BIG_ZERO } from 'utils/bigNumber'
 import multicall from 'utils/multicall'
 import lpStaking from 'config/abi/lpStaking.json'
 import { Farm, SerializedBigNumber } from '../types'
-import { DEFAULT_TOKEN_DECIMAL } from '../../config'
-import { getBalanceAmount } from '../../utils/formatBalance'
 
 type PublicFarmData = {
   totalDeposits: SerializedBigNumber
@@ -96,9 +93,9 @@ const fetchFarm = async (farm: Farm): Promise<PublicFarmData> => {
 
   // console.log(totalRewardRate)
 
-  const endDate = (new Date(0)).setUTCSeconds(periodFinish);
-  const hasEnded = endDate < now();
-  const remainingDays = (Math.max(0, Math.ceil(((((endDate - now()) / 1000) / 60) / 60) / 24))).toString();
+  const endDate = (new Date(0)).setUTCSeconds(periodFinish)
+  const hasEnded = endDate < now()
+  const remainingDays = (Math.max(0, Math.ceil(((((endDate - now()) / 1000) / 60) / 60) / 24))).toString()
 
   // Ratio in % of LP tokens that are staked in the MC, vs the total number in circulation
   const lpTokenRatio = new BigNumber(lpTokenBalanceMC).div(new BigNumber(lpTotalSupply))
@@ -118,16 +115,16 @@ const fetchFarm = async (farm: Farm): Promise<PublicFarmData> => {
   const [info, totalAllocPoint] =
     pid || pid === 0
       ? await multicall(masterchefABI, [
-          {
-            address: getMasterChefAddress(),
-            name: 'poolInfo',
-            params: [pid],
-          },
-          {
-            address: getMasterChefAddress(),
-            name: 'totalAllocPoint',
-          },
-        ])
+        {
+          address: getMasterChefAddress(),
+          name: 'poolInfo',
+          params: [pid],
+        },
+        {
+          address: getMasterChefAddress(),
+          name: 'totalAllocPoint',
+        },
+      ])
       : [null, null]
 
   const allocPoint = info ? new BigNumber(info.allocPoint?._hex) : BIG_ZERO

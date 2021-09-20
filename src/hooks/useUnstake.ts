@@ -1,8 +1,8 @@
 import { useCallback } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import { useAppDispatch } from 'state'
-import { updateUserStakedBalance, updateUserBalance, updateUserPendingReward } from 'state/actions'
-import { unstake, sousUnstake, sousEmergencyUnstake, exit } from 'utils/callHelpers'
+import { updateUserBalance, updateUserPendingReward, updateUserStakedBalance } from 'state/actions'
+import { exit, sousEmergencyUnstake, sousUnstake, unstake } from 'utils/callHelpers'
 import { useLPStakingContract, useMasterchef, useSousChef } from './useContract'
 
 export const useExit = (contract: string) => {

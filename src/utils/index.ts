@@ -3,7 +3,7 @@ import { getAddress } from '@ethersproject/address'
 import { AddressZero } from '@ethersproject/constants'
 import { JsonRpcSigner, Web3Provider } from '@ethersproject/providers'
 import { BigNumber } from '@ethersproject/bignumber'
-import { ChainId, JSBI, Percent, Token, CurrencyAmount, Currency, ETHER } from '@pancakeswap-libs/sdk'
+import { ChainId, CurrencyAmount, JSBI, Percent } from '@pancakeswap-libs/sdk'
 import { BASE_BSC_SCAN_URLS } from '../config'
 
 // returns the checksummed address if the address is valid, otherwise returns false

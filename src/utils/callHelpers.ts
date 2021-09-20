@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js'
 import { DEFAULT_GAS_LIMIT, DEFAULT_TOKEN_DECIMAL } from 'config'
 import { ethers } from 'ethers'
-import { JSBI, Pair, Token, TokenAmount } from '@pancakeswap-libs/sdk'
+import { Pair, Token, TokenAmount } from '@pancakeswap-libs/sdk'
 import { Contract } from 'web3-eth-contract'
 import { getLpContract, getLpStakingContract, getMasterchefContract } from 'utils/contractHelpers'
 import farms from 'config/constants/farms'
@@ -210,7 +210,7 @@ export const getLPStakingDetails = async (stakingAddresses, account: string) => 
   } catch (error) {
     console.error(`LP Staking error: ${error}`)
     return {
-      totalDeposits: '-'
+      totalDeposits: '-',
     }
   }
 }

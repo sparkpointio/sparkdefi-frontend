@@ -4,8 +4,6 @@ import multicall from 'utils/multicall'
 import { getAddress } from 'utils/addressHelpers'
 import { FarmConfig } from 'config/constants/types'
 import lpStakingAbi from 'config/abi/lpStaking.json'
-import { JSBI, Pair, Token, TokenAmount } from '@pancakeswap-libs/sdk'
-import tokens from '../../config/constants/tokens'
 
 export const fetchFarmUserAllowances = async (account: string, farmsToFetch: FarmConfig[]) => {
   const calls = farmsToFetch.map((farm) => {
