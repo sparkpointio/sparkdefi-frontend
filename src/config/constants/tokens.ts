@@ -1614,6 +1614,22 @@ const tokens = {
     decimals: 18,
     projectLink: 'https://sparkpoint.io/',
   },
+  kroot: {
+    symbol: 'KROOT',
+    address: {
+      56: '0x0cD3a8Ce155A8d9DAAF19E5caa642e72a2a24Cd8',
+      97: '0x0cD3a8Ce155A8d9DAAF19E5caa642e72a2a24Cd8',
+    },
+    decimals: 18,
+  },
+  bglg: {
+    symbol: 'BGLG',
+    address: {
+      56: '0xEa01D8D9EaCCa9996Db6Bb3377c1Fe64308e7328',
+      97: '0xEa01D8D9EaCCa9996Db6Bb3377c1Fe64308e7328',
+    },
+    decimals: 18,
+  },
 }
 
 export default tokens
