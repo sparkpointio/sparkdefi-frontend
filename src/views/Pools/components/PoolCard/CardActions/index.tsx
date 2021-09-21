@@ -72,7 +72,7 @@ const CardActions: React.FC<CardActionsProps> = ({ pool, stakedBalance }) => {
               <Box display="inline">
                 {/* <Text color="text" textTransform="uppercase" bold fontSize="12px"> */}
                 <Text color="text" textTransform="uppercase" fontSize="12px">
-                   {!isComingSoon && formatNumber(totalEarned,2,5)} {isComingSoon && '-'} {stakingToken.symbol}
+                   {!isComingSoon && formatNumber(totalEarned,2,5)} {isComingSoon && '-'} {earningToken.symbol}
                 </Text>
               </Box>
             </Flex>
