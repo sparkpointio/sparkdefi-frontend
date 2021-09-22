@@ -77,6 +77,7 @@ export interface PoolConfig {
   isFinished?: boolean
   isComingSoon?: boolean
   enableEmergencyWithdraw?: boolean
+  isAddTokenDisabled?: boolean
 }
 
 export type Images = {
