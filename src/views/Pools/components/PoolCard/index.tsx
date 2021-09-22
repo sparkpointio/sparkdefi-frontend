@@ -6,7 +6,7 @@ import UnlockButton from 'components/UnlockButton'
 import { useTranslation } from 'contexts/Localization'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { Pool } from 'state/types'
-import { getBalanceNumber } from 'utils/formatBalance'
+import { getBalanceNumber , formatNumber } from 'utils/formatBalance'
 import { getPoolBlockInfo } from 'views/Pools/helpers'
 import { useBlock } from 'state/block/hooks'
 import { getBscScanLink } from 'utils'
@@ -24,12 +24,12 @@ const PoolCard: React.FC<{ pool: Pool; account: string }> = ({ pool, account }) 
   const accountHasStakedBalance = stakedBalance.gt(0)
   const theme = useContext(ThemeContext)
 
-  const totalStaked = pool.totalStaked ? getBalanceNumber(new BigNumber(pool.totalStaked.toString()), stakingToken.decimals) : BIG_ZERO
+  const totalStaked = pool.totalStaked ? getBalanceNumber(new BigNumber(pool.totalStaked.toString()), stakingToken.decimals) : 0
 
-  const rewardPerBlock = pool?.tokenPerBlock ? getBalanceNumber(new BigNumber(pool.tokenPerBlock.toString()), earningToken.decimals) : BIG_ZERO
+  const rewardPerBlock = pool?.tokenPerBlock ? getBalanceNumber(new BigNumber(pool.tokenPerBlock.toString()), earningToken.decimals) : 0
 
   const temp = new BigNumber(pool.tokenPerBlock).times( new BigNumber(userData.stakedBalance).div(pool.totalStaked)  )
-  const rewardRate = pool?.tokenPerBlock ? getBalanceNumber(temp) : BIG_ZERO
+  const rewardRate = pool?.tokenPerBlock ? getBalanceNumber(temp) : 0
 
   const { currentBlock } = useBlock()
 
@@ -51,14 +51,14 @@ const PoolCard: React.FC<{ pool: Pool; account: string }> = ({ pool, account }) 
           <Flex justifyContent="space-between" style={{textAlign: 'left'}}>
             <Text>Remaining blocks</Text>
             <Link external href={getBscScanLink(hasPoolStarted ? endBlock : startBlock, 'countdown')}>
-              <Text>{!isComingSoon && `${blocksRemaining}`} {isComingSoon && '-'} blocks</Text>
+              <Text>{!isComingSoon && `${ formatNumber(blocksRemaining, 0, 0) }`} {isComingSoon && '-'} blocks</Text>
             </Link>
           </Flex>
 
           {/* <AprRow pool={pool} stakingTokenPrice={stakingTokenPrice} /> */}
           <Flex justifyContent="space-between" style={{textAlign: 'left'}}>
             <Text>Total Deposit</Text>
-            <Text>{!isComingSoon && `${totalStaked}`} {isComingSoon && '-'} {stakingToken.symbol}</Text>
+            <Text>{!isComingSoon && `${ formatNumber(totalStaked) }`} {isComingSoon && '-'} {stakingToken.symbol}</Text>
           </Flex>
           <Flex justifyContent="space-between" style={{textAlign: 'left'}}>
               <Text>Reward per block</Text>
@@ -70,7 +70,7 @@ const PoolCard: React.FC<{ pool: Pool; account: string }> = ({ pool, account }) 
           </Flex> */}
           <Flex justifyContent="space-between" style={{textAlign: 'left'}}>
         <Text>{t('Your Rate')}</Text>
-        <Text>{!isComingSoon && rewardRate.toFixed(4)} {isComingSoon && '-'} {pool.earningToken.symbol}/block</Text>
+        <Text>{!isComingSoon && formatNumber(rewardRate,2,10)} {isComingSoon && '-'} {pool.earningToken.symbol}/block</Text>
       </Flex>
           <Flex mt="24px" flexDirection="column" marginTop="10px">
             {account ? (

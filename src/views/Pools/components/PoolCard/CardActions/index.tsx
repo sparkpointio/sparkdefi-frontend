@@ -6,7 +6,7 @@ import { Flex, Text, Box } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import { PoolCategory } from 'config/constants/types'
 import { Pool } from 'state/types'
-import { getBalanceNumber } from 'utils/formatBalance'
+import { getBalanceNumber, formatNumber } from 'utils/formatBalance'
 import ApprovalAction from './ApprovalAction'
 import StakeActions from './StakeActions'
 import HarvestActions from './HarvestActions'
@@ -40,8 +40,8 @@ const CardActions: React.FC<CardActionsProps> = ({ pool, stakedBalance }) => {
   const isStaked = stakedBalance.gt(0)
   const isLoading = !userData
 
-  const totalStaked = userData?.stakedBalance ? getBalanceNumber(new BigNumber(userData.stakedBalance), stakingToken.decimals) : BIG_ZERO
-  const totalEarned = userData?.pendingReward ? getBalanceNumber(new BigNumber(userData.pendingReward)) : BIG_ZERO
+  const totalStaked = userData?.stakedBalance ? getBalanceNumber(new BigNumber(userData.stakedBalance), stakingToken.decimals) : 0
+  const totalEarned = userData?.pendingReward ? getBalanceNumber(new BigNumber(userData.pendingReward)) : 0
 
   return (
     <Flex flexDirection="column">
@@ -66,13 +66,13 @@ const CardActions: React.FC<CardActionsProps> = ({ pool, stakedBalance }) => {
               <Box display="inline">
                 {/* <Text color="text" textTransform="uppercase"  bold fontSize="12px"> */}
                 <Text color="text" textTransform="uppercase" fontSize="12px">
-                   {!isComingSoon && totalStaked} {isComingSoon && '-'} {stakingToken.symbol}
+                   {!isComingSoon && formatNumber(totalStaked,2,5)} {isComingSoon && '-'} {stakingToken.symbol}
                 </Text>
               </Box>
               <Box display="inline">
                 {/* <Text color="text" textTransform="uppercase" bold fontSize="12px"> */}
                 <Text color="text" textTransform="uppercase" fontSize="12px">
-                   {!isComingSoon && totalEarned} {isComingSoon && '-'} {stakingToken.symbol}
+                   {!isComingSoon && formatNumber(totalEarned,2,5)} {isComingSoon && '-'} {earningToken.symbol}
                 </Text>
               </Box>
             </Flex>
