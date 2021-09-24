@@ -18,6 +18,10 @@ const config: MenuEntry[] = [
         label: "Pools",
         href: "/pools",
       },
+      {
+        label: "Old Farms/Pools",
+        href: "https://app.srk.finance/#/stake",
+      },
     ],
   },
   // {
