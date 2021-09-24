@@ -8,12 +8,11 @@ const config: MenuEntry[] = [
   },
   {
     label: "Staking",
-    icon: "staking",
+    icon: "FarmIcon",
     items: [
       {
         label: "Farms",
         href: "/farms",
-
       },
       {
         label: "Pools",

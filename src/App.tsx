@@ -1,6 +1,6 @@
 import React, { lazy } from 'react'
 import { HashRouter, Redirect, Route, Switch } from 'react-router-dom'
-import { ResetCSS } from '@sparkpointio/sparkswap-uikit'
+import { ResetCSS,  } from '@sparkpointio/sparkswap-uikit'
 import BigNumber from 'bignumber.js'
 import useEagerConnect from 'hooks/useEagerConnect'
 import { useFetchProfile, usePollBlockNumber, usePollCoreFarmData } from 'state/hooks'
