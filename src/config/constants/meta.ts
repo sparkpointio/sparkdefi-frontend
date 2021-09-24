@@ -24,11 +24,11 @@ export const getCustomMeta = (path: string, t: ContextApi['t']): PageMeta => {
       }
     case '/farms':
       return {
-        title: `${t('Farms')} | ${t('SparkDeFi')}`,
+        title: `${t('Farms')} | ${t('SparkDeFi')} - ${t('Earn SRK, SFUEL, and other tokens by just staking!')}`,
       }
     case '/pools':
       return {
-        title: `${t('Pools')} | ${t('SparkDeFi')}`,
+        title: `${t('Pools')} | ${t('SparkPool')} - ${t('Earn SRK, SFUEL, and other tokens by just staking!')}`,
       }
     case '/lottery':
       return {
