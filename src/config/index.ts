@@ -22,6 +22,8 @@ export const CAKE_PER_YEAR = CAKE_PER_BLOCK.times(BLOCKS_PER_YEAR)
 // export const BASE_URL = 'https://pancakeswap.finance'
 export const BASE_URL = 'https://sparkswap.finance'
 export const BASE_EXCHANGE_URL = 'https://sparkswap.finance'
+export const BASE_INFO_URL = 'https://sparkswap.info/#/token/'
+export const CAKE_INFO_URL = 'https://pancakeswap.finance/info/pool/'
 export const BASE_ADD_LIQUIDITY_URL = `${BASE_EXCHANGE_URL}/#/add`
 export const BASE_LIQUIDITY_POOL_URL = `${BASE_EXCHANGE_URL}/#/pool`
 export const PANCAKE_EXCHANGE_URL = 'https://pancakeswap.finance'
@@ -34,6 +36,8 @@ export const DEFAULT_GAS_LIMIT = 200000
 export const DEFAULT_GAS_PRICE = 5
 export const TESTNET_CHAIN_ID = '97'
 export const MAINNET_CHAIN_ID = '56'
+export const EPOCH_PER_YEAR=31556926
+
 
 export const BASE_BSC_SCAN_URLS = {
   [MAINNET_CHAIN_ID]: 'https://bscscan.com',

@@ -4,13 +4,16 @@ import styled, { keyframes, ThemeContext } from 'styled-components'
 import { Flex, Skeleton, Text } from '@sparkpointio/sparkswap-uikit'
 import { Farm } from 'state/types'
 import { useTranslation } from 'contexts/Localization'
-import { BASE_ADD_LIQUIDITY_URL, BASE_EXCHANGE_URL } from 'config'
+import { BASE_ADD_LIQUIDITY_URL, BASE_EXCHANGE_URL, BASE_INFO_URL } from 'config'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
 import CardHeading from './CardHeading'
 import CardActionsContainer from './CardActionsContainer'
 import HarvestAction from '../FarmTable/Actions/HarvestAction'
 import { getAddress } from '../../../../utils/addressHelpers'
 import { getBalanceAmount } from '../../../../utils/formatBalance'
+import ExpandableSectionButton from '../../../../components/ExpandableSectionButton'
+import DetailsSection from './DetailsSection'
+import { getBscScanAddressUrl } from '../../../../utils/bscscan'
 
 export interface FarmWithStakedValue extends Farm {
   apr?: number
@@ -90,6 +93,8 @@ const FarmCard: React.FC<FarmCardProps> = ({ userDataReady, farm, removed, cakeP
     pairTokenAddress: farm.pairToken.address,
   })
 
+  const stakingAddress = getAddress(farm.stakingAddresses);
+
   const addLiquidityUrl = `${farm.liquidityUrl ?? BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`
   const AddTokenUrl = `${BASE_EXCHANGE_URL}/#/swap/${farm.token.address[56]}`
   const lpAddress = farm.lpAddresses[process.env.REACT_APP_CHAIN_ID]
@@ -152,6 +157,14 @@ const FarmCard: React.FC<FarmCardProps> = ({ userDataReady, farm, removed, cakeP
       </Flex>
       <CardActionsContainer userDataReady={userDataReady} farm={farm} account={account}
                             addLiquidityUrl={addLiquidityUrl} addTokenUrl={AddTokenUrl} />
+
+      <DetailsSection
+        removed={removed}
+        stakingAddress={getBscScanAddressUrl(stakingAddress)}
+        lpInfoAddress={`${farm.infoURL?? BASE_INFO_URL}/${lpAddress}`}
+        lpLabel={lpLabel}
+      />
+
       {/* <Divider />
        <ExpandableSectionButton
         onClick={() => setShowExpandableSection(!showExpandableSection)}
@@ -166,11 +179,11 @@ const FarmCard: React.FC<FarmCardProps> = ({ userDataReady, farm, removed, cakeP
           lpLabel={lpLabel}
           addLiquidityUrl={addLiquidityUrl}
         />
-      </ExpandingWrapper> */}
+      </ExpandingWrapper>
       <Flex justifyContent='center'>
-        {/* {Object.prototype.hasOwnProperty.call(farm.lpAddresses, '56') && (<Text color="textSubtle" fontSize="14px">{t('This will only work on Binance Smart Chain')}</Text>)} */}
-        {/* {Object.prototype.hasOwnProperty.call(farm.lpAddresses, '1') && (<Text color="textSubtle" fontSize="14px">{t('This will only work on Ethereum Blockchain')}</Text>)} */}
-      </Flex>
+         {Object.prototype.hasOwnProperty.call(farm.lpAddresses, '56') && (<Text color="textSubtle" fontSize="14px">{t('This will only work on Binance Smart Chain')}</Text>)}
+         {Object.prototype.hasOwnProperty.call(farm.lpAddresses, '1') && (<Text color="textSubtle" fontSize="14px">{t('This will only work on Ethereum Blockchain')}</Text>)}
+      </Flex> */}
     </FCard>
   )
 }

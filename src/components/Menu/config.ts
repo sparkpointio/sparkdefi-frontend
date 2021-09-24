@@ -13,6 +13,7 @@ const config: MenuEntry[] = [
       {
         label: "Farms",
         href: "/farms",
+
       },
       {
         label: "Pools",

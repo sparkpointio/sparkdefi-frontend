@@ -1,6 +1,6 @@
 import tokens from './tokens'
 import { FarmConfig } from './types'
-import { PANCAKE_ADD_LIQUIDITY_URL } from '../index'
+import { CAKE_INFO_URL, PANCAKE_ADD_LIQUIDITY_URL } from '../index'
 
 const farms: FarmConfig[] = [
   /**
@@ -18,9 +18,27 @@ const farms: FarmConfig[] = [
   },
   */
 
+  /**
+   * INTERNAL STAKING POOLS
+   */
   // OWN - BNB - OWN
   {
     pid: 251,
+    lpSymbol: 'SRKb-BNB LP',
+    lpAddresses: {
+      97: '',
+      56: '0xD581CdF609DD50fbaa25118583c6EE31b39662F9',
+    },
+    stakingAddresses: {
+      97: '',
+      56: '0xCec445174D6f4e87d38d43d4b13E36dd55CC56A1',
+    },
+    token: tokens.srkb,
+    pairToken: tokens.wbnb,
+    quoteToken: tokens.srkb,
+  },
+  {
+    pid: 252,
     lpSymbol: 'OWN-BNB LP',
     lpAddresses: {
       97: '',
@@ -34,9 +52,28 @@ const farms: FarmConfig[] = [
     pairToken: tokens.wbnb,
     quoteToken: tokens.own,
   },
+
+  /**
+   * EXTERNAL STAKING POOLS
+   */
+  {
+    pid: 253,
+    lpSymbol: 'KGO-BNB LP',
+    lpAddresses: {
+      97: '',
+      56: '0xAB80cD24f54566FD482ffd928c13b4a618DC6d0c',
+    },
+    stakingAddresses: {
+      97: '',
+      56: '0xF5927A81112ED7a5680DfB8D63E230b8c527CEA7',
+    },
+    token: tokens.own,
+    pairToken: tokens.wbnb,
+    quoteToken: tokens.own,
+  },
   // KCLP - BUSD - SFUEL
   {
-    pid: 252,
+    pid: 254,
     lpSymbol: 'KCLP-BUSD LP',
     lpAddresses: {
       97: '',
@@ -49,10 +86,11 @@ const farms: FarmConfig[] = [
     token: tokens.kclp,
     pairToken: tokens.busd,
     quoteToken: tokens.sfuel,
+    isPromoted: 1
   },
   // KCLP - BUSD - KCLP
   {
-    pid: 253,
+    pid: 255,
     lpSymbol: 'KCLP-BUSD LP',
     lpAddresses: {
       97: '',
@@ -66,6 +104,7 @@ const farms: FarmConfig[] = [
     pairToken: tokens.busd,
     quoteToken: tokens.kclp,
     liquidityUrl: PANCAKE_ADD_LIQUIDITY_URL,
+    infoURL: CAKE_INFO_URL,
   },
 
 ]

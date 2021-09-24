@@ -62,6 +62,8 @@ export interface FarmConfig {
   multiplier?: string
   isCommunity?: boolean
   liquidityUrl?: string
+  infoURL?: string
+  isPromoted?: number
   dual?: {
     rewardPerBlock: number
     earnLabel: string

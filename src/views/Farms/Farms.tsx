@@ -112,7 +112,7 @@ const Farms: React.FC = () => {
   const [query, setQuery] = useState('')
   const [viewMode, setViewMode] = usePersistState(ViewMode.CARD, { localStorageKey: 'sparkswap_farm_view' })
   const { account } = useWeb3React()
-  const [sortOption, setSortOption] = useState('Earned')
+  const [sortOption, setSortOption] = useState('earned')
   const theme = useContext(ThemeContext)
   const isArchived = pathname.includes('archived')
   const isInactive = pathname.includes('history')
@@ -182,6 +182,12 @@ const Farms: React.FC = () => {
 
     const sortFarms = (farms: FarmWithStakedValue[]): FarmWithStakedValue[] => {
       switch (sortOption) {
+        // case 'promoted':
+        //   return orderBy(
+        //     farms,
+        //     (farm: FarmWithStakedValue) => (farm.isPromoted ?? 0),
+        //     'desc',
+        //   )
         case 'apr':
           return orderBy(farms, (farm: FarmWithStakedValue) => farm.apr, 'desc')
         case 'duration':
@@ -429,6 +435,10 @@ const Farms: React.FC = () => {
                   // {
                   //   label: t('Multiplier'),
                   //   value: 'multiplier',
+                  // },
+                  // {
+                  //   label: t('Promoted'),
+                  //   value: 'promoted',
                   // },
                   {
                     label: t('Earned'),
