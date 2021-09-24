@@ -67,9 +67,9 @@ const farms: FarmConfig[] = [
       97: '',
       56: '0xF5927A81112ED7a5680DfB8D63E230b8c527CEA7',
     },
-    token: tokens.own,
+    token: tokens.kgo,
     pairToken: tokens.wbnb,
-    quoteToken: tokens.own,
+    quoteToken: tokens.srkb,
   },
   // KCLP - BUSD - SFUEL
   {
