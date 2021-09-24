@@ -23,6 +23,7 @@ import {
   getChainlinkOracleContract,
   getSouschefV2Contract,
   getLotteryV2Contract,
+  getLpStakingContract,
 } from 'utils/contractHelpers'
 
 /**
@@ -42,6 +43,11 @@ export const useIfoV2Contract = (address: string) => {
 export const useERC20 = (address: string) => {
   const web3 = useWeb3()
   return useMemo(() => getBep20Contract(address, web3), [address, web3])
+}
+
+export const useLPStakingContract = (address: string) => {
+  const web3 = useWeb3()
+  return useMemo(() => getLpStakingContract(address, web3), [address, web3])
 }
 
 /**

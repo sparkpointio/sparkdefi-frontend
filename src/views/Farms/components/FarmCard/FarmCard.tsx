@@ -1,24 +1,26 @@
-import React, { useState, useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import styled, { keyframes, ThemeContext } from 'styled-components'
-import { Flex, Text, Skeleton } from '@pancakeswap/uikit'
+import { Flex, Skeleton, Text } from '@sparkpointio/sparkswap-uikit'
 import { Farm } from 'state/types'
-import { getBscScanAddressUrl } from 'utils/bscscan'
 import { useTranslation } from 'contexts/Localization'
-import ExpandableSectionButton from 'components/ExpandableSectionButton'
-import { BASE_ADD_LIQUIDITY_URL, BASE_EXCHANGE_URL } from 'config'
+import { BASE_ADD_LIQUIDITY_URL, BASE_EXCHANGE_URL, BASE_INFO_URL } from 'config'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
-import DetailsSection from './DetailsSection'
 import CardHeading from './CardHeading'
 import CardActionsContainer from './CardActionsContainer'
-import ApyButton from './ApyButton'
+import HarvestAction from '../FarmTable/Actions/HarvestAction'
+import { getAddress } from '../../../../utils/addressHelpers'
+import { getBalanceAmount } from '../../../../utils/formatBalance'
+import ExpandableSectionButton from '../../../../components/ExpandableSectionButton'
+import DetailsSection from './DetailsSection'
+import { getBscScanAddressUrl } from '../../../../utils/bscscan'
 
 export interface FarmWithStakedValue extends Farm {
   apr?: number
   liquidity?: BigNumber
 }
 
-const AccentGradient = keyframes`  
+const AccentGradient = keyframes`
   0% {
     background-position: 50% 0%;
   }
@@ -31,7 +33,7 @@ const AccentGradient = keyframes`
 `
 
 const StyledCardAccent = styled.div`
-  // background: ${({ theme }) => `linear-gradient(180deg, ${theme.colors.primaryBright}, ${theme.colors.secondary})`};
+    // background: ${({ theme }) => `linear-gradient(180deg, ${theme.colors.primaryBright}, ${theme.colors.secondary})`};
   background-size: 400% 400%;
   animation: ${AccentGradient} 2s linear infinite;
   border-radius: 32px;
@@ -47,7 +49,7 @@ const FCard = styled.div<{ isPromotedFarm: boolean }>`
   align-self: baseline;
   background: ${(props) => props.theme.card.background};
   border: 5px solid ${(props) => props.theme.colors.primary};
-  // border-radius: ${({ theme, isPromotedFarm }) => (isPromotedFarm ? '31px' : theme.radii.card)};
+    // border-radius: ${({ theme, isPromotedFarm }) => (isPromotedFarm ? '31px' : theme.radii.card)};
   box-shadow: 0px 1px 4px rgba(25, 19, 38, 0.15);
   display: flex;
   flex-direction: column;
@@ -70,30 +72,30 @@ const ExpandingWrapper = styled.div<{ expanded: boolean }>`
 `
 
 interface FarmCardProps {
+  userDataReady: boolean
   farm: FarmWithStakedValue
   removed: boolean
   cakePrice?: BigNumber
   account?: string
 }
 
-const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }) => {
+const FarmCard: React.FC<FarmCardProps> = ({ userDataReady, farm, removed, cakePrice, account }) => {
   const { t } = useTranslation()
   const [showExpandableSection, setShowExpandableSection] = useState(false)
-  const totalValueFormatted =
-    farm.liquidity && farm.liquidity.gt(0)
-      ? `$${farm.liquidity.toNumber().toLocaleString(undefined, { maximumFractionDigits: 0 })}`
-      : ''
   const farmImage = farm.lpSymbol.split(' ')[0].toLocaleLowerCase()
+  const formatTotalDeposits = getBalanceAmount(new BigNumber(farm.totalDeposits ?? 0)).toFormat(4)
+  const formatTotalRewardRate = getBalanceAmount(new BigNumber(farm.totalRewardRate ?? 0)).toFormat(4)
   const lpLabel = farm.lpSymbol && farm.lpSymbol.toUpperCase().replace('PANCAKE', '')
-  const earnLabel = farm.dual ? farm.dual.earnLabel : 'CAKE'
+  const earnLabel = farm.quoteToken.symbol
   const farmAPR = farm.apr && farm.apr.toLocaleString('en-US', { maximumFractionDigits: 2 })
   const liquidityUrlPathParts = getLiquidityUrlPathParts({
-    quoteTokenAddress: farm.quoteToken.address,
-    tokenAddress: farm.token.address,
+    mainTokenAddress: farm.token.address,
+    pairTokenAddress: farm.pairToken.address,
   })
 
-  // const addLiquidityUrl = `${BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`
-  const addLiquidityUrl = `${BASE_ADD_LIQUIDITY_URL}`
+  const stakingAddress = getAddress(farm.stakingAddresses);
+
+  const addLiquidityUrl = `${farm.liquidityUrl ?? BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`
   const AddTokenUrl = `${BASE_EXCHANGE_URL}/#/swap/${farm.token.address[56]}`
   const lpAddress = farm.lpAddresses[process.env.REACT_APP_CHAIN_ID]
   const isPromotedFarm = farm.token.symbol === 'CAKE'
@@ -111,8 +113,9 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
         rewardToken={farm.quoteToken.symbol}
         token={farm.token}
         quoteToken={farm.quoteToken}
+        pairToken={farm.pairToken}
       />
-      <hr style={{width: '100%', border: 'none', backgroundColor: theme.colors.primary, height: '2px'}}/>
+      <hr style={{ width: '100%', border: 'none', backgroundColor: theme.colors.primary, height: '2px' }} />
       {/* {!removed && (
         <Flex justifyContent="space-between" alignItems="center">
           <Text>{t('APR')}:</Text>
@@ -130,30 +133,40 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
       )} */}
 
 
-      
-      <Flex justifyContent="space-between" style={{textAlign: 'left'}}>
-        <Text>{t('Total Deposit')}</Text>
-        <Text color="textSubtle">{totalValueFormatted}</Text>
+      <Flex justifyContent='space-between' style={{ textAlign: 'left' }}>
+        <Text>{t('Total Deposits')}</Text>
+        <Text color='textSubtle'>{farm.totalDeposits ? formatTotalDeposits : <Skeleton width={60} display='inline-block' />}</Text>
       </Flex>
-      <Flex justifyContent="space-between">
-        <Text>{t('Pool Rate')}</Text>
-        <Text color="textSubtle">{earnLabel}</Text>
+      <Flex>
+        <HarvestAction stakingContract={getAddress(farm.stakingAddresses)}
+                       tokenRewardSymbol={earnLabel} userDataReady={userDataReady} userData={farm.userData}
+                       pid={farm.pid} />
       </Flex>
-      <Flex justifyContent="space-between">
+      <Flex justifyContent='space-between'>
         <Text>{t('APR')}</Text>
-        <Text color="textSubtle">0%</Text>
+        <Text color='textSubtle'>--</Text>
       </Flex>
-      <Flex justifyContent="space-between">
-        <Text>{t('Your Rate')}</Text>
-        <Text color="textSubtle">{farm.userData.earnings}</Text>
+      <Flex justifyContent='space-between'>
+        <Text>{t('Rate')}</Text>
+        <Text color='textSubtle'>
+          {formatTotalRewardRate ?? <Skeleton width={60} display='inline-block' />} {earnLabel} / week</Text>
       </Flex>
-      <Flex justifyContent="space-between">
+      <Flex justifyContent='space-between'>
         <Text>{t('Duration')}</Text>
-        <Text color="textSubtle">{earnLabel}</Text>
+        <Text color='textSubtle'>{farm.remainingDays ??  <Skeleton width={60} display='inline-block' />} Days</Text>
       </Flex>
-      <CardActionsContainer farm={farm} account={account} addLiquidityUrl={addLiquidityUrl} addTokenUrl={AddTokenUrl} />
-      {/* <Divider /> */}
-      {/* <ExpandableSectionButton
+      <CardActionsContainer userDataReady={userDataReady} farm={farm} account={account}
+                            addLiquidityUrl={addLiquidityUrl} addTokenUrl={AddTokenUrl} />
+
+      <DetailsSection
+        removed={removed}
+        stakingAddress={getBscScanAddressUrl(stakingAddress)}
+        lpInfoAddress={`${farm.infoURL?? BASE_INFO_URL}/${lpAddress}`}
+        lpLabel={lpLabel}
+      />
+
+      {/* <Divider />
+       <ExpandableSectionButton
         onClick={() => setShowExpandableSection(!showExpandableSection)}
         expanded={showExpandableSection}
       />
@@ -162,15 +175,15 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
           removed={removed}
           bscScanAddress={getBscScanAddressUrl(farm.lpAddresses[process.env.REACT_APP_CHAIN_ID])}
           infoAddress={`https://pancakeswap.info/pool/${lpAddress}`}
-          totalValueFormatted={totalValueFormatted}
+          totalValueFormatted={farm.totalDeposits}
           lpLabel={lpLabel}
           addLiquidityUrl={addLiquidityUrl}
         />
-      </ExpandingWrapper> */}
-       <Flex justifyContent="center">
+      </ExpandingWrapper>
+      <Flex justifyContent='center'>
          {Object.prototype.hasOwnProperty.call(farm.lpAddresses, '56') && (<Text color="textSubtle" fontSize="14px">{t('This will only work on Binance Smart Chain')}</Text>)}
          {Object.prototype.hasOwnProperty.call(farm.lpAddresses, '1') && (<Text color="textSubtle" fontSize="14px">{t('This will only work on Ethereum Blockchain')}</Text>)}
-      </Flex>
+      </Flex> */}
     </FCard>
   )
 }

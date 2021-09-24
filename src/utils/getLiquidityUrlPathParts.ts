@@ -2,14 +2,14 @@
 // Each part of the url represents a different side of the LP pair.
 import { getWbnbAddress } from './addressHelpers'
 
-const getLiquidityUrlPathParts = ({ quoteTokenAddress, tokenAddress }) => {
+const getLiquidityUrlPathParts = ({ mainTokenAddress, pairTokenAddress }) => {
   const chainId = process.env.REACT_APP_CHAIN_ID
   const wBNBAddressString = getWbnbAddress()
-  const quoteTokenAddressString: string = quoteTokenAddress ? quoteTokenAddress[chainId] : null
-  const tokenAddressString: string = tokenAddress ? tokenAddress[chainId] : null
+  const mainTokenAddressString: string = mainTokenAddress ? mainTokenAddress[chainId] : null
+  const pairTokenAddressString: string = pairTokenAddress ? pairTokenAddress[chainId] : null
   const firstPart =
-    !quoteTokenAddressString || quoteTokenAddressString === wBNBAddressString ? 'BNB' : quoteTokenAddressString
-  const secondPart = !tokenAddressString || tokenAddressString === wBNBAddressString ? 'BNB' : tokenAddressString
+    !mainTokenAddressString || mainTokenAddressString === wBNBAddressString ? 'ETH' : mainTokenAddressString
+  const secondPart = !pairTokenAddressString || pairTokenAddressString === wBNBAddressString ? 'ETH' : pairTokenAddressString
   return `${firstPart}/${secondPart}`
 }
 

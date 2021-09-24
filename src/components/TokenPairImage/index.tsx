@@ -1,10 +1,7 @@
 import React from 'react'
-import {
-  TokenPairImage as UIKitTokenPairImage,
-  TokenPairImageProps as UIKitTokenPairImageProps,
-} from '@pancakeswap/uikit'
-import { Flex } from '@sparkpointio/sparkswap-uikit';
-import styled from 'styled-components';
+import { TokenPairImageProps as UIKitTokenPairImageProps } from '@pancakeswap/uikit'
+import { Flex } from '@sparkpointio/sparkswap-uikit'
+import styled from 'styled-components'
 import tokens from 'config/constants/tokens'
 import { Token } from 'config/constants/types'
 import { getAddress } from 'utils/addressHelpers'
@@ -23,14 +20,14 @@ const PairLogoImg = styled(Flex)`
 
 const getImageUrlFromToken = (token: Token) => {
   const address = getAddress(token.symbol === 'BNB' ? tokens.wbnb.address : token.address)
-  return `/images/tokens/${address}.svg`
+  return `/images/tokens/${address}.${token.iconExtension?? 'svg'}`
 }
 
-const TokenPairImage: React.FC<TokenPairImageProps> = ({ primaryToken, secondaryToken, ...props }) => {
+const TokenPairImage: React.FC<TokenPairImageProps> = ({ primaryToken, secondaryToken }) => {
   return (
     <PairLogoImg>
-      <StyledLogo src={getImageUrlFromToken(secondaryToken)} alt="logo-img" />
-      <StyledLogo src={getImageUrlFromToken(primaryToken)} alt="logo-img" />
+      <StyledLogo src={getImageUrlFromToken(primaryToken)} alt='logo-img' />
+      <StyledLogo src={getImageUrlFromToken(secondaryToken)} alt='logo-img' />
     </PairLogoImg>
   )
 }

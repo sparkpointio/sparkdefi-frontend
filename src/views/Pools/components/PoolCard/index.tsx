@@ -81,7 +81,7 @@ const PoolCard: React.FC<{ pool: Pool; account: string }> = ({ pool, account }) 
               </>
             )}
           </Flex>
-          <Text color="textSubtle" fontSize="14px">{t('This will only work on Binance Smart Chain')}</Text>
+          {/* <Text color="textSubtle" fontSize="14px">{t('This will only work on Binance Smart Chain')}</Text> */}
         {/* <CardFooter pool={pool} account={account} /> */ }
     </StyledCard>
   )

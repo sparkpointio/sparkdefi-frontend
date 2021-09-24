@@ -1,8 +1,9 @@
 import BigNumber from 'bignumber.js'
 import { DEFAULT_GAS_LIMIT, DEFAULT_TOKEN_DECIMAL } from 'config'
 import { ethers } from 'ethers'
-import { Pair, TokenAmount, Token } from '@pancakeswap-libs/sdk'
-import { getLpContract, getMasterchefContract } from 'utils/contractHelpers'
+import { Pair, Token, TokenAmount } from '@pancakeswap-libs/sdk'
+import { Contract } from 'web3-eth-contract'
+import { getLpContract, getLpStakingContract, getMasterchefContract } from 'utils/contractHelpers'
 import farms from 'config/constants/farms'
 import { getAddress, getCakeAddress } from 'utils/addressHelpers'
 import tokens from 'config/constants/tokens'
@@ -22,7 +23,15 @@ export const approveWithAmount = async (lpContract, masterChefContract, account,
     .send({ from: account })
 }
 
-export const stake = async (masterChefContract, pid, amount, account) => {
+export const stake = async (masterChefContract, pid, amount, account, useV2 = false) => {
+  if (useV2) {
+    return masterChefContract.methods
+      .stake(new BigNumber(amount).times(DEFAULT_TOKEN_DECIMAL).toString())
+      .send({ from: account, gas: DEFAULT_GAS_LIMIT })
+      .on('transactionHash', (tx) => {
+        return tx.transactionHash
+      })
+  }
   if (pid === 0) {
     return masterChefContract.methods
       .enterStaking(new BigNumber(amount).times(DEFAULT_TOKEN_DECIMAL).toString())
@@ -80,6 +89,15 @@ export const unstake = async (masterChefContract, pid, amount, account) => {
     })
 }
 
+export const exit = async (contract: Contract, account) => {
+  return contract.methods
+    .exit()
+    .send({ from: account, gas: DEFAULT_GAS_LIMIT })
+    .on('transactionHash', (tx) => {
+      return tx.transactionHash
+    })
+}
+
 export const sousUnstake = async (sousChefContract, amount, decimals, account) => {
   return sousChefContract.methods
     .withdraw(new BigNumber(amount).times(BIG_TEN.pow(decimals)).toString())
@@ -93,6 +111,15 @@ export const sousEmergencyUnstake = async (sousChefContract, account) => {
   return sousChefContract.methods
     .emergencyWithdraw()
     .send({ from: account })
+    .on('transactionHash', (tx) => {
+      return tx.transactionHash
+    })
+}
+
+export const claim = async (contract, account) => {
+  return contract.methods
+    .getReward()
+    .send({ from: account, gas: DEFAULT_GAS_LIMIT })
     .on('transactionHash', (tx) => {
       return tx.transactionHash
     })
@@ -168,6 +195,23 @@ export const getUserStakeInCakeBnbLp = async (account: string, block?: number) =
   } catch (error) {
     console.error(`CAKE-BNB LP error: ${error}`)
     return BIG_ZERO
+  }
+}
+
+export const getLPStakingDetails = async (stakingAddresses, account: string) => {
+  try {
+    const contract = getLpStakingContract(getAddress(stakingAddresses))
+
+    return {
+      stakedTokens: await contract.methods.balanceOf(account).call(),
+      totalDeposits: await contract.methods.totalSupply().call(),
+      rewardRate: await contract.methods.rewardRate().call(),
+    }
+  } catch (error) {
+    console.error(`LP Staking error: ${error}`)
+    return {
+      totalDeposits: '-',
+    }
   }
 }
 

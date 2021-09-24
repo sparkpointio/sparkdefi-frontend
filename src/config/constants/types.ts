@@ -11,6 +11,7 @@ export interface Token {
   decimals?: number
   projectLink?: string
   busdPrice?: string
+  iconExtension?: string | 'svg'
 }
 
 export enum PoolIds {
@@ -54,10 +55,15 @@ export interface FarmConfig {
   pid: number
   lpSymbol: string
   lpAddresses: Address
+  stakingAddresses: Address
   token: Token
+  pairToken: Token
   quoteToken: Token
   multiplier?: string
   isCommunity?: boolean
+  liquidityUrl?: string
+  infoURL?: string
+  isPromoted?: number
   dual?: {
     rewardPerBlock: number
     earnLabel: string

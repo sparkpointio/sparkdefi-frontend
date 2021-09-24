@@ -1,191 +1,177 @@
 import BigNumber from 'bignumber.js'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useState } from 'react'
+import { Contract } from 'web3-eth-contract'
 import { useWeb3React } from '@web3-react/core'
-import { Button, Modal, LinkExternal, Text, useModal, Dropdown } from '@sparkpointio/sparkswap-uikit'
-import { ChevronDown, ChevronUp } from 'react-feather'
+import { Button, Modal, Skeleton, Text, useModal } from '@sparkpointio/sparkswap-uikit'
 import { useApprove } from 'hooks/useApprove'
-import { useERC20 } from 'hooks/useContract'
+import { useERC20, useLPStakingContract } from 'hooks/useContract'
 import useTokenBalance from 'hooks/useTokenBalance'
 import { useAppDispatch } from 'state'
 import { Farm } from 'state/types'
 import { fetchFarmUserDataAsync } from 'state/farms'
 import { getAddress } from 'utils/addressHelpers'
-import { BIG_ZERO } from 'utils/bigNumber'
-import { getBalanceAmount, getFullDisplayBalance, getBalanceNumber} from 'utils/formatBalance'
+import { getBalanceAmount } from 'utils/formatBalance'
 import { useTranslation } from 'contexts/Localization'
-import ModalActions from 'components/ModalActions'
-import ModalInput from 'components/ModalInput'
 import WithdrawModal from './WithdrawModal'
 import Container, { ActionDiv, DetailsCont, ModalFooter } from './Styled'
 import { ModalHr } from './Divider'
 import StakeModal from './Modals/Stake'
 import ClaimModal from './Modals/ClaimModal'
-
+import { calculateUserRewardRate } from '../../../utils/farmHelpers'
 
 
 interface DepositModalProps {
   max: BigNumber
-  onConfirm: (amount: string) => void
+  onConfirm: (amount: string, contract: Contract) => void
   onDismiss?: () => void
   tokenName?: string
   addLiquidityUrl?: string
   addTokenUrl?: string
-  tokenReward?: string
-  tokenRewardAddress?: string
-  tokenBalance?: string
-  stakedBalance?: string
-  tokenEarnings?: string
   farm?: Farm
   handleUnstake?: (amount: string) => void
   maxStake?: BigNumber
 }
 
-const DepositModal: React.FC<DepositModalProps> = ({
-  max,
-  onConfirm,
-  onDismiss,
-  tokenName = '',
-  addLiquidityUrl,
-  addTokenUrl,
-  tokenReward,
-  tokenBalance,
-  stakedBalance,
-  tokenEarnings,
-  tokenRewardAddress,
-  handleUnstake,
-  farm,
-  maxStake
-}) => {
+const DepositModal: React.FC<DepositModalProps> = (
+  {
+    max,
+    onConfirm,
+    onDismiss,
+    tokenName = '',
+    addLiquidityUrl,
+    addTokenUrl,
+    handleUnstake,
+    farm,
+    maxStake,
+  }) => {
   const [requestedApproval, setRequestedApproval] = useState(false)
-  const [pendingTx, setPendingTx] = useState(false)
   const { t } = useTranslation()
   const [activeSelect, setActiveSelect] = useState(false)
-  const fullBalance = useMemo(() => {
-    return getFullDisplayBalance(max)
-  }, [max])
   const {
-    allowance: allowanceAsString = 0,
-    tokenBalance: tokenBalanceAsString = 0,
-    stakedBalance: stakedBalanceAsString = 0,
-    earnings: earningsAsString = 0,
+    allowance,
+    tokenBalance,
+    stakedBalance,
+    earnings,
   } = farm.userData || {}
-  const allowance = new BigNumber(allowanceAsString)
-  const earnings = new BigNumber(tokenBalanceAsString)
+  const userRate = calculateUserRewardRate(farm)
   const { account } = useWeb3React()
-  const dispatch = useAppDispatch();
-  const RewardTokenBalance = useTokenBalance(tokenRewardAddress)
-  const formatTokenBalance = getBalanceNumber(RewardTokenBalance.balance)
+  const dispatch = useAppDispatch()
   const { pid, lpAddresses } = farm
   const lpAddress = getAddress(lpAddresses)
-  const isApproved = account && allowance && allowance.isGreaterThan(0)
   const lpContract = useERC20(lpAddress)
-  const { onApprove } = useApprove(lpContract)
+  const RewardTokenBalance = useTokenBalance(getAddress(farm.quoteToken.address))
+  const formatTokenBalance = getBalanceAmount(RewardTokenBalance.balance).toFormat(6)
+  const formatLPTokenBalance = getBalanceAmount(new BigNumber(tokenBalance)).toFormat(6)
+  const formatStakedTokenBalance = getBalanceAmount(new BigNumber(stakedBalance)).toFormat(6)
+  const formatTokenEarnings = getBalanceAmount(new BigNumber(earnings)).toFormat(6)
+
+  const [isApproved, setIsApproved] = useState(account && allowance && (new BigNumber(allowance)).isGreaterThanOrEqualTo(tokenBalance))
+  const lpStakingAddress = getAddress(farm.stakingAddresses)
+  const lpStakingContract = useLPStakingContract(lpStakingAddress)
+  const { onApprove } = useApprove(lpContract, lpStakingContract)
   const handleApprove = useCallback(async () => {
     try {
       setRequestedApproval(true)
       await onApprove()
       dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
+      setIsApproved(true)
       setRequestedApproval(false)
     } catch (e) {
       console.error(e)
     }
   }, [onApprove, dispatch, account, pid])
-  const rawEarningsBalance = account ? getBalanceAmount(earnings) : BIG_ZERO
   const [onPresentStake] = useModal(
-    <StakeModal onConfirm={onConfirm} max={max} symbol={tokenName} addLiquidityUrl={addLiquidityUrl} inputTitle={t('Stake')} />,
+    <StakeModal
+      pid={pid}
+      onConfirm={onConfirm} lpStakingContract={lpStakingContract} max={max} symbol={tokenName}
+      addLiquidityUrl={addLiquidityUrl}
+      inputTitle={t('Stake')} />,
   )
 
-  const [onPresentClaim] = useModal (<ClaimModal />)
+  const [onPresentClaim] = useModal(<ClaimModal />)
   const [onPresentWithdraw] = useModal(
-    <WithdrawModal max={maxStake} onConfirm={handleUnstake} tokenName={tokenName} />,
+    <WithdrawModal
+      farm={farm}
+      staked={formatStakedTokenBalance}
+      earnings={formatTokenEarnings}
+      max={maxStake} onConfirm={handleUnstake} tokenName={tokenName} />,
   )
 
   return (
     <Modal title={t('Account Info')} onDismiss={onDismiss}>
-      <Text color="textSubtle" fontSize="14px" style={{ paddingBottom: '30px', marginTop: '-40px' }}>
+      <Text color='textSubtle' fontSize='14px' style={{ paddingBottom: '30px', marginTop: '-40px' }}>
         Staking, balances & earnings
       </Text>
       <Container>
         <DetailsCont>
-          <Text bold fontSize="24px" >
-          {formatTokenBalance === 0? '0.0000': formatTokenBalance}
+          <Text bold fontSize='24px'>
+            {formatTokenBalance ?? <Skeleton width={60} display='inline-block' />}
           </Text>
-          <Text color="textSubtle" fontSize="14px">
-            {tokenReward}
+          <Text color='textSubtle' fontSize='14px'>
+            {farm.quoteToken.symbol}
           </Text>
-          <ActionDiv style={{ paddingTop: '30px' }}>
-            <Button fullWidth as="a" target="_blank" href={addTokenUrl}>
-              Add More
+          <ActionDiv style={{ padding: '0px' }}>
+            <Button fullWidth as='a' target='_blank' href={addTokenUrl}>
+              Get {farm.quoteToken.symbol}
             </Button>
           </ActionDiv>
         </DetailsCont>
         <DetailsCont>
-          <Text bold fontSize="24px">
-          {tokenBalance === '0'? '0.0000' : {tokenBalance}}
+          <Text bold fontSize='24px'>
+            {formatLPTokenBalance ?? <Skeleton width={60} display='inline-block' />}
           </Text>
-          <Text color="textSubtle" fontSize="14px">
+          <Text color='textSubtle' fontSize='14px'>
             {tokenName} Tokens
           </Text>
-          <ActionDiv style={{ paddingTop: '30px' }}>
-            <Button fullWidth as="a" target="_blank" href={addLiquidityUrl}>
-              Add Liquidity
+          <ActionDiv style={{ padding: '0px' }}>
+            <Button fullWidth as='a' target='_blank' href={addLiquidityUrl}>
+              Get {tokenName}
             </Button>
           </ActionDiv>
         </DetailsCont>
         <DetailsCont>
-          <Text bold fontSize="24px">
-          {stakedBalance === '0'? '0.0000' : {stakedBalance}}
+          <Text bold fontSize='24px'>
+            {formatStakedTokenBalance ?? <Skeleton width={60} display='inline-block' />}
           </Text>
-          <Text color="textSubtle" fontSize="14px">
+          <Text color='textSubtle' fontSize='14px'>
             Your {tokenName} Deposits
           </Text>
-          <ActionDiv style={{ paddingTop: '30px' }}>
-             {/* {isApproved? */}
+          <ActionDiv style={{ padding: '0px' }}>
+            {isApproved ?
               <Button fullWidth onClick={onPresentStake}>
-                Stake Tokens
+                Stake {tokenName}
               </Button>
-              {/* <Button fullWidth onClick={handleApprove} disabled={requestedApproval}>
-                Stake Tokens
-              </Button> */}
-             {/* } */}
-            
+              :
+              <Button fullWidth onClick={handleApprove} disabled={requestedApproval}>
+                Enable Farm
+              </Button>
+            }
+
           </ActionDiv>
         </DetailsCont>
       </Container>
       <ModalHr />
       <ModalFooter>
         <DetailsCont>
-          <Text bold fontSize="24px">
-            0.0000
+          <Text bold fontSize='24px'>
+            {userRate}
           </Text>
-          <Text color="textSubtle" fontSize="14px">{`Your Rate ${tokenReward}/week`}</Text>
+          <Text color='textSubtle' fontSize='14px'>{`Your Rate ${farm.quoteToken.symbol}/week`}</Text>
         </DetailsCont>
         <DetailsCont>
-          <Text bold fontSize="24px">
-            {tokenEarnings === '0'? '0.0000': tokenEarnings}
+          <Text bold fontSize='24px'>
+            {formatTokenEarnings ?? <Skeleton width={60} display='inline-block' />}
           </Text>
-          <Text color="textSubtle" fontSize="14px">{`${tokenReward} Token Earnings`}</Text>
+          <Text color='textSubtle' fontSize='14px'>{`${farm.quoteToken.symbol} Token Earnings`}</Text>
         </DetailsCont>
         <DetailsCont
           style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
           onMouseEnter={() => setActiveSelect(true)}
           onMouseLeave={() => setActiveSelect(false)}
         >
-          <Dropdown
-            position="top"
-            target={
-              <Button variant="secondary" onClick={onDismiss}>
-                <Text>Withdraw</Text> {activeSelect ? <ChevronDown /> : <ChevronUp />}
-              </Button>
-            }
-          >
-            <Button fullWidth onClick={onPresentClaim}>
-              <Text>Claim</Text>
-            </Button>
-            <Button fullWidth onClick={onDismiss}>
-              <Text>Claim & Withdraw</Text>
-            </Button>
-          </Dropdown>
+          <Button fullWidth onClick={onPresentWithdraw}>
+            <Text>Claim & Withdraw</Text>
+          </Button>
         </DetailsCont>
       </ModalFooter>
     </Modal>

@@ -1599,20 +1599,41 @@ const tokens = {
   srkb: {
     symbol: 'SRKb',
     address: {
-      56: '0xc3440c10c4f36f354eb591b19fafb4906d449b75',
-      97: '0xc3440c10c4f36f354eb591b19fafb4906d449b75',
+      56: '0xC3440c10c4F36f354eB591B19FafB4906d449B75',
+      97: '0xC3440c10c4F36f354eB591B19FafB4906d449B75',
     },
     decimals: 18,
+    iconExtension: 'png',
     projectLink: 'https://sparkpoint.io/',
   },
   ttkb: {
     symbol: 'TTKb',
     address: {
       56: '0x9ee47c9630a41525c139ef9ca42ba3b238ecfecf',
-      97: '0xac9b89c1049b358277ca1d76f6c18f10f3d8128e',
+      97: '0x9ee47c9630a41525c139ef9ca42ba3b238ecfecf',
     },
     decimals: 18,
     projectLink: 'https://sparkpoint.io/',
+  },
+  own: {
+    symbol: 'OWN',
+    address: {
+      56: '0x7665CB7b0d01Df1c9f9B9cC66019F00aBD6959bA',
+      97: '0x7665CB7b0d01Df1c9f9B9cC66019F00aBD6959bA',
+    },
+    decimals: 18,
+    iconExtension: 'png',
+    projectLink: 'https://ownly.io/',
+  },
+  kclp: {
+    symbol: 'KCLP',
+    address: {
+      56: '0x47b8806C2891c4a92b5c590C32CFE1Eb617648EF',
+      97: '0x47b8806C2891c4a92b5c590C32CFE1Eb617648EF',
+    },
+    decimals: 18,
+    iconExtension: 'png',
+    projectLink: 'https://kucoinlaunchpad.com/',
   },
   kroot: {
     symbol: 'KROOT',
@@ -1633,3 +1654,4 @@ const tokens = {
 }
 
 export default tokens
+

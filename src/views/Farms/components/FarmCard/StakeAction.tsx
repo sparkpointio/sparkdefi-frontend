@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react'
 import { useWeb3React } from '@web3-react/core'
+import { Contract } from 'web3-eth-contract'
 import styled from 'styled-components'
 import BigNumber from 'bignumber.js'
 import { Button, Flex, Heading, IconButton, AddIcon, MinusIcon, useModal } from '@sparkpointio/sparkswap-uikit'
@@ -10,13 +11,18 @@ import { useAppDispatch } from 'state'
 import { fetchFarmUserDataAsync } from 'state/farms'
 import { useLpTokenPrice } from 'state/hooks'
 import useStake from 'hooks/useStake'
-import useUnstake from 'hooks/useUnstake'
+import useUnstake, { useExit } from 'hooks/useUnstake'
 import { Farm } from 'state/types'
 import { getBalanceAmount, getBalanceNumber, getFullDisplayBalance } from 'utils/formatBalance'
+import Loading from 'components/Loading'
 import DepositModal from '../DepositModal'
 import WithdrawModal from '../WithdrawModal'
+import { getAddress } from '../../../../utils/addressHelpers'
+import { calculateUserRewardRate } from '../../../../utils/farmHelpers'
 
 interface FarmCardActionsProps {
+  userDataReady?: boolean
+  userRate?:string,
   stakedBalance?: BigNumber
   tokenBalance?: BigNumber
   tokenName?: string
@@ -41,17 +47,18 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
   addLiquidityUrl,
   addTokenUrl,
   farm,
+  userDataReady
 }) => {
   const { t } = useTranslation()
   const { onStake } = useStake(pid)
-  const { onUnstake } = useUnstake(pid)
+  const { onUnstake } = useExit(getAddress(farm.stakingAddresses))
   const location = useLocation()
   const dispatch = useAppDispatch()
   const { account } = useWeb3React()
   const lpPrice = useLpTokenPrice(tokenName)
 
-  const handleStake = async (amount: string) => {
-    await onStake(amount)
+  const handleStake = async (amount: string, contract?: Contract) => {
+    await onStake(amount, contract)
     dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
   }
 
@@ -71,15 +78,10 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
   const [onPresentDeposit] = useModal(
     <DepositModal
       max={tokenBalance}
-      onConfirm={onStake}
+      onConfirm={handleStake}
       tokenName={tokenName}
       addLiquidityUrl={addLiquidityUrl}
       addTokenUrl={addTokenUrl}
-      tokenReward={farm.quoteToken.symbol}
-      tokenRewardAddress={farm.quoteToken.address[97]}
-      tokenBalance={farm.userData.tokenBalance}
-      stakedBalance={farm.userData.stakedBalance}
-      tokenEarnings={farm.userData.earnings}
       farm={farm}
       handleUnstake={handleUnstake}
       maxStake={stakedBalance}
@@ -96,7 +98,7 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
         disabled={['history', 'archived'].some((item) => location.pathname.includes(item))}
         fullWidth
       >
-        {t('Deposit')}
+        {userDataReady? t('Deposit') : <Loading /> }
       </Button>
     )
   }

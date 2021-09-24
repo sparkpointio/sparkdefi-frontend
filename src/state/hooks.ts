@@ -13,15 +13,15 @@ import { BIG_ZERO } from 'utils/bigNumber'
 import useRefresh from 'hooks/useRefresh'
 import { filterFarmsByQuoteToken } from 'utils/farmsPriceHelpers'
 import {
+  fetchCakeVaultFees,
+  fetchCakeVaultPublicData,
+  fetchCakeVaultUserData,
   fetchFarmsPublicDataAsync,
   fetchPoolsPublicDataAsync,
   fetchPoolsUserDataAsync,
-  fetchCakeVaultPublicData,
-  fetchCakeVaultUserData,
-  fetchCakeVaultFees,
   setBlock,
 } from './actions'
-import { State, Farm, Pool, ProfileState, TeamsState, AchievementState, FarmsState } from './types'
+import { AchievementState, Farm, FarmsState, Pool, ProfileState, State, TeamsState } from './types'
 import { fetchProfile } from './profile'
 import { fetchTeam, fetchTeams } from './teams'
 import { fetchAchievements } from './achievements'

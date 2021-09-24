@@ -7,24 +7,20 @@ import { useAppDispatch } from 'state'
 import { updateUserAllowance } from 'state/actions'
 import { approve, approveWithAmount } from 'utils/callHelpers'
 import { useTranslation } from 'contexts/Localization'
-import { getDecimalAmount } from 'utils/formatBalance'
-import { useMasterchef, useCake, useSousChef, useLottery, useCakeVaultContract } from './useContract'
+import { useCake, useCakeVaultContract, useLottery, useSousChef } from './useContract'
 import useToast from './useToast'
 import useLastUpdated from './useLastUpdated'
 
 // Approve a Farm
-export const useApprove = (lpContract: Contract) => {
+export const useApprove = (lpContract: Contract, contractAddress: Contract) => {
   const { account } = useWeb3React()
-  const masterChefContract = useMasterchef()
-
   const handleApprove = useCallback(async () => {
     try {
-      const tx = await approve(lpContract, masterChefContract, account)
-      return tx
+      return await approve(lpContract, contractAddress, account)
     } catch (e) {
       return false
     }
-  }, [account, lpContract, masterChefContract])
+  }, [account, lpContract, contractAddress])
 
   return { onApprove: handleApprove }
 }
@@ -32,7 +28,6 @@ export const useApprove = (lpContract: Contract) => {
 // Approve a Pool
 export const useSousApprove = (lpContract: Contract, sousId, earningTokenSymbol) => {
   const [requestedApproval, setRequestedApproval] = useState(false)
-  const [totalApproved, setTotalApproved] = useState(0)
   const { toastSuccess, toastError } = useToast()
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
@@ -161,8 +156,7 @@ export const useLotteryApprove = () => {
 
   const handleApprove = useCallback(async () => {
     try {
-      const tx = await approve(cakeContract, lotteryContract, account)
-      return tx
+      return await approve(cakeContract, lotteryContract, account)
     } catch (e) {
       return false
     }

@@ -53,7 +53,6 @@ const DropDownContainer = styled.div<{ isOpen: boolean; width: number; height: n
     css`
       ${DropDownHeader} {
         border-bottom: 1px solid ${({ theme }) => theme.colors.inputSecondary};
-        box-shadow: ${({ theme }) => theme.tooltip.boxShadow};
         border-radius: 16px 16px 0 0;
       }
 
@@ -64,7 +63,6 @@ const DropDownContainer = styled.div<{ isOpen: boolean; width: number; height: n
         border: 1px solid ${({ theme }) => theme.colors.inputSecondary};
         border-top-width: 0;
         border-radius: 0 0 16px 16px;
-        box-shadow: ${({ theme }) => theme.tooltip.boxShadow};
       }
     `}
 

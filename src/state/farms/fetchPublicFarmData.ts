@@ -1,12 +1,19 @@
 import BigNumber from 'bignumber.js'
 import masterchefABI from 'config/abi/masterchef.json'
+import { now } from 'lodash'
 import erc20 from 'config/abi/erc20.json'
 import { getAddress, getMasterChefAddress } from 'utils/addressHelpers'
 import { BIG_TEN, BIG_ZERO } from 'utils/bigNumber'
 import multicall from 'utils/multicall'
+import lpStaking from 'config/abi/lpStaking.json'
 import { Farm, SerializedBigNumber } from '../types'
 
 type PublicFarmData = {
+  totalDeposits: SerializedBigNumber
+  rewardRate: SerializedBigNumber
+  totalRewardRate: SerializedBigNumber
+  hasEnded: boolean
+  remainingDays: string
   tokenAmountMc: SerializedBigNumber
   quoteTokenAmountMc: SerializedBigNumber
   tokenAmountTotal: SerializedBigNumber
@@ -19,7 +26,7 @@ type PublicFarmData = {
 }
 
 const fetchFarm = async (farm: Farm): Promise<PublicFarmData> => {
-  const { pid, lpAddresses, token, quoteToken } = farm
+  const { pid, lpAddresses, token, quoteToken, stakingAddresses } = farm
   const lpAddress = getAddress(lpAddresses)
   const calls = [
     // Balance of token in the LP contract
@@ -59,6 +66,36 @@ const fetchFarm = async (farm: Farm): Promise<PublicFarmData> => {
 
   const [tokenBalanceLP, quoteTokenBalanceLP, lpTokenBalanceMC, lpTotalSupply, tokenDecimals, quoteTokenDecimals] =
     await multicall(erc20, calls)
+  const lpStakingCalls = [
+    // Total deposits in staking address
+    {
+      address: getAddress(stakingAddresses),
+      name: 'totalSupply',
+    },
+    // Total deposits in staking address
+    {
+      address: getAddress(stakingAddresses),
+      name: 'periodFinish',
+    },
+    {
+      address: getAddress(stakingAddresses),
+      name: 'rewardRate',
+    },
+  ]
+  const [totalSupply, periodFinish, rewardRate] =
+    await multicall(lpStaking, lpStakingCalls)
+
+  // Total Deposits in staking address
+  const totalDeposits = new BigNumber(totalSupply)
+
+  // total reward rate
+  const totalRewardRate = new BigNumber(rewardRate).times(60 * 60 * 24 * 7)
+
+  // console.log(totalRewardRate)
+
+  const endDate = (new Date(0)).setUTCSeconds(periodFinish)
+  const hasEnded = endDate < now()
+  const remainingDays = (Math.max(0, Math.ceil(((((endDate - now()) / 1000) / 60) / 60) / 24))).toString()
 
   // Ratio in % of LP tokens that are staked in the MC, vs the total number in circulation
   const lpTokenRatio = new BigNumber(lpTokenBalanceMC).div(new BigNumber(lpTotalSupply))
@@ -78,22 +115,27 @@ const fetchFarm = async (farm: Farm): Promise<PublicFarmData> => {
   const [info, totalAllocPoint] =
     pid || pid === 0
       ? await multicall(masterchefABI, [
-          {
-            address: getMasterChefAddress(),
-            name: 'poolInfo',
-            params: [pid],
-          },
-          {
-            address: getMasterChefAddress(),
-            name: 'totalAllocPoint',
-          },
-        ])
+        {
+          address: getMasterChefAddress(),
+          name: 'poolInfo',
+          params: [pid],
+        },
+        {
+          address: getMasterChefAddress(),
+          name: 'totalAllocPoint',
+        },
+      ])
       : [null, null]
 
   const allocPoint = info ? new BigNumber(info.allocPoint?._hex) : BIG_ZERO
   const poolWeight = totalAllocPoint ? allocPoint.div(new BigNumber(totalAllocPoint)) : BIG_ZERO
 
   return {
+    totalDeposits: totalDeposits.toJSON(),
+    'rewardRate': new BigNumber(rewardRate).toJSON(),
+    'totalRewardRate': totalRewardRate.toJSON(),
+    'hasEnded': hasEnded,
+    'remainingDays': remainingDays,
     tokenAmountMc: tokenAmountMc.toJSON(),
     quoteTokenAmountMc: quoteTokenAmountMc.toJSON(),
     tokenAmountTotal: tokenAmountTotal.toJSON(),
