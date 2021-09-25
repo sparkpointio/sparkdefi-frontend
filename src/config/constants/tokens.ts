@@ -1658,6 +1658,7 @@ const tokens = {
       97: '0x5d3AfBA1924aD748776E4Ca62213BF7acf39d773',
     },
     decimals: 18,
+    iconExtension: 'png',
   },
 }
 

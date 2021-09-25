@@ -26,7 +26,7 @@ const StyledCardHeader: React.FC<{
   // const background = isStaking ? 'bubblegum' : 'cardHeader'
   const background = 'cardHeader'
 
-/* 
+/*
   const getHeadingPrefix = () => {
     if (isAutoVault) {
       // vault
@@ -66,7 +66,7 @@ const StyledCardHeader: React.FC<{
         {isAutoVault ? (
           <CakeVaultTokenPairImage width={64} height={64} />
         ) : (
-          <TokenPairImage primaryToken={earningToken} secondaryToken={stakingToken} width={64} height={64} />
+          <TokenPairImage primaryToken={stakingToken} secondaryToken={earningToken} width={64} height={64} />
         )}
       </Flex>
     </Wrapper>
