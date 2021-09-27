@@ -334,7 +334,7 @@ const Farms: React.FC = () => {
     }
 
     return (
-      <div>A
+      <div>
         <FlexLayout>
           <Route exact path={`${path}`}>
             {farmsStakedMemoized.map((farm) => (
