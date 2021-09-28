@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { SPARKSWAP_API } from 'config'
+import { SPARKSWAP_API, API_ASSETS, API_SUMMARY, API_LIQUIDITY, API_LASTPRICE } from 'config'
 import useWeb3 from 'hooks/useWeb3'
 import BigNumber from 'bignumber.js/bignumber'
 import { getBalanceNumber } from 'utils/formatBalance'
@@ -22,7 +22,7 @@ export const usePoolPrice = (stakingTokenAddress: string, rewardTokenAddress: st
     useEffect(() => {
         const fetchData = async () => {
         try {
-            let assets = await fetch(SPARKSWAP_API.concat('assets'))
+            let assets = await fetch(SPARKSWAP_API.concat(API_ASSETS))
             assets = await assets.json();
             const lastPrice = "last_price"
             
@@ -39,7 +39,7 @@ export const usePoolPrice = (stakingTokenAddress: string, rewardTokenAddress: st
     return {stakingPrice, rewardPrice}
 }
 
-export const useFarmPrice = (lpTotalSupply: BigNumber, token1Address: string, token2Address: string, rewardTokenAddress: string) => {
+export const useFarmPrice = (lpTotalSupply: number, token1Address: string, token2Address: string, rewardTokenAddress: string) => {
     const [LPPrice, setLPPrice] = useState(0)
     const [rewardPrice, setRewardPrice] = useState(0)
 
@@ -60,25 +60,22 @@ export const useFarmPrice = (lpTotalSupply: BigNumber, token1Address: string, to
         const fetchData = async () => {
         try {
 
-            let assets = await fetch(SPARKSWAP_API.concat('assets'))
+            let assets = await fetch(SPARKSWAP_API.concat(API_ASSETS))
             assets = await assets.json()
-            let summary = await fetch(SPARKSWAP_API.concat('summary'))
+            let summary = await fetch(SPARKSWAP_API.concat(API_SUMMARY))
             summary = await summary.json()
-            const lastPrice = "last_price"
-            const liquidity = "liquidity"
-            
 
             let pairLiquidity
 
             if(Object.prototype.hasOwnProperty.call(summary, _token1Address.concat("_",_token2Address))){
-                pairLiquidity = summary[_token1Address.concat("_",_token2Address)][liquidity];
+                pairLiquidity = summary[_token1Address.concat("_",_token2Address)][API_LIQUIDITY];
             }
             else{
-                pairLiquidity = summary[_token2Address.concat("_",_token1Address)][liquidity];
+                pairLiquidity = summary[_token2Address.concat("_",_token1Address)][API_LIQUIDITY];
             }
 
-            setLPPrice( new BigNumber(pairLiquidity).div( getBalanceNumber(lpTotalSupply, 18) ).toNumber()  )
-            setRewardPrice(assets[_rewardTokenAddress][lastPrice])
+            setLPPrice( pairLiquidity / getBalanceNumber(new BigNumber(lpTotalSupply), 18)  )
+            setRewardPrice(assets[_rewardTokenAddress][API_LASTPRICE])
         } catch (error) {
           console.error('Unable to fetch data:', error)
         }
@@ -86,8 +83,6 @@ export const useFarmPrice = (lpTotalSupply: BigNumber, token1Address: string, to
   
       fetchData()
     }, [setLPPrice, setRewardPrice, lpTotalSupply, _token1Address, _token2Address, _rewardTokenAddress])
-
-    console.log(LPPrice)
 
     return {LPPrice, rewardPrice}
 }
