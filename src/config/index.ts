@@ -37,6 +37,7 @@ export const DEFAULT_GAS_PRICE = 5
 export const TESTNET_CHAIN_ID = '97'
 export const MAINNET_CHAIN_ID = '56'
 export const EPOCH_PER_YEAR=31556926
+export const SPARKSWAP_API = 'https://api.sparkswap.info/api/'
 
 
 export const BASE_BSC_SCAN_URLS = {
