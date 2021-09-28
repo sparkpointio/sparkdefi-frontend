@@ -108,7 +108,8 @@ const FarmCard: React.FC<FarmCardProps> = ({ userDataReady, farm, removed, cakeP
 
   const {LPPrice, rewardPrice} = useFarmPrice(new BigNumber(farm.lpTotalSupply), farm.token.address[56], farm.pairToken.address[56], farm.quoteToken.address[56])
 
-  const apr = getFarmV2Apr(LPPrice, rewardPrice, Number(farm.totalDeposits), Number(farm.rewardRate))
+  const aprBlackList = ["0x9f6b80e3867ab402081574e9e0a3be6fdf4ae95b"]
+  const apr = (aprBlackList.includes(farm.lpAddresses[56]) ? null : getFarmV2Apr(LPPrice, rewardPrice, Number(farm.totalDeposits), Number(farm.rewardRate)) )
 
   return (
     <FCard isPromotedFarm={isPromotedFarm}>
