@@ -1,16 +1,17 @@
 import BigNumber from 'bignumber.js'
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { CardBody, Flex, Text , Link, LinkExternal} from '@sparkpointio/sparkswap-uikit'
 import { ThemeContext } from 'styled-components'
 import UnlockButton from 'components/UnlockButton'
 import { useTranslation } from 'contexts/Localization'
 import { BIG_ZERO } from 'utils/bigNumber'
+import { usePoolPrice } from 'hooks/price'
+import { getPoolApr } from 'utils/apr'
 import { Pool } from 'state/types'
 import { getBalanceNumber , formatNumber } from 'utils/formatBalance'
 import { getPoolBlockInfo } from 'views/Pools/helpers'
 import { useBlock } from 'state/block/hooks'
 import { getBscScanLink } from 'utils'
-import AprRow from './AprRow'
 import { StyledCard, StyledCardInner } from './StyledCard'
 import CardFooter from './CardFooter'
 import StyledCardHeader from './StyledCardHeader'
@@ -35,6 +36,10 @@ const PoolCard: React.FC<{ pool: Pool; account: string }> = ({ pool, account }) 
 
   const { shouldShowBlockCountdown, blocksUntilStart, blocksRemaining, hasPoolStarted, blocksToDisplay } =
   getPoolBlockInfo(pool, currentBlock)
+
+  const {stakingPrice, rewardPrice} = usePoolPrice(stakingToken.address[56], earningToken.address[56])
+
+  const apr = getPoolApr(stakingPrice, rewardPrice, totalStaked, rewardPerBlock)
 
   return (
     <StyledCard
@@ -64,10 +69,10 @@ const PoolCard: React.FC<{ pool: Pool; account: string }> = ({ pool, account }) 
               <Text>Reward per block</Text>
               <Text>{!isComingSoon && rewardPerBlock} {isComingSoon && '-'}</Text>
           </Flex>
-          {/* <Flex justifyContent="space-between" style={{textAlign: 'left'}}>
+          <Flex justifyContent="space-between" style={{textAlign: 'left'}}>
             <Text>APY</Text>
-            <Text>0%</Text>
-          </Flex> */}
+            <Text>{(apr === 0 || apr === null ? "-- " : apr.toFixed(2))}%</Text>
+          </Flex>
           <Flex justifyContent="space-between" style={{textAlign: 'left'}}>
         <Text>{t('Your Rate')}</Text>
         <Text>{!isComingSoon && formatNumber(rewardRate,2,10)} {isComingSoon && '-'} {pool.earningToken.symbol}/block</Text>

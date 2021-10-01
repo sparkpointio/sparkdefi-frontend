@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { BLOCKS_PER_YEAR, CAKE_PER_YEAR } from 'config'
+import { BLOCKS_PER_YEAR, EPOCH_PER_YEAR, CAKE_PER_YEAR } from 'config'
 
 /**
  * Get the APR value in %
@@ -15,8 +15,30 @@ export const getPoolApr = (
   totalStaked: number,
   tokenPerBlock: number,
 ): number => {
+  
   const totalRewardPricePerYear = new BigNumber(rewardTokenPrice).times(tokenPerBlock).times(BLOCKS_PER_YEAR)
   const totalStakingTokenInPool = new BigNumber(stakingTokenPrice).times(totalStaked)
+  const apr = totalRewardPricePerYear.div(totalStakingTokenInPool).times(100)
+  return apr.isNaN() || !apr.isFinite() ? null : apr.toNumber()
+}
+
+/**
+ * Get the FARM APR value in %
+ * @param LPTokenPrice LP Token price in the same quote currency
+ * @param rewardTokenPrice Token price in the same quote currency
+ * @param totalStaked Total amount of LP Token in the pool
+ * @param rewardForDuration Amount of rewards allocated to the farms
+ * @param duration Duration of the farm in EPOCH
+ * @returns Null if the APR is NaN or infinite.
+ */
+export const getFarmV2Apr = (
+  LPTokenPrice: number,
+  rewardTokenPrice: number,
+  totalStaked: number,
+  rewardRate: number
+): number => {
+  const totalRewardPricePerYear = new BigNumber(rewardTokenPrice).times(rewardRate).times(EPOCH_PER_YEAR)
+  const totalStakingTokenInPool = new BigNumber(LPTokenPrice).times(totalStaked)
   const apr = totalRewardPricePerYear.div(totalStakingTokenInPool).times(100)
   return apr.isNaN() || !apr.isFinite() ? null : apr.toNumber()
 }

@@ -3,6 +3,8 @@ import BigNumber from 'bignumber.js'
 import styled, { keyframes, ThemeContext } from 'styled-components'
 import { Flex, Skeleton, Text } from '@sparkpointio/sparkswap-uikit'
 import { Farm } from 'state/types'
+import { useFarmPrice } from 'hooks/price'
+import { getFarmV2Apr } from 'utils/apr'
 import { useTranslation } from 'contexts/Localization'
 import { BASE_ADD_LIQUIDITY_URL, BASE_EXCHANGE_URL, BASE_INFO_URL } from 'config'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
@@ -100,6 +102,13 @@ const FarmCard: React.FC<FarmCardProps> = ({ userDataReady, farm, removed, cakeP
   const lpAddress = farm.lpAddresses[process.env.REACT_APP_CHAIN_ID]
   const isPromotedFarm = farm.token.symbol === 'CAKE'
   const theme = useContext(ThemeContext)
+
+
+  const {LPPrice, rewardPrice} = useFarmPrice(Number(farm.lpTotalSupply), farm.token.address[56], farm.pairToken.address[56], farm.quoteToken.address[56])
+
+  const aprBlackList = ["0x9f6b80e3867ab402081574e9e0a3be6fdf4ae95b"]
+  const apr = (aprBlackList.includes(farm.lpAddresses[56]) ? null : getFarmV2Apr(LPPrice, rewardPrice, Number(farm.totalDeposits), Number(farm.rewardRate)) )
+
   return (
     <FCard isPromotedFarm={isPromotedFarm}>
       {isPromotedFarm && <StyledCardAccent />}
@@ -144,7 +153,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ userDataReady, farm, removed, cakeP
       </Flex>
       <Flex justifyContent='space-between'>
         <Text>{t('APR')}</Text>
-        <Text color='textSubtle'>--</Text>
+        <Text color='textSubtle'>{(apr === 0 || apr === null ? "-- " : apr.toFixed(2))}%</Text>
       </Flex>
       <Flex justifyContent='space-between'>
         <Text>{t('Rate')}</Text>
