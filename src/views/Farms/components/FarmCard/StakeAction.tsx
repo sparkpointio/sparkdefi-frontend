@@ -87,18 +87,30 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
       maxStake={stakedBalance}
     />
   )
+  const earnings = getBalanceAmount(new BigNumber(farm.userData.earnings)).toFormat(6)
+  const formatStakedBalance = getBalanceAmount(new BigNumber(farm.userData.stakedBalance)).toFormat(6)
   const [onPresentWithdraw] = useModal(
-    <WithdrawModal max={stakedBalance} onConfirm={handleUnstake} tokenName={tokenName} />,
+    <WithdrawModal
+      farm={farm}
+      staked={formatStakedBalance}
+      earnings={earnings}
+      max={stakedBalance} onConfirm={handleUnstake} tokenName={tokenName} />
   )
 
   const renderStakingButtons = () => {
+    let buttonTxt = 'Deposit'
+    if (farm.hasEnded && farm.userData.stakedBalance) {
+      buttonTxt = 'Withdraw'
+    }
     return (
       <Button
-        onClick={onPresentDeposit}
-        disabled={['history', 'archived'].some((item) => location.pathname.includes(item))}
+        onClick={farm.hasEnded && farm.userData.stakedBalance? onPresentWithdraw: onPresentDeposit}
+        disabled={(farm.hasEnded && !farm.userData.stakedBalance) && ['history', 'archived'].some((item) => location.pathname.includes(item))}
         fullWidth
       >
-        {userDataReady? t('Deposit') : <Loading /> }
+        {userDataReady?
+          buttonTxt
+          : <Loading /> }
       </Button>
     )
   }
