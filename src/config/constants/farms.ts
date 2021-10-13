@@ -106,6 +106,23 @@ const farms: FarmConfig[] = [
     liquidityUrl: PANCAKE_ADD_LIQUIDITY_URL,
     infoURL: CAKE_INFO_URL,
   },
+  // TIPSY - BNB - KCLP
+  {
+    pid: 256,
+    lpSymbol: 'TIPSY-BNB LP',
+    lpAddresses: {
+      97: '',
+      56: '0xdF306B071D0DcA82580ff0B7834b5Fc962fb30F8',
+    },
+    stakingAddresses: {
+      97: '',
+      56: '0xA24a42f5DCbe5AbaEf992818cC05e1Fd00a8A780',
+    },
+    token: tokens.tipsy,
+    pairToken: tokens.wbnb,
+    quoteToken: tokens.tipsy,
+    isPromoted: 1
+  },
 
 ]
 
