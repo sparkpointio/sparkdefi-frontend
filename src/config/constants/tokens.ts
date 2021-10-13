@@ -1660,6 +1660,15 @@ const tokens = {
     decimals: 18,
     iconExtension: 'png',
   },
+  tipsy: {
+    symbol: 'TIPSY ',
+    address: {
+      56: '0xf380334b9A181F54BF2f32FDD3e153D259472eBB',
+      97: '0xf380334b9A181F54BF2f32FDD3e153D259472eBB',
+    },
+    decimals: 18,
+    iconExtension: 'png',
+  },
 }
 
 export default tokens
