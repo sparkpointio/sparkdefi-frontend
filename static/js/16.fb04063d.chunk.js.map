@@ -1,1 +1,1 @@
-{"version":3,"sources":["views/Lottery/components/PastDrawsHistory/LineChartWrapper.tsx"],"names":["Line"],"mappings":"8HAAA,qBAEeA,YAAf","file":"static/js/16.fb04063d.chunk.js","sourcesContent":["import { Line } from 'react-chartjs-2'\n\nexport default Line\n"],"sourceRoot":""}
+{"version":3,"sources":["views/Lottery/components/PastDrawsHistory/LineChartWrapper.tsx"],"names":["Line"],"mappings":"8HAAA,qBAEeA,YAAf","file":"static/js/16.fb04063d.chunk.js","sourcesContent":["import { Line } from 'react-chartjs-2'\r\n\r\nexport default Line\r\n"],"sourceRoot":""}
