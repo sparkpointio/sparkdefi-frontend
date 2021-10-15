@@ -137,7 +137,7 @@ const farms: FarmConfig[] = [
     },
     token: tokens.gzila,
     pairToken: tokens.busd,
-    quoteToken: tokens.gzila,
+    quoteToken: tokens.sfuel,
     isPromoted: 1
   },
 
