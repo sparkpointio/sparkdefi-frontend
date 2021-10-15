@@ -123,6 +123,23 @@ const farms: FarmConfig[] = [
     quoteToken: tokens.tipsy,
     isPromoted: 1
   },
+  // GZILA - BUSD - SFUEL
+  {
+    pid: 257,
+    lpSymbol: 'GZILA-BUSD LP',
+    lpAddresses: {
+      97: '',
+      56: '0x4178934c6E313a062c5addD66ab0D9B8d858347a',
+    },
+    stakingAddresses: {
+      97: '',
+      56: '0x43BDf10036Dad8622569677217B40a0EdD2510C8',
+    },
+    token: tokens.gzila,
+    pairToken: tokens.busd,
+    quoteToken: tokens.gzila,
+    isPromoted: 1
+  },
 
 ]
 
