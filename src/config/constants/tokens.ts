@@ -1661,10 +1661,19 @@ const tokens = {
     iconExtension: 'png',
   },
   tipsy: {
-    symbol: 'TIPSY ',
+    symbol: 'TIPSY',
     address: {
       56: '0xf380334b9A181F54BF2f32FDD3e153D259472eBB',
       97: '0xf380334b9A181F54BF2f32FDD3e153D259472eBB',
+    },
+    decimals: 18,
+    iconExtension: 'png',
+  },
+  gzila: {
+    symbol: 'GZILA',
+    address: {
+      56: '0x4178934c6E313a062c5addD66ab0D9B8d858347a',
+      97: '0x4178934c6E313a062c5addD66ab0D9B8d858347a',
     },
     decimals: 18,
     iconExtension: 'png',
