@@ -70,7 +70,7 @@ const PoolCard: React.FC<{ pool: Pool; account: string }> = ({ pool, account }) 
               <Text>{!isComingSoon && rewardPerBlock} {isComingSoon && '-'}</Text>
           </Flex>
           <Flex justifyContent="space-between" style={{textAlign: 'left'}}>
-            <Text>APY</Text>
+            <Text>APR</Text>
             <Text>{(apr === 0 || apr === null ? "-- " : apr.toFixed(2))}%</Text>
           </Flex>
           <Flex justifyContent="space-between" style={{textAlign: 'left'}}>
