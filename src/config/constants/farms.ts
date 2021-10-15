@@ -129,7 +129,7 @@ const farms: FarmConfig[] = [
     lpSymbol: 'GZILA-BUSD LP',
     lpAddresses: {
       97: '',
-      56: '0x4178934c6E313a062c5addD66ab0D9B8d858347a',
+      56: '0x8C7F831c673CDf29A9fb996593d8a7c71c028959',
     },
     stakingAddresses: {
       97: '',
