@@ -16,7 +16,7 @@ const pools: PoolConfig[] = [
     sortOrder: 999,
     isFinished: false,
     isComingSoon: false,
-    isDepositDisabled: true,
+    isDepositDisabled: false,
   },
   {
     sousId: 4,
@@ -63,7 +63,7 @@ const pools: PoolConfig[] = [
     sortOrder: 999,
     isFinished: false,
     isComingSoon: false,
-    isDepositDisabled: true,
+    isDepositDisabled: false,
   },
   {
     sousId: 7,
@@ -108,7 +108,7 @@ const pools: PoolConfig[] = [
     tokenPerBlock: '307004629629629629',
     sortOrder: 999,
     isFinished: false,
-    isDepositDisabled: true,
+    isDepositDisabled: false,
   },
   {
     sousId: 10,
@@ -123,7 +123,7 @@ const pools: PoolConfig[] = [
     tokenPerBlock: '307004629629629629',
     sortOrder: 999,
     isFinished: false,
-    isDepositDisabled: true,
+    isDepositDisabled: false,
   },
   {
     sousId: 11,
@@ -138,7 +138,7 @@ const pools: PoolConfig[] = [
     tokenPerBlock: '590513888888888888',
     sortOrder: 999,
     isFinished: false,
-    isDepositDisabled: true,
+    isDepositDisabled: false,
   },
   {
     sousId: 12,
