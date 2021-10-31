@@ -143,7 +143,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
       <Flex flexDirection="column">
         <Text fontSize="24px">{formatNumber(totalStakedTokens,2,5)}</Text>
         <Text color="textSubtle" marginBottom="24px">{pool.stakingToken.symbol} Staked</Text>
-        <Button fullWidth onClick={onPresentStakeAction}>Stake Tokens</Button>
+        <Button fullWidth onClick={onPresentStakeAction} disabled={pool.isDepositDisabled}>Stake Tokens</Button>
       </Flex>
       </StyledFlex>
 
