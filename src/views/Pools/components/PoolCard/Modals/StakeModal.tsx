@@ -181,8 +181,8 @@ const StakeModal: React.FC<StakeModalProps> = ({
             }
           </Flex>
         </StyledFlex>
-        <Text className='yellow' fontSize='15px' marginLeft='10px'>SRKb and SFUEL Withdrawals and Deposits are
-          locked for 48 hours during launchpad</Text>
+        {!!pool.isWithdrawDisabled && < Text className='yellow' fontSize='15px' marginLeft='10px'>SRKb and SFUEL Withdrawals and Deposits are
+          locked for 48 hours during launchpad</Text>}
       </Flex>
     </Modal>
   )
