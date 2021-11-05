@@ -140,6 +140,22 @@ const farms: FarmConfig[] = [
     quoteToken: tokens.sfuel,
     isPromoted: 1
   },
+  {
+    pid: 258,
+    lpSymbol: 'FLASH-BUSD LP',
+    lpAddresses: {
+      97: '',
+      56: '0x34E5f2A523a4f192Cfa495Ba330EC2eC220c9e60',
+    },
+    stakingAddresses: {
+      97: '',
+      56: '0x827a57f1BA89197a916916739fFE9aFBEe0D7670',
+    },
+    token: tokens.flash,
+    pairToken: tokens.busd,
+    quoteToken: tokens.flash,
+    isPromoted: 1
+  },
 
 ]
 

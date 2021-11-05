@@ -17,7 +17,7 @@ const pools: PoolConfig[] = [
     isFinished: false,
     isComingSoon: false,
     isDepositDisabled: false,
-    isWithdrawDisabled: false,
+    isWithdrawDisabled: false ,
   },
   {
     sousId: 4,
@@ -34,7 +34,7 @@ const pools: PoolConfig[] = [
     isFinished: false,
     isComingSoon: false,
     isDepositDisabled: false,
-    isWithdrawDisabled: false,
+    isWithdrawDisabled: false ,
   },
   {
     sousId: 5,
@@ -67,7 +67,7 @@ const pools: PoolConfig[] = [
     isFinished: false,
     isComingSoon: false,
     isDepositDisabled: false,
-    isWithdrawDisabled: false,
+    isWithdrawDisabled: false ,
   },
   {
     sousId: 7,
@@ -127,7 +127,7 @@ const pools: PoolConfig[] = [
     sortOrder: 999,
     isFinished: false,
     isDepositDisabled: false,
-    isWithdrawDisabled: false,
+    isWithdrawDisabled: false ,
   },
   {
     sousId: 11,
@@ -143,7 +143,7 @@ const pools: PoolConfig[] = [
     sortOrder: 999,
     isFinished: false,
     isDepositDisabled: false,
-    isWithdrawDisabled: false,
+    isWithdrawDisabled: false ,
   },
   {
     sousId: 12,

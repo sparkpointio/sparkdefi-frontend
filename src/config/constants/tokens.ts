@@ -1678,6 +1678,15 @@ const tokens = {
     decimals: 18,
     iconExtension: 'png',
   },
+  flash: {
+    symbol: 'FLASH',
+    address: {
+      56: '0x5f0366c9962193fa774cdce9602195593b49f23c',
+      97: '0x5f0366c9962193fa774cdce9602195593b49f23c',
+    },
+    decimals: 18,
+    iconExtension: 'png',
+  },
 }
 
 export default tokens
