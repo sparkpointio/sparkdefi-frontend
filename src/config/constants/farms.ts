@@ -156,6 +156,38 @@ const farms: FarmConfig[] = [
     quoteToken: tokens.flash,
     isPromoted: 1
   },
+  {
+    pid: 259,
+    lpSymbol: 'BHC-BUSD LP',
+    lpAddresses: {
+      97: '',
+      56: '0x19e3cd6418d81d69a71b3fc931387a2062c5a815',
+    },
+    stakingAddresses: {
+      97: '',
+      56: '0xD314dbD9998401770943EcdBE97f78Ea2f0dEE62',
+    },
+    token: tokens.bhc,
+    pairToken: tokens.busd,
+    quoteToken: tokens.bhc,
+    isPromoted: 1
+  },
+  {
+    pid: 260,
+    lpSymbol: 'HPS-BUSD LP',
+    lpAddresses: {
+      97: '',
+      56: '0xaaf827e2eaf72c62e77047458cbd40e7f30f1896',
+    },
+    stakingAddresses: {
+      97: '',
+      56: '0x5a870495971ed55bd377fc390f46ab1b96bcd6b4',
+    },
+    token: tokens.hps,
+    pairToken: tokens.busd,
+    quoteToken: tokens.hps,
+    isPromoted: 1
+  },
 
 ]
 

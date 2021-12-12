@@ -1687,6 +1687,24 @@ const tokens = {
     decimals: 18,
     iconExtension: 'png',
   },
+  bhc: {
+    symbol: 'BHC',
+    address: {
+      56: '0x6fd7c98458a943f469e1cf4ea85b173f5cd342f4',
+      97: '0x6fd7c98458a943f469e1cf4ea85b173f5cd342f4',
+    },
+    decimals: 18,
+    iconExtension: 'png',
+  },
+  hps: {
+    symbol: 'HPS',
+    address: {
+      56: '0xeda21b525ac789eab1a08ef2404dd8505ffb973d',
+      97: '0xeda21b525ac789eab1a08ef2404dd8505ffb973d',
+    },
+    decimals: 18,
+    iconExtension: 'png',
+  },
 }
 
 export default tokens
