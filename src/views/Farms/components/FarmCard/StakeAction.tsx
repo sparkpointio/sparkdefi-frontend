@@ -99,7 +99,7 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
 
   const renderStakingButtons = () => {
     let buttonTxt = 'Deposit'
-    if (farm.hasEnded && parseFloat(farm.userData.stakedBalance)) {
+    if (farm.hasEnded && stakedBalance.isGreaterThan(0)) {
       buttonTxt = 'Withdraw'
     }
     return (

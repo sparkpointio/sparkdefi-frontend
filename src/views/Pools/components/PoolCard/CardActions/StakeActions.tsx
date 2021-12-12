@@ -104,13 +104,13 @@ const StakeAction: React.FC<StakeActionsProps> = ({
     //     </Flex>
     //     {tooltipVisible && tooltip}
     //   </Flex>
-    // ) : 
+    // ) :
 
     // Reserve function for future use
     // <Button disabled={isFinished} onClick={stakingTokenBalance.gt(0) ? onPresentStake : onPresentTokenRequired} fullWidth>
     return (
-      <Button fullWidth disabled={isFinished} onClick={ onPresentStake }>
-        Stake
+      <Button fullWidth disabled={isFinished && stakedBalance.isEqualTo(0)} onClick={ onPresentStake }>
+        {isFinished && stakedBalance.isGreaterThan(0) ? 'Withdraw' : 'Stake' }
       </Button>
     )
   }
