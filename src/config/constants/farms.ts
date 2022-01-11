@@ -188,7 +188,38 @@ const farms: FarmConfig[] = [
     quoteToken: tokens.hps,
     isPromoted: 1
   },
-
+  {
+    pid: 261,
+    lpSymbol: 'SRKb-BNB LP',
+    lpAddresses: {
+      97: '',
+      56: '0xd581cdf609dd50fbaa25118583c6ee31b39662f9',
+    },
+    stakingAddresses: {
+      97: '',
+      56: '0x13b9294FFC6cf6cE10A115E5B8025316f1893167',
+    },
+    token: tokens.srkb,
+    pairToken: tokens.wbnb,
+    quoteToken: tokens.srkb,
+    isPromoted: 1
+  },
+  {
+    pid: 262,
+    lpSymbol: 'SFUEL-BNB LP',
+    lpAddresses: {
+      97: '',
+      56: '0x0f105b57c4aa5e288a9d291de7c37ad511570e3a',
+    },
+    stakingAddresses: {
+      97: '',
+      56: '0xB11dDED8a4218e22866338F3a7AD9948457D9740',
+    },
+    token: tokens.sfuel,
+    pairToken: tokens.wbnb,
+    quoteToken: tokens.sfuel,
+    isPromoted: 1
+  },
 ]
 
 export default farms
