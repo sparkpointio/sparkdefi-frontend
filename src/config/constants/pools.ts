@@ -201,6 +201,34 @@ const pools: PoolConfig[] = [
     sortOrder: 999,
     isFinished: false,
   },
+  {
+    sousId: 16,
+    stakingToken: tokens.srkb,
+    earningToken: tokens.srkb,
+    contractAddress: {
+      97: '0x5Ddf45D274CA323739E23f402f47E288Ce305443',
+      56: '0x5Ddf45D274CA323739E23f402f47E288Ce305443',
+    },
+    poolCategory: PoolCategory.CORE,
+    harvest: true,
+    tokenPerBlock: '4755483159722222222',
+    sortOrder: 999,
+    isFinished: false,
+  },
+  {
+    sousId: 17,
+    stakingToken: tokens.sfuel,
+    earningToken: tokens.sfuel,
+    contractAddress: {
+      97: '0x13A75c6d0D5494D43966848105f3Df39eFC34564',
+      56: '0x13A75c6d0D5494D43966848105f3Df39eFC34564',
+    },
+    poolCategory: PoolCategory.CORE,
+    harvest: true,
+    tokenPerBlock: '412554976851851851',
+    sortOrder: 999,
+    isFinished: false,
+  },
   // Dummy Contract #1
   // {
   //   sousId: 4,
