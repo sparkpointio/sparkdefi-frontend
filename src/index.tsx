@@ -6,7 +6,7 @@ import Providers from './Providers'
 ReactDOM.render(
   <React.StrictMode>
     <Providers>
-      <App />
+      <App /> 
     </Providers>
   </React.StrictMode>,
   document.getElementById('root'),
