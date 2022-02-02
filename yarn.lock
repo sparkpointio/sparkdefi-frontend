@@ -2260,16 +2260,19 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
-"@sparkpointio/sparkswap-uikit@^1.0.12":
-  version "1.0.12"
-  resolved "https://registry.nlark.com/@sparkpointio/sparkswap-uikit/download/@sparkpointio/sparkswap-uikit-1.0.12.tgz?cache=0&sync_timestamp=1624522519750&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40sparkpointio%2Fsparkswap-uikit%2Fdownload%2F%40sparkpointio%2Fsparkswap-uikit-1.0.12.tgz#732afc718fe2fa3a4662d4fe776067bf528c0471"
-  integrity sha1-cyr8cY/i+jpGYtT+d2Bnv1KMBHE=
+"@sparkpointio/sparkswap-uikit@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@sparkpointio/sparkswap-uikit/-/sparkswap-uikit-1.2.1.tgz#30a7a5a46415faa7669413a8aa1b7d1c012200e0"
+  integrity sha512-I9UXc5FdYNFtWvVrPhTWp8Yh2enD0Ftu1nh4iw3CRPpA7rRlpZf1FpVd67KPrcxgN7BAsPh+hn7KTl2LEbznXQ==
   dependencies:
     "@types/lodash" "^4.14.162"
     "@types/styled-system" "^5.1.10"
     lodash "^4.17.20"
+    react-feather "^2.0.9"
+    react-icons "^4.3.1"
     react-transition-group "^4.4.1"
     styled-system "^5.1.5"
+    use-media "^1.4.0"
 
 "@styled-system/background@^5.1.2":
   version "5.1.2"
@@ -12055,7 +12058,7 @@ react-fast-compare@^3.0.1, react-fast-compare@^3.2.0:
   resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-3.2.0.tgz#641a9da81b6a6320f270e89724fb45a0b39e43bb"
   integrity sha512-rtGImPZ0YyLrscKI9xTpV8psd6I8VAtjKCzQDlzyDvqJA8XOW78TXYQwNRNd8g8JZnDu8q9Fu/1v4HPAVwVdHA==
 
-react-feather@^2.0.8:
+react-feather@^2.0.8, react-feather@^2.0.9:
   version "2.0.9"
   resolved "https://registry.yarnpkg.com/react-feather/-/react-feather-2.0.9.tgz#6e42072130d2fa9a09d4476b0e61b0ed17814480"
   integrity sha512-yMfCGRkZdXwIs23Zw/zIWCJO3m3tlaUvtHiXlW+3FH7cIT6fiK1iJ7RJWugXq7Fso8ZaQyUm92/GOOHXvkiVUw==
@@ -12072,6 +12075,11 @@ react-helmet-async@^1.0.9:
     prop-types "^15.7.2"
     react-fast-compare "^3.2.0"
     shallowequal "^1.1.0"
+
+react-icons@^4.3.1:
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.3.1.tgz#2fa92aebbbc71f43d2db2ed1aed07361124e91ca"
+  integrity sha512-cB10MXLTs3gVuXimblAdI71jrJx8njrJZmNMEMC+sQu5B/BIOmlsAjskdqpn81y8UBVEGuHODd7/ci5DvoSzTQ==
 
 react-is@^16.13.1, react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1:
   version "16.13.1"
