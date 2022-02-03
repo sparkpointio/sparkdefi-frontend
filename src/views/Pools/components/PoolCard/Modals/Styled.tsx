@@ -62,7 +62,8 @@ export const StyledDropdown = MStyled(Menu)({
         display: 'flex',
         borderRadius: '0px',
         '& > *': {
-            width: '163px'
+            width: '163px',
+            border: '1px solid rgba(0,0,0, 0.2)'
         }
       },
 })
