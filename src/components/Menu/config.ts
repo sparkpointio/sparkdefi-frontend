@@ -54,19 +54,19 @@ const config: MenuEntry[] = [
     items: [
       {
         label: 'Home',
-        href: '/create',
+        href: 'https://nft.sparkswap.finance/#/create',
       },
       {
         label: 'Create',
-        href: '/createNFT',
+        href: 'https://nft.sparkswap.finance/#/createNFT',
       },
       {
         label: 'My NFTs',
-        href: '/MyNFT',
+        href: 'https://nft.sparkswap.finance/#/MyNFT',
       },
       {
         label: 'Marketplace',
-        href: '/marketplace',
+        href: 'https://nft.sparkswap.finance/#/marketplace',
       },
     ],
   },
