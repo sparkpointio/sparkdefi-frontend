@@ -389,7 +389,7 @@ const Farms: React.FC = () => {
       <PageHeader background={theme.card.background}>
         <Flex alignItems='center' justifyContent='space-between' flexDirection={['column', null, 'row']}
               style={isMobile ? { flexDirection: 'column-reverse' } : { minHeight: '20vh', marginLeft: '-16px' }}
-              padding='24px'>
+        >
           <Flex flexDirection='column' mr={['8px', 0]}>
             <Text color='text' fontSize='60px' bold marginBottom='10px'>
               <span style={{ borderBottom: `2px solid ${theme.colors.primary}` }}>Farms</span>
