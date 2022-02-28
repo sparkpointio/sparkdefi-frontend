@@ -322,7 +322,7 @@ const Pools: React.FC = () => {
         {/* UPCOMING  */}
         {showUpcomingPools && (
           <>
-            <StyledHr style={{ marginTop: '35px'}}/>
+            <StyledHr style={{ marginTop: '35px', width: '100%'}}/>
             
             <Flex justifyContent="space-between" style={{ margin: '20px' }}>
               <Flex flexDirection="column" mr={['8px', 0]}>
@@ -338,7 +338,7 @@ const Pools: React.FC = () => {
         {/* ENDED  */}
         {showFinishedPools && (
           <>
-            <StyledHr style={{ marginTop: '35px'}}/>
+            <StyledHr style={{ marginTop: '35px', width: '100%'}}/>
 
             <Flex justifyContent="space-between" style={{ margin: '20px' }}>
               <Flex flexDirection="column" mr={['8px', 0]}>
