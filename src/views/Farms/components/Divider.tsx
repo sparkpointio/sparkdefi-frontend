@@ -12,7 +12,7 @@ export const StyledHr = styled.div`
   border-style: solid none none none;
   border-width: 2px;
   border-color: ${({ theme }) => theme.colors.primary};
-  width: 95%;
+  width: 100%;
 `
 
 export const ModalHr = styled.hr`

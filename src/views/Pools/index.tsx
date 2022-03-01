@@ -306,7 +306,7 @@ const Pools: React.FC = () => {
             {' '}
             Stake tokens to earn{' '}
           </Text> */}
-          <StyledHr style={{ marginTop: '35px', width: '100%'}}/>
+          <StyledHr style={{ marginTop: '35px' }}/>
           
           {/* Header title for Active Pools   */}
           
@@ -322,7 +322,7 @@ const Pools: React.FC = () => {
         {/* UPCOMING  */}
         {showUpcomingPools && (
           <>
-            <StyledHr style={{ marginTop: '35px'}}/>
+            <StyledHr style={{ marginTop: '35px' }}/>
             
             <Flex justifyContent="space-between" style={{ margin: '20px' }}>
               <Flex flexDirection="column" mr={['8px', 0]}>
@@ -338,7 +338,7 @@ const Pools: React.FC = () => {
         {/* ENDED  */}
         {showFinishedPools && (
           <>
-            <StyledHr style={{ marginTop: '35px'}}/>
+            <StyledHr style={{ marginTop: '35px' }}/>
 
             <Flex justifyContent="space-between" style={{ margin: '20px' }}>
               <Flex flexDirection="column" mr={['8px', 0]}>
