@@ -1,6 +1,6 @@
 import React, { lazy } from 'react'
 import { HashRouter, Redirect, Route, Switch } from 'react-router-dom'
-import { ResetCSS,  } from '@sparkpointio/sparkswap-uikit'
+import { ResetCSS, Footer } from '@sparkpointio/sparkswap-uikit'
 import BigNumber from 'bignumber.js'
 import useEagerConnect from 'hooks/useEagerConnect'
 import { useFetchProfile, usePollBlockNumber, usePollCoreFarmData } from 'state/hooks'
@@ -97,6 +97,54 @@ const App: React.FC = () => {
       </Menu>
       <EasterEgg iterations={2} />
       <ToastListener />
+      <div
+        style={{
+          position: 'relative',
+          right: 0,
+          left: 0,
+          bottom: 0,
+        }}
+      >
+        <Footer
+          helperLinks={[
+            {
+              label: 'Terms and Conditions',
+              href: '#',
+            },
+            {
+              label: 'Privacy',
+              href: '#',
+            },
+            {
+              label: 'Sitemap',
+              href: 'https://srk.finance/#roadmap',
+            },
+          ]}
+          socLinks={[
+            {
+              label: 'facebook',
+              href: 'https://www.facebook.com/sparkpointio/',
+            },
+            {
+              label: 'twitter',
+              href: 'https://twitter.com/sparkpointio',
+            },
+            {
+              label: 'telegram',
+              href: 'https://t.me/SparkPointOfficial',
+            },
+            {
+              label: 'email',
+              href: 'mailto: support@sparkpoint.io',
+            },
+            {
+              label: 'discord',
+              href: 'https://discord.com/invite/Sgc6yDEAAe',
+            },
+          ]}
+          title="SparkDeFi Staking 2022"
+        />
+      </div>
     </HashRouter>
   )
 }

@@ -59,6 +59,7 @@ const FCard = styled.div<{ isPromotedFarm: boolean }>`
   padding: 24px;
   position: relative;
   text-align: center;
+  max-width: 352px;
 `
 
 const Divider = styled.div`
