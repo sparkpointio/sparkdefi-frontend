@@ -109,11 +109,11 @@ const App: React.FC = () => {
           helperLinks={[
             {
               label: 'Terms and Conditions',
-              href: '#',
+              href: 'https://sparkpointio.github.io/terms_and_conditions/sparkdefi-stake/',
             },
             {
               label: 'Privacy',
-              href: '#',
+              href: 'https://sparkpointio.github.io/privacy_policies/sparkdefi-stake/',
             },
             {
               label: 'Sitemap',
