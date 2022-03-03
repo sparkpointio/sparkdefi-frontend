@@ -47,9 +47,7 @@ const PoolCard: React.FC<{ pool: Pool; account: string }> = ({ pool, account }) 
   const hours = Math.floor(blockSeconds % (3600*24) / 3600);
   const minutes = Math.floor(blockSeconds % 3600 / 60);
   // const seconds = Math.floor(blockSeconds % 60);
-
   const daysRemaining = `${date}d : ${hours}h : ${minutes}m `;
-  
 
   return (
     <StyledCard
@@ -68,7 +66,7 @@ const PoolCard: React.FC<{ pool: Pool; account: string }> = ({ pool, account }) 
             <Text>Remaining days</Text>
             <Link external href={getBscScanLink(hasPoolStarted ? endBlock : startBlock, 'countdown')}>
               {/* <Text>{!isComingSoon && `${ formatNumber(blocksRemaining, 0, 0) }`} {isComingSoon && '-'} blocks</Text> */}
-              <Text>{!isComingSoon && `${ daysRemaining }`} {isComingSoon && '-'}</Text>
+              <Text bold color={theme.colors.primary} >{!isComingSoon && `${ daysRemaining }`} {isComingSoon && '-'}</Text>
             </Link>
             
           </Flex>
