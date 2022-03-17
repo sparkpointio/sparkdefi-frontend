@@ -41,6 +41,14 @@ const PoolCard: React.FC<{ pool: Pool; account: string }> = ({ pool, account }) 
 
   const apr = getPoolApr(stakingPrice, rewardPrice, totalStaked, rewardPerBlock)
 
+  // Countdown for days remaining
+  const blockSeconds = blocksRemaining * 3;
+  const date = Math.floor(blockSeconds / (3600*24));
+  const hours = Math.floor(blockSeconds % (3600*24) / 3600);
+  const minutes = Math.floor(blockSeconds % 3600 / 60);
+  // const seconds = Math.floor(blockSeconds % 60);
+  const daysRemaining = `${date}d : ${hours}h : ${minutes}m `;
+
   return (
     <StyledCard
       isFinished={isFinished && sousId !== 0}
@@ -54,11 +62,15 @@ const PoolCard: React.FC<{ pool: Pool; account: string }> = ({ pool, account }) 
          <hr style={{width: '100%', border: 'none', backgroundColor: theme.colors.primary, height: '2px'}}/>
 
           <Flex justifyContent="space-between" style={{textAlign: 'left'}}>
-            <Text>Remaining blocks</Text>
+            {/* <Text>Remaining blocks</Text> */}
+            <Text>Remaining days</Text>
             <Link external href={getBscScanLink(hasPoolStarted ? endBlock : startBlock, 'countdown')}>
-              <Text>{!isComingSoon && `${ formatNumber(blocksRemaining, 0, 0) }`} {isComingSoon && '-'} blocks</Text>
+              {/* <Text>{!isComingSoon && `${ formatNumber(blocksRemaining, 0, 0) }`} {isComingSoon && '-'} blocks</Text> */}
+              <Text bold color={theme.colors.primary} >{!isComingSoon && `${ daysRemaining }`} {isComingSoon && '-'}</Text>
             </Link>
+            
           </Flex>
+          {/* {console.log(startBlock, 'countdown')} */}
 
           {/* <AprRow pool={pool} stakingTokenPrice={stakingTokenPrice} /> */}
           <Flex justifyContent="space-between" style={{textAlign: 'left'}}>
