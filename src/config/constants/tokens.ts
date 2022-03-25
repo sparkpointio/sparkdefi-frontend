@@ -1657,7 +1657,7 @@ const tokens = {
       56: '0x5d3AfBA1924aD748776E4Ca62213BF7acf39d773',
       97: '0x5d3AfBA1924aD748776E4Ca62213BF7acf39d773',
     },
-    decimals: 18,
+    decimals: 5,
     iconExtension: 'png',
   },
   tipsy: {
