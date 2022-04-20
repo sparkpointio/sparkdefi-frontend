@@ -2,9 +2,10 @@ const tokens = {
   mgg: {
     symbol: 'MGG',
     address: {
+      56: '0x6125aDCAb2F171BC70cfe2CAeCFeC5509273A86A',
       97: '',
-      56: '0x6125aDCAb2F171BC70cfe2CAeCFeC5509273A86A'
     },
+    iconExtension: 'png',
     decimals: 18,
     projectLink: 'https://www.metagg.com/'
   },
