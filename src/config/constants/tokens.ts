@@ -1,4 +1,13 @@
 const tokens = {
+  mgg: {
+    symbol: 'MGG',
+    address: {
+      97: '',
+      56: '0x6125aDCAb2F171BC70cfe2CAeCFeC5509273A86A'
+    },
+    decimals: 18,
+    projectLink: 'https://www.metagg.com/'
+  },
   sfuel: {
     symbol: 'SFUEL',
     address: {

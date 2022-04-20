@@ -236,6 +236,22 @@ const farms: FarmConfig[] = [
     quoteToken: tokens.tipsy,
     isPromoted: 1
   },
+  {
+    pid: 264,
+    lpSymbol: 'MGG-BUSD LP',
+    lpAddresses: {
+      97: '',
+      56: '0xb2F6FE5e9C83ad968fde18306D35caf8555BcD9f',
+    },
+    stakingAddresses: {
+      97: '',
+      56: '0xaE712e16960B85F1624a7242f9F66CE752c4b774',
+    },
+    token: tokens.mgg,
+    pairToken: tokens.busd,
+    quoteToken: tokens.mgg,
+    isPromoted: 1
+  },
 ]
 
 export default farms
