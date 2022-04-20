@@ -61,7 +61,7 @@ const Stake: React.FC<StakeModalInterface> = ({
       setPendingTx(true)
       await onConfirm(val, lpStakingContract)
       setPendingTx(false)
-      toastSuccess(`${t('Staked')}!`, t('Your %symbol% tokens have been staked to the pool!', { symbol: symbol }))
+      toastSuccess(`${t('Staked')}!`, t('Your %sym% tokens have been staked to the pool!', { sym: symbol }))
       onDismiss()
     } catch (e) {
       toastError(t('Error'), t('Please try again. Confirm the transaction and make sure you are paying enough gas!'))
@@ -86,7 +86,7 @@ const Stake: React.FC<StakeModalInterface> = ({
           max={fullBalance}
           symbol={symbol}
           addLiquidityUrl={addLiquidityUrl}
-          //  inputTitle={t('Stake')}
+      
         />
       </Container>
       <StyledFlex justifyContent="space-between">
