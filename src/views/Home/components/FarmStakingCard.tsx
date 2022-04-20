@@ -88,7 +88,7 @@ const FarmedStakingCard = () => {
                   })}
             </Button>
           ) : (
-            <UnlockButton width="100%" fullWidth/>
+            <UnlockButton width="100%" fullWidth />
           )}
         </Actions>
       </CardBody>

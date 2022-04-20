@@ -24,14 +24,13 @@ interface FarmCardActionsProps {
   addTokenUrl?: string
 }
 
-const CardActions: React.FC<FarmCardActionsProps> = (
-  {
-    userDataReady,
-    farm,
-    account,
-    addLiquidityUrl,
-    addTokenUrl,
-  }) => {
+const CardActions: React.FC<FarmCardActionsProps> = ({
+  userDataReady,
+  farm,
+  account,
+  addLiquidityUrl,
+  addTokenUrl,
+}) => {
   const { t } = useTranslation()
   const { pid, lpAddresses } = farm
   const {
@@ -58,11 +57,7 @@ const CardActions: React.FC<FarmCardActionsProps> = (
     )
   }
 
-  return (
-    <Action>
-      {!account ? <UnlockButton mt='8px' width='100%' /> : renderDepositButton()}
-    </Action>
-  )
+  return <Action>{!account ? <UnlockButton mt="8px" width="100%" /> : renderDepositButton()}</Action>
 }
 
 export default CardActions

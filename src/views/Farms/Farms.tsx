@@ -159,8 +159,10 @@ const Farms: React.FC = () => {
       if (query) {
         const lowercaseQuery = latinise(query.toLowerCase())
         farmsToDisplayWithAPR = farmsToDisplayWithAPR.filter((farm: FarmWithStakedValue) => {
-          return latinise(farm.lpSymbol.toLowerCase()).includes(lowercaseQuery)
-            || latinise(farm.quoteToken.symbol.toLowerCase()).includes(lowercaseQuery)
+          return (
+            latinise(farm.lpSymbol.toLowerCase()).includes(lowercaseQuery) ||
+            latinise(farm.quoteToken.symbol.toLowerCase()).includes(lowercaseQuery)
+          )
         })
       }
       return farmsToDisplayWithAPR
@@ -302,7 +304,6 @@ const Farms: React.FC = () => {
     return row
   })
 
-
   const renderContent = (): JSX.Element => {
     if (viewMode === ViewMode.TABLE && rowData.length) {
       const columnSchema = DesktopColumnSchema
@@ -338,20 +339,38 @@ const Farms: React.FC = () => {
         <FlexLayout>
           <Route exact path={`${path}`}>
             {farmsStakedMemoized.map((farm) => (
-              <FarmCard userDataReady={userDataReady} key={farm.pid} farm={farm} cakePrice={cakePrice} account={account}
-                        removed={false} />
+              <FarmCard
+                userDataReady={userDataReady}
+                key={farm.pid}
+                farm={farm}
+                cakePrice={cakePrice}
+                account={account}
+                removed={false}
+              />
             ))}
           </Route>
           <Route exact path={`${path}/history`}>
             {farmsStakedMemoized.map((farm) => (
-              <FarmCard userDataReady={userDataReady} key={farm.pid} farm={farm} cakePrice={cakePrice} account={account}
-                        removed />
+              <FarmCard
+                userDataReady={userDataReady}
+                key={farm.pid}
+                farm={farm}
+                cakePrice={cakePrice}
+                account={account}
+                removed
+              />
             ))}
           </Route>
           <Route exact path={`${path}/archived`}>
             {farmsStakedMemoized.map((farm) => (
-              <FarmCard userDataReady={userDataReady} key={farm.pid} farm={farm} cakePrice={cakePrice} account={account}
-                        removed />
+              <FarmCard
+                userDataReady={userDataReady}
+                key={farm.pid}
+                farm={farm}
+                cakePrice={cakePrice}
+                account={account}
+                removed
+              />
             ))}
           </Route>
           {/* {farmsList(activeFarms).map((farm) => ( */}
@@ -367,17 +386,25 @@ const Farms: React.FC = () => {
   }
 
   const renderInactiveContent = (): JSX.Element => {
-
     return (
       <div>
         <div style={{ margin: '20px' }}>
-          <Text fontSize='24px' bold> Inactive Liquidity Pools </Text>
+          <Text fontSize="24px" bold>
+            {' '}
+            Inactive Liquidity Pools{' '}
+          </Text>
         </div>
 
         <FlexLayout>
           {farmsList(inactiveFarms).map((farm) => (
-            <FarmCard userDataReady={userDataReady} key={farm.pid} farm={farm} cakePrice={cakePrice} account={account}
-                      removed />
+            <FarmCard
+              userDataReady={userDataReady}
+              key={farm.pid}
+              farm={farm}
+              cakePrice={cakePrice}
+              account={account}
+              removed
+            />
           ))}
         </FlexLayout>
       </div>
@@ -387,25 +414,38 @@ const Farms: React.FC = () => {
   return (
     <>
       <PageHeader background={theme.card.background}>
-        <Flex alignItems='center' justifyContent='space-between' flexDirection={['column', null, 'row']}
-              style={isMobile ? { flexDirection: 'column-reverse' } : { minHeight: '20vh', marginLeft: '-16px' }}
+        <Flex
+          alignItems="center"
+          justifyContent="space-between"
+          flexDirection={['column', null, 'row']}
+          style={isMobile ? { flexDirection: 'column-reverse' } : { minHeight: '20vh', marginLeft: '-16px' }}
         >
-          <Flex flexDirection='column' mr={['8px', 0]}>
-            <Text color='text' fontSize='60px' bold marginBottom='10px'>
+          <Flex flexDirection="column" mr={['8px', 0]}>
+            <Text color="text" fontSize="60px" bold marginBottom="10px">
               <span style={{ borderBottom: `2px solid ${theme.colors.primary}` }}>Farms</span>
             </Text>
-            <Text color='text' style={isMobile ? { fontSize: '17px' } : { fontSize: '27px' }}>
+            <Text color="text" style={isMobile ? { fontSize: '17px' } : { fontSize: '27px' }}>
               Earn SRK, SFUEL and other tokens by staking LP tokens!
             </Text>
           </Flex>
-          <Flex style={isMobile ? {
-            fontSize: '150px',
-            margin: 'auto',
-            marginTop: '20px',
-            marginBottom: '20px',
-          } : { fontSize: '240px', marginRight: '-118px' }}>
-            <SvgIcon component={theme.isDark ? FarmsDarkLogo : FarmsLightLogo} viewBox='0  0 384 512'
-                     style={isMobile ? { width: '200px' } : { width: '500px' }} fontSize='inherit' />
+          <Flex
+            style={
+              isMobile
+                ? {
+                    fontSize: '150px',
+                    margin: 'auto',
+                    marginTop: '20px',
+                    marginBottom: '20px',
+                  }
+                : { fontSize: '240px', marginRight: '-118px' }
+            }
+          >
+            <SvgIcon
+              component={theme.isDark ? FarmsDarkLogo : FarmsLightLogo}
+              viewBox="0  0 384 512"
+              style={isMobile ? { width: '200px' } : { width: '500px' }}
+              fontSize="inherit"
+            />
           </Flex>
         </Flex>
       </PageHeader>
@@ -414,14 +454,14 @@ const Farms: React.FC = () => {
           <ViewControls>
             {/* <ToggleView viewMode={viewMode} onToggle={(mode: ViewMode) => setViewMode(mode)} /> */}
             <ToggleWrapper>
-              <Toggle checked={stakedOnly} onChange={() => setStakedOnly(!stakedOnly)} scale='sm' />
+              <Toggle checked={stakedOnly} onChange={() => setStakedOnly(!stakedOnly)} scale="sm" />
               <Text> {t('Staked only')}</Text>
             </ToggleWrapper>
             <FarmTabButtons hasStakeInFinishedFarms={stakedInactiveFarms.length > 0} />
           </ViewControls>
           <FilterContainer>
             <LabelWrapper>
-              <Text textTransform='uppercase'>{t('Sort by')}</Text>
+              <Text textTransform="uppercase">{t('Sort by')}</Text>
               <Select
                 options={[
                   // {
@@ -457,15 +497,14 @@ const Farms: React.FC = () => {
               />
             </LabelWrapper>
             <LabelWrapper style={{ marginLeft: 16 }}>
-              <Text textTransform='uppercase'>{t('Search')}</Text>
-              <SearchInput onChange={handleChangeQuery} placeholder='Search Farms' />
+              <Text textTransform="uppercase">{t('Search')}</Text>
+              <SearchInput onChange={handleChangeQuery} placeholder="Search Farms" />
             </LabelWrapper>
           </FilterContainer>
         </ControlContainer>
 
         {renderContent()}
         <div ref={loadMoreRef} />
-
       </Page>
     </>
   )

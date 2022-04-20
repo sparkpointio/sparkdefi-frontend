@@ -6,8 +6,7 @@ interface ClaimModalProps {
   onDismiss?: () => void
 }
 
-const ClaimModal: React.FC<ClaimModalProps> = ({ onDismiss}) => {
-  
+const ClaimModal: React.FC<ClaimModalProps> = ({ onDismiss }) => {
   return (
     <Modal title="" onDismiss={onDismiss}>
       {/* <ModalInput
@@ -35,9 +34,11 @@ const ClaimModal: React.FC<ClaimModalProps> = ({ onDismiss}) => {
           {pendingTx ? t('Pending Confirmation') : t('Confirm')}
         </Button>
       </ModalActions> */}
-      <Flex marginTop="-10px" style={{width: '450px'}} alignItems="center" flexDirection="column">
+      <Flex marginTop="-10px" style={{ width: '450px' }} alignItems="center" flexDirection="column">
         <Text>You will be claiming the reward amount of </Text>
-        <Text fontSize="28px" bold>78.912 SRK Tokens</Text>
+        <Text fontSize="28px" bold>
+          78.912 SRK Tokens
+        </Text>
       </Flex>
       <Flex justifyContent="center" margin="24px" padding="0px 35px">
         <Button fullWidth>Confirm</Button>

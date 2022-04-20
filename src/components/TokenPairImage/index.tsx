@@ -20,14 +20,14 @@ const PairLogoImg = styled(Flex)`
 
 const getImageUrlFromToken = (token: Token) => {
   const address = getAddress(token.symbol === 'BNB' ? tokens.wbnb.address : token.address)
-  return `/images/tokens/${address}.${token.iconExtension?? 'svg'}`
+  return `/images/tokens/${address}.${token.iconExtension ?? 'svg'}`
 }
 
 const TokenPairImage: React.FC<TokenPairImageProps> = ({ primaryToken, secondaryToken }) => {
   return (
     <PairLogoImg>
-      <StyledLogo src={getImageUrlFromToken(primaryToken)} alt='logo-img' />
-      <StyledLogo src={getImageUrlFromToken(secondaryToken)} alt='logo-img' />
+      <StyledLogo src={getImageUrlFromToken(primaryToken)} alt="logo-img" />
+      <StyledLogo src={getImageUrlFromToken(secondaryToken)} alt="logo-img" />
     </PairLogoImg>
   )
 }

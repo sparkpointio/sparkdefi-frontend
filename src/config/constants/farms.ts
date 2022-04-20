@@ -86,7 +86,7 @@ const farms: FarmConfig[] = [
     token: tokens.kclp,
     pairToken: tokens.busd,
     quoteToken: tokens.sfuel,
-    isPromoted: 1
+    isPromoted: 1,
   },
   // KCLP - BUSD - KCLP
   {
@@ -121,7 +121,7 @@ const farms: FarmConfig[] = [
     token: tokens.tipsy,
     pairToken: tokens.wbnb,
     quoteToken: tokens.tipsy,
-    isPromoted: 1
+    isPromoted: 1,
   },
   // GZILA - BUSD - SFUEL
   {
@@ -138,7 +138,7 @@ const farms: FarmConfig[] = [
     token: tokens.gzila,
     pairToken: tokens.busd,
     quoteToken: tokens.sfuel,
-    isPromoted: 1
+    isPromoted: 1,
   },
   {
     pid: 258,
@@ -154,7 +154,7 @@ const farms: FarmConfig[] = [
     token: tokens.flash,
     pairToken: tokens.busd,
     quoteToken: tokens.flash,
-    isPromoted: 1
+    isPromoted: 1,
   },
   {
     pid: 259,
@@ -170,7 +170,7 @@ const farms: FarmConfig[] = [
     token: tokens.bhc,
     pairToken: tokens.busd,
     quoteToken: tokens.bhc,
-    isPromoted: 1
+    isPromoted: 1,
   },
   {
     pid: 260,
@@ -186,7 +186,7 @@ const farms: FarmConfig[] = [
     token: tokens.hps,
     pairToken: tokens.busd,
     quoteToken: tokens.hps,
-    isPromoted: 1
+    isPromoted: 1,
   },
   {
     pid: 261,
@@ -202,7 +202,7 @@ const farms: FarmConfig[] = [
     token: tokens.srkb,
     pairToken: tokens.wbnb,
     quoteToken: tokens.srkb,
-    isPromoted: 1
+    isPromoted: 1,
   },
   {
     pid: 262,
@@ -218,7 +218,7 @@ const farms: FarmConfig[] = [
     token: tokens.sfuel,
     pairToken: tokens.wbnb,
     quoteToken: tokens.sfuel,
-    isPromoted: 1
+    isPromoted: 1,
   },
   {
     pid: 263,
@@ -234,7 +234,23 @@ const farms: FarmConfig[] = [
     token: tokens.tipsy,
     pairToken: tokens.wbnb,
     quoteToken: tokens.tipsy,
-    isPromoted: 1
+    isPromoted: 1,
+  },
+  {
+    pid: 264,
+    lpSymbol: 'MGG-BUSD LP',
+    lpAddresses: {
+      97: '',
+      56: '0xb2F6FE5e9C83ad968fde18306D35caf8555BcD9f',
+    },
+    stakingAddresses: {
+      97: '',
+      56: '0x57DE775D524545Fab61978b60312ada906CFE355',
+    },
+    token: tokens.mgg,
+    pairToken: tokens.busd,
+    quoteToken: tokens.mgg,
+    isPromoted: 1,
   },
 ]
 

@@ -16,8 +16,8 @@ import useToast from '../../../../../hooks/useToast'
 
 interface HarvestActionProps {
   pid: number
-  stakingContract?: string,
-  tokenRewardSymbol?: string,
+  stakingContract?: string
+  tokenRewardSymbol?: string
   userData?: {
     allowance: string
     tokenBalance: string
@@ -27,10 +27,13 @@ interface HarvestActionProps {
   userDataReady: boolean
 }
 
-const HarvestAction: React.FunctionComponent<HarvestActionProps> = (
-  {
-    stakingContract, tokenRewardSymbol, pid, userData, userDataReady,
-  }) => {
+const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({
+  stakingContract,
+  tokenRewardSymbol,
+  pid,
+  userData,
+  userDataReady,
+}) => {
   const earningsBigNumber = new BigNumber(userData.earnings)
   const cakePrice = usePriceCakeBusd()
   let earnings = BIG_ZERO
@@ -54,10 +57,10 @@ const HarvestAction: React.FunctionComponent<HarvestActionProps> = (
   return (
     <ActionContainer style={{ margin: '10px 0' }}>
       <ActionTitles>
-        <Text bold textTransform='uppercase' color='secondary' fontSize='12px' pr='4px'>
+        <Text bold textTransform="uppercase" color="secondary" fontSize="12px" pr="4px">
           {tokenRewardSymbol}
         </Text>
-        <Text bold textTransform='uppercase' color='textSubtle' fontSize='12px'>
+        <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px">
           {t('Earned')}
         </Text>
       </ActionTitles>
@@ -65,7 +68,7 @@ const HarvestAction: React.FunctionComponent<HarvestActionProps> = (
         <div>
           <Earned>{displayBalance}</Earned>
           {earningsBusd > 0 && (
-            <Balance fontSize='12px' color='textSubtle' decimals={2} value={earningsBusd} unit=' USD' prefix='~' />
+            <Balance fontSize="12px" color="textSubtle" decimals={2} value={earningsBusd} unit=" USD" prefix="~" />
           )}
         </div>
         <Button
@@ -89,7 +92,7 @@ const HarvestAction: React.FunctionComponent<HarvestActionProps> = (
             }
             dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
           }}
-          ml='4px'
+          ml="4px"
         >
           {t('Claim')}
         </Button>

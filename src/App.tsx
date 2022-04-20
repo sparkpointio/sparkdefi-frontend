@@ -49,47 +49,47 @@ const App: React.FC = () => {
             {/* <Route path='/' exact>
               <Pools />
             </Route> */}
-            <Route path='/farms'>
+            <Route path="/farms">
               <Farms />
             </Route>
-            <Route path='/pools'>
+            <Route path="/pools">
               <Pools />
             </Route>
-            <Route path='/lottery'>
+            <Route path="/lottery">
               <Lottery />
             </Route>
-            <Route path='/ifo'>
+            <Route path="/ifo">
               <Ifos />
             </Route>
-            <Route path='/collectibles'>
+            <Route path="/collectibles">
               <Collectibles />
             </Route>
-            <Route exact path='/teams'>
+            <Route exact path="/teams">
               <Teams />
             </Route>
-            <Route path='/teams/:id'>
+            <Route path="/teams/:id">
               <Team />
             </Route>
-            <Route path='/profile'>
+            <Route path="/profile">
               <Profile />
             </Route>
-            <Route path='/competition'>
+            <Route path="/competition">
               <TradingCompetition />
             </Route>
-            <Route path='/prediction'>
+            <Route path="/prediction">
               <Predictions />
             </Route>
             {/* Redirect */}
-            <Route path='/staking'>
-              <Redirect to='/pools' />
+            <Route path="/staking">
+              <Redirect to="/pools" />
             </Route>
-            <Route path='/syrup'>
-              <Redirect to='/pools' />
+            <Route path="/syrup">
+              <Redirect to="/pools" />
             </Route>
-            <Route path='/nft'>
-              <Redirect to='/collectibles' />
+            <Route path="/nft">
+              <Redirect to="/collectibles" />
             </Route>
-            <Route path='/' component={RedirectToPools} />
+            <Route path="/" component={RedirectToPools} />
             {/* 404 */}
             <Route component={NotFound} />
           </Switch>

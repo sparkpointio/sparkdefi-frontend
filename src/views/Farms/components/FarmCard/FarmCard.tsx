@@ -35,7 +35,7 @@ const AccentGradient = keyframes`
 `
 
 const StyledCardAccent = styled.div`
-    // background: ${({ theme }) => `linear-gradient(180deg, ${theme.colors.primaryBright}, ${theme.colors.secondary})`};
+  // background: ${({ theme }) => `linear-gradient(180deg, ${theme.colors.primaryBright}, ${theme.colors.secondary})`};
   background-size: 400% 400%;
   animation: ${AccentGradient} 2s linear infinite;
   border-radius: 32px;
@@ -51,7 +51,7 @@ const FCard = styled.div<{ isPromotedFarm: boolean }>`
   align-self: baseline;
   background: ${(props) => props.theme.card.background};
   border: 5px solid ${(props) => props.theme.colors.primary};
-    // border-radius: ${({ theme, isPromotedFarm }) => (isPromotedFarm ? '31px' : theme.radii.card)};
+  // border-radius: ${({ theme, isPromotedFarm }) => (isPromotedFarm ? '31px' : theme.radii.card)};
   box-shadow: 0px 1px 4px rgba(25, 19, 38, 0.15);
   display: flex;
   flex-direction: column;
@@ -96,7 +96,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ userDataReady, farm, removed, cakeP
     pairTokenAddress: farm.pairToken.address,
   })
 
-  const stakingAddress = getAddress(farm.stakingAddresses);
+  const stakingAddress = getAddress(farm.stakingAddresses)
 
   const addLiquidityUrl = `${farm.liquidityUrl ?? BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`
   const AddTokenUrl = `${BASE_EXCHANGE_URL}/#/swap/${farm.token.address[56]}`
@@ -104,11 +104,17 @@ const FarmCard: React.FC<FarmCardProps> = ({ userDataReady, farm, removed, cakeP
   const isPromotedFarm = farm.token.symbol === 'CAKE'
   const theme = useContext(ThemeContext)
 
+  const { LPPrice, rewardPrice } = useFarmPrice(
+    Number(farm.lpTotalSupply),
+    farm.token.address[56],
+    farm.pairToken.address[56],
+    farm.quoteToken.address[56],
+  )
 
-  const {LPPrice, rewardPrice} = useFarmPrice(Number(farm.lpTotalSupply), farm.token.address[56], farm.pairToken.address[56], farm.quoteToken.address[56])
-
-  const aprBlackList = ["0x9f6b80e3867ab402081574e9e0a3be6fdf4ae95b"]
-  const apr = (aprBlackList.includes(farm.lpAddresses[56]) ? null : getFarmV2Apr(LPPrice, rewardPrice, Number(farm.totalDeposits), Number(farm.rewardRate)) )
+  const aprBlackList = ['0x9f6b80e3867ab402081574e9e0a3be6fdf4ae95b']
+  const apr = aprBlackList.includes(farm.lpAddresses[56])
+    ? null
+    : getFarmV2Apr(LPPrice, rewardPrice, Number(farm.totalDeposits), Number(farm.rewardRate))
 
   return (
     <FCard isPromotedFarm={isPromotedFarm}>
@@ -142,36 +148,47 @@ const FarmCard: React.FC<FarmCardProps> = ({ userDataReady, farm, removed, cakeP
         </Flex>
       )} */}
 
-
-      <Flex justifyContent='space-between' style={{ textAlign: 'left' }}>
+      <Flex justifyContent="space-between" style={{ textAlign: 'left' }}>
         <Text>{t('Total Deposits')}</Text>
-        <Text color='textSubtle'>{farm.totalDeposits ? formatTotalDeposits : <Skeleton width={60} display='inline-block' />}</Text>
+        <Text color="textSubtle">
+          {farm.totalDeposits ? formatTotalDeposits : <Skeleton width={60} display="inline-block" />}
+        </Text>
       </Flex>
       <Flex>
-        <HarvestAction stakingContract={getAddress(farm.stakingAddresses)}
-                       tokenRewardSymbol={earnLabel} userDataReady={userDataReady} userData={farm.userData}
-                       pid={farm.pid} />
+        <HarvestAction
+          stakingContract={getAddress(farm.stakingAddresses)}
+          tokenRewardSymbol={earnLabel}
+          userDataReady={userDataReady}
+          userData={farm.userData}
+          pid={farm.pid}
+        />
       </Flex>
-      <Flex justifyContent='space-between'>
+      <Flex justifyContent="space-between">
         <Text>{t('APR')}</Text>
-        <Text color='textSubtle'>{(apr === 0 || apr === null ? "-- " : apr.toFixed(2))}%</Text>
+        <Text color="textSubtle">{apr === 0 || apr === null ? '-- ' : apr.toFixed(2)}%</Text>
       </Flex>
-      <Flex justifyContent='space-between'>
+      <Flex justifyContent="space-between">
         <Text>{t('Rate')}</Text>
-        <Text color='textSubtle'>
-          {formatTotalRewardRate ?? <Skeleton width={60} display='inline-block' />} {earnLabel} / week</Text>
+        <Text color="textSubtle">
+          {formatTotalRewardRate ?? <Skeleton width={60} display="inline-block" />} {earnLabel} / week
+        </Text>
       </Flex>
-      <Flex justifyContent='space-between'>
+      <Flex justifyContent="space-between">
         <Text>{t('Duration')}</Text>
-        <Text color='textSubtle'>{farm.remainingDays ??  <Skeleton width={60} display='inline-block' />} Days</Text>
+        <Text color="textSubtle">{farm.remainingDays ?? <Skeleton width={60} display="inline-block" />} Days</Text>
       </Flex>
-      <CardActionsContainer userDataReady={userDataReady} farm={farm} account={account}
-                            addLiquidityUrl={addLiquidityUrl} addTokenUrl={AddTokenUrl} />
+      <CardActionsContainer
+        userDataReady={userDataReady}
+        farm={farm}
+        account={account}
+        addLiquidityUrl={addLiquidityUrl}
+        addTokenUrl={AddTokenUrl}
+      />
 
       <DetailsSection
         removed={removed}
         stakingAddress={getBscScanAddressUrl(stakingAddress)}
-        lpInfoAddress={`${farm.infoURL?? BASE_INFO_URL}/${lpAddress}`}
+        lpInfoAddress={`${farm.infoURL ?? BASE_INFO_URL}/${lpAddress}`}
         lpLabel={lpLabel}
       />
 

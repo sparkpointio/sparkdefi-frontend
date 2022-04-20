@@ -12,7 +12,7 @@ export interface ExpandableSectionProps {
   farmImage?: string
   farmSymbol?: string
   tokenSymbol?: string
-  rewardToken?:string
+  rewardToken?: string
   token: Token
   quoteToken: Token
   pairToken?: Token
@@ -37,12 +37,14 @@ const CardHeading: React.FC<ExpandableSectionProps> = ({
   farmSymbol,
   rewardToken,
   token,
-  pairToken
+  pairToken,
 }) => {
   return (
     <Wrapper justifyContent="space-between" alignItems="center" mb="12px">
       <Flex flexDirection="row" alignItems="">
-        <Heading  mb="4px" style={{textAlign: 'left'}}>Stake <br/> {lpLabel.split(' ')[0]} <br /> Earn {rewardToken}</Heading>
+        <Heading mb="4px" style={{ textAlign: 'left' }}>
+          Stake <br /> {lpLabel.split(' ')[0]} <br /> Earn {rewardToken}
+        </Heading>
       </Flex>
       <TokenPairImage variant="inverted" primaryToken={token} secondaryToken={pairToken} width={64} height={64} />
       {/* <Image src={`/images/farms/${farmImage}.svg`} alt={tokenSymbol} width={64} height={64} /> */}

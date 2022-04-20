@@ -43,8 +43,6 @@ export const API_SUMMARY = 'summary'
 export const API_LIQUIDITY = 'liquidity'
 export const API_LASTPRICE = 'last_price'
 
-
-
 export const BASE_BSC_SCAN_URLS = {
   [MAINNET_CHAIN_ID]: 'https://bscscan.com',
   [TESTNET_CHAIN_ID]: 'https://testnet.bscscan.com',

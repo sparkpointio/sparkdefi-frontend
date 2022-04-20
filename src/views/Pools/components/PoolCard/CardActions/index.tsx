@@ -40,12 +40,14 @@ const CardActions: React.FC<CardActionsProps> = ({ pool, stakedBalance }) => {
   const isStaked = stakedBalance.gt(0)
   const isLoading = !userData
 
-  const totalStaked = userData?.stakedBalance ? getBalanceNumber(new BigNumber(userData.stakedBalance), stakingToken.decimals) : 0
+  const totalStaked = userData?.stakedBalance
+    ? getBalanceNumber(new BigNumber(userData.stakedBalance), stakingToken.decimals)
+    : 0
   const totalEarned = userData?.pendingReward ? getBalanceNumber(new BigNumber(userData.pendingReward)) : 0
 
   return (
     <Flex flexDirection="column">
-      <Flex flexDirection="column" >
+      <Flex flexDirection="column">
         {harvest && (
           <>
             <Flex justifyContent="space-between">
@@ -66,13 +68,13 @@ const CardActions: React.FC<CardActionsProps> = ({ pool, stakedBalance }) => {
               <Box display="inline">
                 {/* <Text color="text" textTransform="uppercase"  bold fontSize="12px"> */}
                 <Text color="text" textTransform="uppercase" fontSize="12px">
-                   {!isComingSoon && formatNumber(totalStaked,2,5)} {isComingSoon && '-'} {stakingToken.symbol}
+                  {!isComingSoon && formatNumber(totalStaked, 2, 5)} {isComingSoon && '-'} {stakingToken.symbol}
                 </Text>
               </Box>
               <Box display="inline">
                 {/* <Text color="text" textTransform="uppercase" bold fontSize="12px"> */}
                 <Text color="text" textTransform="uppercase" fontSize="12px">
-                   {!isComingSoon && formatNumber(totalEarned,2,5)} {isComingSoon && '-'} {earningToken.symbol}
+                  {!isComingSoon && formatNumber(totalEarned, 2, 5)} {isComingSoon && '-'} {earningToken.symbol}
                 </Text>
               </Box>
             </Flex>
@@ -86,8 +88,8 @@ const CardActions: React.FC<CardActionsProps> = ({ pool, stakedBalance }) => {
             {isStaked ? t('Staked') : `${stakingToken.symbol}`}
           </InlineText>
         </Box> */}
-          <StyledFlex justifyContent="space-between" marginTop="10px">
-             <StakeActions
+        <StyledFlex justifyContent="space-between" marginTop="10px">
+          <StakeActions
             isLoading={isLoading}
             pool={pool}
             stakingTokenBalance={stakingTokenBalance}
@@ -95,7 +97,7 @@ const CardActions: React.FC<CardActionsProps> = ({ pool, stakedBalance }) => {
             isBnbPool={isBnbPool}
             isStaked={isStaked}
           />
-             {/* <HarvestActions
+          {/* <HarvestActions
               earnings={earnings}
               earningToken={earningToken}
               sousId={sousId}
@@ -103,7 +105,7 @@ const CardActions: React.FC<CardActionsProps> = ({ pool, stakedBalance }) => {
               isBnbPool={isBnbPool}
               isLoading={isLoading}
             /> */}
-          </StyledFlex>
+        </StyledFlex>
       </Flex>
     </Flex>
   )

@@ -12,7 +12,7 @@ const useStake = (pid: number) => {
 
   const handleStake = useCallback(
     async (amount: string, contract: Contract) => {
-      const txHash = await stake(contract?? masterChefContract, pid, amount, account, !!contract)
+      const txHash = await stake(contract ?? masterChefContract, pid, amount, account, !!contract)
       console.info(txHash)
     },
     [account, masterChefContract, pid],

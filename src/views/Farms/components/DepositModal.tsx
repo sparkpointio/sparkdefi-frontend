@@ -19,7 +19,6 @@ import StakeModal from './Modals/Stake'
 import ClaimModal from './Modals/ClaimModal'
 import { calculateUserRewardRate } from '../../../utils/farmHelpers'
 
-
 interface DepositModalProps {
   max: BigNumber
   onConfirm: (amount: string, contract: Contract) => void
@@ -32,27 +31,21 @@ interface DepositModalProps {
   maxStake?: BigNumber
 }
 
-const DepositModal: React.FC<DepositModalProps> = (
-  {
-    max,
-    onConfirm,
-    onDismiss,
-    tokenName = '',
-    addLiquidityUrl,
-    addTokenUrl,
-    handleUnstake,
-    farm,
-    maxStake,
-  }) => {
+const DepositModal: React.FC<DepositModalProps> = ({
+  max,
+  onConfirm,
+  onDismiss,
+  tokenName = '',
+  addLiquidityUrl,
+  addTokenUrl,
+  handleUnstake,
+  farm,
+  maxStake,
+}) => {
   const [requestedApproval, setRequestedApproval] = useState(false)
   const { t } = useTranslation()
   const [activeSelect, setActiveSelect] = useState(false)
-  const {
-    allowance,
-    tokenBalance,
-    stakedBalance,
-    earnings,
-  } = farm.userData || {}
+  const { allowance, tokenBalance, stakedBalance, earnings } = farm.userData || {}
   const userRate = calculateUserRewardRate(farm)
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
@@ -65,7 +58,9 @@ const DepositModal: React.FC<DepositModalProps> = (
   const formatStakedTokenBalance = getBalanceAmount(new BigNumber(stakedBalance)).toFormat(6)
   const formatTokenEarnings = getBalanceAmount(new BigNumber(earnings)).toFormat(6)
 
-  const [isApproved, setIsApproved] = useState(account && allowance && (new BigNumber(allowance)).isGreaterThanOrEqualTo(tokenBalance))
+  const [isApproved, setIsApproved] = useState(
+    account && allowance && new BigNumber(allowance).isGreaterThanOrEqualTo(tokenBalance),
+  )
   const lpStakingAddress = getAddress(farm.stakingAddresses)
   const lpStakingContract = useLPStakingContract(lpStakingAddress)
   const { onApprove } = useApprove(lpContract, lpStakingContract)
@@ -83,9 +78,13 @@ const DepositModal: React.FC<DepositModalProps> = (
   const [onPresentStake] = useModal(
     <StakeModal
       pid={pid}
-      onConfirm={onConfirm} lpStakingContract={lpStakingContract} max={max} symbol={tokenName}
+      onConfirm={onConfirm}
+      lpStakingContract={lpStakingContract}
+      max={max}
+      symbol={tokenName}
       addLiquidityUrl={addLiquidityUrl}
-      inputTitle={t('Stake')} />,
+      inputTitle={t('Stake')}
+    />,
   )
 
   const [onPresentClaim] = useModal(<ClaimModal />)
@@ -94,75 +93,77 @@ const DepositModal: React.FC<DepositModalProps> = (
       farm={farm}
       staked={formatStakedTokenBalance}
       earnings={formatTokenEarnings}
-      max={maxStake} onConfirm={handleUnstake} tokenName={tokenName} />,
+      max={maxStake}
+      onConfirm={handleUnstake}
+      tokenName={tokenName}
+    />,
   )
 
   return (
     <Modal title={t('Account Info')} onDismiss={onDismiss}>
-      <Text color='textSubtle' fontSize='14px' style={{ paddingBottom: '30px', marginTop: '-40px' }}>
+      <Text color="textSubtle" fontSize="14px" style={{ paddingBottom: '30px', marginTop: '-40px' }}>
         Staking, balances & earnings
       </Text>
       <Container>
         <DetailsCont>
-          <Text bold fontSize='24px'>
-            {formatTokenBalance ?? <Skeleton width={60} display='inline-block' />}
+          <Text bold fontSize="24px">
+            {formatTokenBalance ?? <Skeleton width={60} display="inline-block" />}
           </Text>
-          <Text color='textSubtle' fontSize='14px'>
+          <Text color="textSubtle" fontSize="14px">
             {farm.quoteToken.symbol}
           </Text>
           <ActionDiv style={{ padding: '0px' }}>
-            <Button fullWidth as='a' target='_blank' href={addTokenUrl}>
+            <Button fullWidth as="a" target="_blank" href={addTokenUrl}>
               Get {farm.quoteToken.symbol}
             </Button>
           </ActionDiv>
         </DetailsCont>
         <DetailsCont>
-          <Text bold fontSize='24px'>
-            {formatLPTokenBalance ?? <Skeleton width={60} display='inline-block' />}
+          <Text bold fontSize="24px">
+            {formatLPTokenBalance ?? <Skeleton width={60} display="inline-block" />}
           </Text>
-          <Text color='textSubtle' fontSize='14px'>
+          <Text color="textSubtle" fontSize="14px">
             {tokenName} Tokens
           </Text>
           <ActionDiv style={{ padding: '0px' }}>
-            <Button fullWidth as='a' target='_blank' href={addLiquidityUrl}>
+            <Button fullWidth as="a" target="_blank" href={addLiquidityUrl}>
               Get {tokenName}
             </Button>
           </ActionDiv>
         </DetailsCont>
         <DetailsCont>
-          <Text bold fontSize='24px'>
-            {formatStakedTokenBalance ?? <Skeleton width={60} display='inline-block' />}
+          <Text bold fontSize="24px">
+            {formatStakedTokenBalance ?? <Skeleton width={60} display="inline-block" />}
           </Text>
-          <Text color='textSubtle' fontSize='14px'>
+          <Text color="textSubtle" fontSize="14px">
             Your {tokenName} Deposits
           </Text>
           <ActionDiv style={{ padding: '0px' }}>
-            {isApproved ?
+            {isApproved ? (
               <Button fullWidth onClick={onPresentStake}>
                 Stake {tokenName}
               </Button>
-              :
+            ) : (
               <Button fullWidth onClick={handleApprove} disabled={requestedApproval}>
                 Enable Farm
               </Button>
-            }
-
+            )}
           </ActionDiv>
         </DetailsCont>
       </Container>
       <ModalHr />
       <ModalFooter>
         <DetailsCont>
-          <Text bold fontSize='24px'>
+          <Text bold fontSize="24px">
             {userRate}
           </Text>
-          <Text color='textSubtle' fontSize='14px'>{`Your Rate ${farm.quoteToken.symbol}/week`}</Text>
+          <Text color="textSubtle" fontSize="14px">{`Your Rate ${farm.quoteToken.symbol}/week`}</Text>
         </DetailsCont>
         <DetailsCont>
-          <Text bold fontSize='24px'>
-            {formatTokenEarnings ?? <Skeleton width={60} display='inline-block' />}
+          <Text bold fontSize="24px">
+            {formatTokenEarnings ?? <Skeleton width={60} display="inline-block" />}
           </Text>
-          <Text color='textSubtle' fontSize='14px'>{`${farm.quoteToken.symbol} Token Earnings`}</Text>
+          <Text color="textSubtle" fontSize="14px">{`${farm.quoteToken.symbol} Token Earnings`}</Text>
         </DetailsCont>
         <DetailsCont
           style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}

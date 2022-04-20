@@ -49,7 +49,7 @@ const Apr: React.FC<AprProps> = ({
   originalValue,
   hideButton = false,
 }) => {
-  const mainTokenAddress = quoteTokenAddress;
+  const mainTokenAddress = quoteTokenAddress
   const pairTokenAddress = tokenAddress
   const liquidityUrlPathParts = getLiquidityUrlPathParts({ mainTokenAddress, pairTokenAddress })
   const addLiquidityUrl = `${BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`

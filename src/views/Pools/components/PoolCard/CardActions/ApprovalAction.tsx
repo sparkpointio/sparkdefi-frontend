@@ -20,22 +20,22 @@ const ApprovalAction: React.FC<ApprovalActionProps> = ({ pool, isLoading = false
   const stakingTokenContract = useERC20(stakingToken.address ? getAddress(stakingToken.address) : '')
   const { handleApprove, requestedApproval } = useSousApprove(stakingTokenContract, sousId, earningToken.symbol)
   // const [activeSelect, setActiveSelect] = useState(false)
-  
+
   return (
-    
-    <Flex flexDirection="row" alignItems='flex-start'>
+    <Flex flexDirection="row" alignItems="flex-start">
       {isLoading ? (
         <Skeleton width="100%" height="52px" />
       ) : (
         // <ActionDiv>
-        <Button style= {{width: '100%' }}
+        <Button
+          style={{ width: '100%' }}
           isLoading={requestedApproval}
           endIcon={requestedApproval ? <AutoRenewIcon spin color="currentColor" /> : null}
           disabled={requestedApproval}
           onClick={handleApprove}
           // width="100%"
         >
-          { }
+          {}
         </Button>
         // </ActionDiv>
       )}
@@ -57,9 +57,7 @@ const ApprovalAction: React.FC<ApprovalActionProps> = ({ pool, isLoading = false
             </Button>
           </Dropdown>
         </ActionDiv> */}
-    </Flex> 
-
-
+    </Flex>
   )
 }
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import styled from 'styled-components'
 import { Slider, BalanceInput, AutoRenewIcon, Link } from '@pancakeswap/uikit'
-import { Modal, Text, Flex, Image, Button} from '@sparkpointio/sparkswap-uikit'
+import { Modal, Text, Flex, Image, Button } from '@sparkpointio/sparkswap-uikit'
 import { useTranslation } from 'contexts/Localization'
 import { BASE_EXCHANGE_URL } from 'config'
 import { useSousStake } from 'hooks/useStake'
@@ -49,7 +49,7 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
   isApprove = false,
 }) => {
   const { sousId, stakingToken, userData, stakingLimit, earningToken } = pool
-  const approveBtn = useRef(null);
+  const approveBtn = useRef(null)
   const stakingTokenContract = useERC20(stakingToken.address ? getAddress(stakingToken.address) : '')
   const { t } = useTranslation()
   const { theme } = useTheme()
@@ -62,13 +62,24 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
   const [stakeAmount, setStakeAmount] = useState('')
   const [hasReachedStakeLimit, setHasReachedStakedLimit] = useState(false)
   const [percent, setPercent] = useState(0)
-  const userLimit = stakingLimit.minus(userData.stakedBalance);
-  const totalStakedTokens = userData?.stakedBalance ? getBalanceNumber(new BigNumber(userData.stakedBalance), stakingToken.decimals) : BIG_ZERO
+  const userLimit = stakingLimit.minus(userData.stakedBalance)
+  const totalStakedTokens = userData?.stakedBalance
+    ? getBalanceNumber(new BigNumber(userData.stakedBalance), stakingToken.decimals)
+    : BIG_ZERO
   const numTotalStaked = totalStakedTokens
-  const totalStakingTokens = userData?.stakingTokenBalance ? getBalanceNumber(new BigNumber(userData.stakingTokenBalance), stakingToken.decimals) : BIG_ZERO
-  const remainingStakeTokens = userData?.stakedBalance ? getBalanceNumber(new BigNumber(pool.stakingLimit.minus(userData.stakedBalance)), stakingToken.decimals) : BIG_ZERO
+  const totalStakingTokens = userData?.stakingTokenBalance
+    ? getBalanceNumber(new BigNumber(userData.stakingTokenBalance), stakingToken.decimals)
+    : BIG_ZERO
+  const remainingStakeTokens = userData?.stakedBalance
+    ? getBalanceNumber(new BigNumber(pool.stakingLimit.minus(userData.stakedBalance)), stakingToken.decimals)
+    : BIG_ZERO
   const totalAllowance = useTokenAllowance(stakingToken.address[56], pool.contractAddress[56])
-  const { handleApprove, requestedApproval } = useSousApproveWithAmount(stakingTokenContract, sousId, earningToken.symbol, getDecimalAmount(new BigNumber(stakeAmount), stakingToken.decimals))
+  const { handleApprove, requestedApproval } = useSousApproveWithAmount(
+    stakingTokenContract,
+    sousId,
+    earningToken.symbol,
+    getDecimalAmount(new BigNumber(stakeAmount), stakingToken.decimals),
+  )
   const getCalculatedStakingLimit = () => {
     if (isRemovingStake) {
       return userData.stakedBalance
@@ -83,7 +94,16 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
       setHasReachedStakedLimit(fullDecimalStakeAmount.plus(userData.stakedBalance).gt(stakingLimit))
     }
     setIsApproved(totalAllowance.balance.gte(getDecimalAmount(new BigNumber(stakeAmount), stakingToken.decimals)))
-  }, [requestedApproval, stakeAmount, stakingLimit, userData, stakingToken, isRemovingStake, totalAllowance, setHasReachedStakedLimit])
+  }, [
+    requestedApproval,
+    stakeAmount,
+    stakingLimit,
+    userData,
+    stakingToken,
+    isRemovingStake,
+    totalAllowance,
+    setHasReachedStakedLimit,
+  ])
 
   const handleStakeInputChange = (input: string) => {
     if (input) {
@@ -113,7 +133,6 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
 
   const handleConfirmClick = async () => {
     setPendingTx(true)
-
 
     if (isRemovingStake) {
       // unstaking
@@ -151,7 +170,6 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
     }
   }
 
-
   return (
     <Modal title="" onDismiss={onDismiss}>
       <ModalBody flexDirection="column">
@@ -165,10 +183,10 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
         )} */}
 
         <Flex justifyContent="center">
-          <Text color="textSubtle" fontSize="14px" mb="38px" mt="-48px" style={{ textAlign: 'center'}}>
+          <Text color="textSubtle" fontSize="14px" mb="38px" mt="-48px" style={{ textAlign: 'center' }}>
             {t('Maximum stakable amount in this pool: %maxstake% %tokensymbol%', {
               maxstake: getFullDisplayBalance(stakingLimit, stakingToken.decimals),
-              tokensymbol: pool.stakingToken.symbol
+              tokensymbol: pool.stakingToken.symbol,
             })}
           </Text>
         </Flex>
@@ -189,30 +207,29 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
         </Flex>
         <ModalInput
           value={stakeAmount}
-          onSelectMax={() => {handleChangePercent(100)}}
-          onChange={e => handleStakeInputChange(e.currentTarget.value)}
+          onSelectMax={() => {
+            handleChangePercent(100)
+          }}
+          onChange={(e) => handleStakeInputChange(e.currentTarget.value)}
           max={getFullDisplayBalance(new BigNumber(userLimit), stakingToken.decimals, 0)}
           symbol={stakingToken.symbol}
-          addLiquidityUrl=''
+          addLiquidityUrl=""
         />
 
         {/* Fetch and display actual balance */}
 
-        <Text color="textSubtle" fontSize="14px" mb="8px" style={{ textAlign: 'left'}}>
+        <Text color="textSubtle" fontSize="14px" mb="8px" style={{ textAlign: 'left' }}>
           Remaining stakable amount: {remainingStakeTokens} {pool.stakingToken.symbol}
         </Text>
 
-
         <div>
-        <Text ml="auto" color="textSubtle" fontSize="14px" mb="8px" style={{ textAlign: 'left'}}>
-          {/* {t('Balance: %balance%', {
+          <Text ml="auto" color="textSubtle" fontSize="14px" mb="8px" style={{ textAlign: 'left' }}>
+            {/* {t('Balance: %balance%', {
             balance: getFullDisplayBalance(getCalculatedStakingLimit(), stakingToken.decimals),
           })} */}
-          Balance: {totalStakingTokens.toFixed(4)} {pool.stakingToken.symbol}
-        </Text>
+            Balance: {totalStakingTokens.toFixed(4)} {pool.stakingToken.symbol}
+          </Text>
         </div>
-
-
 
         {/* {hasReachedStakeLimit && (
           <Text color="failure" fontSize="12px" style={{ textAlign: 'right' }} mt="4px">
@@ -245,40 +262,40 @@ const StakeActionModal: React.FC<StakeModalProps> = ({
           <PercentageButton onClick={() => handleChangePercent(100)}>{t('Max')}</PercentageButton>
         </Flex> */}
 
-        <Flex justifyContent="space-between"  marginTop="17px" marginBottom="17px">
+        <Flex justifyContent="space-between" marginTop="17px" marginBottom="17px">
           <Text bold>Approved Tokens</Text>
           <Text>
             {getBalanceNumber(totalAllowance.balance, stakingToken.decimals)} {pool.stakingToken.symbol}
           </Text>
         </Flex>
-        <Flex style={{width: '100%'}}>
-        <Button
-          isLoading={pendingTx}
-          // endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
-          endIcon={requestedApproval ? <AutoRenewIcon spin color="currentColor" /> : null}
-          // onClick={handleApproveClick}
-          // disabled={!stakeAmount || parseFloat(stakeAmount) === 0 || hasReachedStakeLimit || approvedTx}
-          onClick={handleApprove}
-          disabled={!stakeAmount || isApproved}
-          mt="24px"
-          fullWidth
-          marginRight="20px"
-        >
-         Approve
-        </Button>
-        <Button
-          isLoading={pendingTx}
-          endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
-          onClick={handleConfirmClick}
-          disabled={!stakeAmount || hasReachedStakeLimit || !isApproved}
-          // disabled={!approvedTx}
-          mt="24px"
-          fullWidth
-          marginLeft="20px"
-        >
-          {/* {pendingTx ? t('Depositing') : t('Deposit')} */}
-          {t('Deposit')}
-        </Button>
+        <Flex style={{ width: '100%' }}>
+          <Button
+            isLoading={pendingTx}
+            // endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
+            endIcon={requestedApproval ? <AutoRenewIcon spin color="currentColor" /> : null}
+            // onClick={handleApproveClick}
+            // disabled={!stakeAmount || parseFloat(stakeAmount) === 0 || hasReachedStakeLimit || approvedTx}
+            onClick={handleApprove}
+            disabled={!stakeAmount || isApproved}
+            mt="24px"
+            fullWidth
+            marginRight="20px"
+          >
+            Approve
+          </Button>
+          <Button
+            isLoading={pendingTx}
+            endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
+            onClick={handleConfirmClick}
+            disabled={!stakeAmount || hasReachedStakeLimit || !isApproved}
+            // disabled={!approvedTx}
+            mt="24px"
+            fullWidth
+            marginLeft="20px"
+          >
+            {/* {pendingTx ? t('Depositing') : t('Deposit')} */}
+            {t('Deposit')}
+          </Button>
         </Flex>
         {/* {!isRemovingStake && (
           <StyledLink external href={BASE_EXCHANGE_URL}>

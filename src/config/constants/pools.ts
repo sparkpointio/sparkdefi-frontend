@@ -50,7 +50,7 @@ const pools: PoolConfig[] = [
     sortOrder: 999,
     isFinished: false,
     isComingSoon: false,
-    isAddTokenDisabled: true
+    isAddTokenDisabled: true,
   },
   {
     sousId: 6,
@@ -83,7 +83,7 @@ const pools: PoolConfig[] = [
     sortOrder: 999,
     isFinished: false,
     isComingSoon: false,
-    isAddTokenDisabled: true
+    isAddTokenDisabled: true,
   },
   {
     sousId: 8,

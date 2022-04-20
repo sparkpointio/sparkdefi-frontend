@@ -1,14 +1,12 @@
 import React, { useState } from 'react'
-import { Button, Text, Flex, useModal, Dropdown} from '@sparkpointio/sparkswap-uikit';
-import { ChevronDown, ChevronUp } from 'react-feather';
+import { Button, Text, Flex, useModal, Dropdown } from '@sparkpointio/sparkswap-uikit'
+import { ChevronDown, ChevronUp } from 'react-feather'
 import BigNumber from 'bignumber.js'
 import { Token } from 'config/constants/types'
 import { useTranslation } from 'contexts/Localization'
 import { getFullDisplayBalance, getBalanceNumber, formatNumber } from 'utils/formatBalance'
 import Balance from 'components/Balance'
 import CollectModal from '../Modals/CollectModal'
-
-
 
 interface HarvestActionsProps {
   earnings: BigNumber
@@ -52,10 +50,14 @@ const HarvestActions: React.FC<HarvestActionsProps> = ({
   )
 
   return (
-    <Flex flexDirection="column" mb="16px" marginLeft="5px"
-          onMouseEnter={() => setActiveSelect(true)}
-          onMouseLeave={() => setActiveSelect(false)}>
-        {/* <Flex flexDirection="column">
+    <Flex
+      flexDirection="column"
+      mb="16px"
+      marginLeft="5px"
+      onMouseEnter={() => setActiveSelect(true)}
+      onMouseLeave={() => setActiveSelect(false)}
+    >
+      {/* <Flex flexDirection="column">
           {isLoading ? (
             <Skeleton width="80px" height="48px" />
           ) : (
@@ -85,8 +87,8 @@ const HarvestActions: React.FC<HarvestActionsProps> = ({
             </>
           )}
         </Flex> */}
-         
-         {/* <Dropdown
+
+      {/* <Dropdown
             position="top"
             target={
               <Button fullWidth variant="secondary"><Text>Withdraw</Text> {activeSelect ? <ChevronDown /> : <ChevronUp />}
