@@ -245,7 +245,7 @@ const farms: FarmConfig[] = [
     },
     stakingAddresses: {
       97: '',
-      56: '0xaE712e16960B85F1624a7242f9F66CE752c4b774',
+      56: '0x57DE775D524545Fab61978b60312ada906CFE355',
     },
     token: tokens.mgg,
     pairToken: tokens.busd,
