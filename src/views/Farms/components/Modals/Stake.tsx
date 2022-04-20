@@ -12,7 +12,7 @@ import { useAppDispatch } from '../../../../state'
 import { fetchFarmUserDataAsync } from '../../../../state/farms'
 
 interface StakeModalInterface {
-  pid: number,
+  pid: number
   onDismiss?: () => void
   max: BigNumber
   symbol: string
@@ -23,7 +23,16 @@ interface StakeModalInterface {
   lpStakingContract?: Contract
 }
 
-const Stake: React.FC<StakeModalInterface> = ({ pid, onDismiss, max, symbol, addLiquidityUrl, inputTitle, onConfirm, lpStakingContract}) => {
+const Stake: React.FC<StakeModalInterface> = ({
+  pid,
+  onDismiss,
+  max,
+  symbol,
+  addLiquidityUrl,
+  inputTitle,
+  onConfirm,
+  lpStakingContract,
+}) => {
   const [val, setVal] = useState('0')
   const [pendingTx, setPendingTx] = useState(false)
   const valNumber = new BigNumber(val)
@@ -52,16 +61,10 @@ const Stake: React.FC<StakeModalInterface> = ({ pid, onDismiss, max, symbol, add
       setPendingTx(true)
       await onConfirm(val, lpStakingContract)
       setPendingTx(false)
-      toastSuccess(
-        `${t('Staked')}!`,
-        t('Your %symbol% tokens have been staked to the pool!', { 'symbol': symbol }),
-      )
+      toastSuccess(`${t('Staked')}!`, t('Your %symbol% tokens have been staked to the pool!', { symbol: symbol }))
       onDismiss()
     } catch (e) {
-      toastError(
-        t('Error'),
-        t('Please try again. Confirm the transaction and make sure you are paying enough gas!'),
-      )
+      toastError(t('Error'), t('Please try again. Confirm the transaction and make sure you are paying enough gas!'))
       console.error(e)
     } finally {
       setPendingTx(false)
@@ -87,21 +90,17 @@ const Stake: React.FC<StakeModalInterface> = ({ pid, onDismiss, max, symbol, add
         />
       </Container>
       <StyledFlex justifyContent="space-between">
-        <Text>{ symbol } balance: </Text>
-        <Text>{ fullBalance }</Text>
+        <Text>{symbol} balance: </Text>
+        <Text>{fullBalance}</Text>
       </StyledFlex>
       <StyledFlex justifyContent="space-between">
-        <CancelButton
-          onClick={onDismiss}
-        >
-         Close
-        </CancelButton>
+        <CancelButton onClick={onDismiss}>Close</CancelButton>
         <DepositButton
           onClick={onClick}
           // disable Deposit button if not yet approved
           disabled={pendingTx || !valNumber.isFinite() || valNumber.eq(0) || valNumber.gt(fullBalanceNumber)}
         >
-        Deposit
+          Deposit
         </DepositButton>
       </StyledFlex>
     </Modal>

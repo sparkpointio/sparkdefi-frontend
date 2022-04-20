@@ -109,13 +109,17 @@ const StakeAction: React.FC<StakeActionsProps> = ({
     // Reserve function for future use
     // <Button disabled={isFinished} onClick={stakingTokenBalance.gt(0) ? onPresentStake : onPresentTokenRequired} fullWidth>
     return (
-      <Button fullWidth disabled={isFinished && stakedBalance.isEqualTo(0)} onClick={ onPresentStake }>
-        {isFinished && stakedBalance.isGreaterThan(0) ? 'Withdraw' : 'Stake' }
+      <Button fullWidth disabled={isFinished && stakedBalance.isEqualTo(0)} onClick={onPresentStake}>
+        {isFinished && stakedBalance.isGreaterThan(0) ? 'Withdraw' : 'Stake'}
       </Button>
     )
   }
 
-  return <Flex justifyContent="space-between" alignItems="center">{isLoading ? <Skeleton width="100%" height="52px" /> : renderStakeAction()}</Flex>
+  return (
+    <Flex justifyContent="space-between" alignItems="center">
+      {isLoading ? <Skeleton width="100%" height="52px" /> : renderStakeAction()}
+    </Flex>
+  )
 }
 
 export default StakeAction

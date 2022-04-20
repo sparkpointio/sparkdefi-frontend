@@ -28,7 +28,7 @@ const StyledTokenInput = styled.div<InputProps>`
   flex-direction: column;
   background-color: transparent;
   border: 2px solid ${({ theme }) => theme.colors.primary};
-    // box-shadow: ${getBoxShadow};
+  // box-shadow: ${getBoxShadow};
   color: ${({ theme }) => theme.colors.text};
   padding: 8px 16px 8px 0;
   width: 100%;
@@ -64,15 +64,15 @@ const StyledInput = styled(Input)`
 // `
 
 const ModalInput: React.FC<ModalInputProps> = ({
-                                                 max,
-                                                 // symbol,
-                                                 onChange,
-                                                 onSelectMax,
-                                                 value,
-                                                 // addLiquidityUrl,
-                                                 // inputTitle,
-                                                 decimals = 18,
-                                               }) => {
+  max,
+  // symbol,
+  onChange,
+  onSelectMax,
+  value,
+  // addLiquidityUrl,
+  // inputTitle,
+  decimals = 18,
+}) => {
   const { t } = useTranslation()
   const isBalanceZero = max === '0' || !max
 
@@ -93,17 +93,17 @@ const ModalInput: React.FC<ModalInputProps> = ({
         {/* <Flex justifyContent="space-between" pl="16px">
           <Text fontSize="14px">{inputTitle}</Text>
         </Flex> */}
-        <Flex alignItems='flex-end' justifyContent='space-around'>
+        <Flex alignItems="flex-end" justifyContent="space-around">
           <StyledInput
             pattern={`^[0-9]*[.,]?[0-9]{0,${decimals}}$`}
-            inputMode='decimal'
-            step='any'
-            min='0'
+            inputMode="decimal"
+            step="any"
+            min="0"
             onChange={onChange}
-            placeholder='0'
+            placeholder="0"
             value={value}
           />
-          <Button size='sm' onClick={onSelectMax} mr='8px' mb='4px'>
+          <Button size="sm" onClick={onSelectMax} mr="8px" mb="4px">
             {t('Max')}
           </Button>
           {/* <Text fontSize="16px">{symbol}</Text> */}
@@ -113,8 +113,6 @@ const ModalInput: React.FC<ModalInputProps> = ({
         {/* <Text fontSize="14px" color="textSubtle">
             {t('Available')}: {getFullDisplayBalance}
           </Text>  */}
-
-
       </Flex>
       {/* {isBalanceZero && (
         <StyledErrorMessage fontSize="14px" color="failure">

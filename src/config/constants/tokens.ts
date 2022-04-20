@@ -7,7 +7,7 @@ const tokens = {
     },
     iconExtension: 'png',
     decimals: 18,
-    projectLink: 'https://www.metagg.com/'
+    projectLink: 'https://www.metagg.com/',
   },
   sfuel: {
     symbol: 'SFUEL',
@@ -1718,4 +1718,3 @@ const tokens = {
 }
 
 export default tokens
-

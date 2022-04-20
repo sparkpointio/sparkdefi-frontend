@@ -89,7 +89,18 @@ export const useSousApproveWithAmount = (lpContract: Contract, sousId, earningTo
       toastError(t('Error'), e?.message)
       setRequestedApproval(false)
     }
-  }, [account, dispatch, lpContract, sousChefContract, sousId, earningTokenSymbol, stakingAmount, t, toastError, toastSuccess])
+  }, [
+    account,
+    dispatch,
+    lpContract,
+    sousChefContract,
+    sousId,
+    earningTokenSymbol,
+    stakingAmount,
+    t,
+    toastError,
+    toastSuccess,
+  ])
 
   return { handleApprove, requestedApproval }
 }

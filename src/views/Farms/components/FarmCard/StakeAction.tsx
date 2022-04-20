@@ -22,7 +22,7 @@ import { calculateUserRewardRate } from '../../../../utils/farmHelpers'
 
 interface FarmCardActionsProps {
   userDataReady?: boolean
-  userRate?:string,
+  userRate?: string
   stakedBalance?: BigNumber
   tokenBalance?: BigNumber
   tokenName?: string
@@ -47,7 +47,7 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
   addLiquidityUrl,
   addTokenUrl,
   farm,
-  userDataReady
+  userDataReady,
 }) => {
   const { t } = useTranslation()
   const { onStake } = useStake(pid)
@@ -85,7 +85,7 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
       farm={farm}
       handleUnstake={handleUnstake}
       maxStake={stakedBalance}
-    />
+    />,
   )
   const earnings = getBalanceAmount(new BigNumber(farm.userData.earnings)).toFormat(6)
   const formatStakedBalance = getBalanceAmount(new BigNumber(farm.userData.stakedBalance)).toFormat(6)
@@ -94,7 +94,10 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
       farm={farm}
       staked={formatStakedBalance}
       earnings={earnings}
-      max={stakedBalance} onConfirm={handleUnstake} tokenName={tokenName} />
+      max={stakedBalance}
+      onConfirm={handleUnstake}
+      tokenName={tokenName}
+    />,
   )
 
   const renderStakingButtons = () => {
@@ -104,13 +107,15 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
     }
     return (
       <Button
-        onClick={farm.hasEnded && parseFloat(farm.userData.stakedBalance)? onPresentWithdraw: onPresentDeposit}
-        disabled={(farm.hasEnded && !parseFloat(farm.userData.stakedBalance)) && ['history', 'archived'].some((item) => location.pathname.includes(item))}
+        onClick={farm.hasEnded && parseFloat(farm.userData.stakedBalance) ? onPresentWithdraw : onPresentDeposit}
+        disabled={
+          farm.hasEnded &&
+          !parseFloat(farm.userData.stakedBalance) &&
+          ['history', 'archived'].some((item) => location.pathname.includes(item))
+        }
         fullWidth
       >
-        {userDataReady?
-          buttonTxt
-          : <Loading /> }
+        {userDataReady ? buttonTxt : <Loading />}
       </Button>
     )
   }

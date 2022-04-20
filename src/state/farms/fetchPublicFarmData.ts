@@ -82,8 +82,7 @@ const fetchFarm = async (farm: Farm): Promise<PublicFarmData> => {
       name: 'rewardRate',
     },
   ]
-  const [totalSupply, periodFinish, rewardRate] =
-    await multicall(lpStaking, lpStakingCalls)
+  const [totalSupply, periodFinish, rewardRate] = await multicall(lpStaking, lpStakingCalls)
 
   // Total Deposits in staking address
   const totalDeposits = new BigNumber(totalSupply)
@@ -93,9 +92,9 @@ const fetchFarm = async (farm: Farm): Promise<PublicFarmData> => {
 
   // console.log(totalRewardRate)
 
-  const endDate = (new Date(0)).setUTCSeconds(periodFinish)
+  const endDate = new Date(0).setUTCSeconds(periodFinish)
   const hasEnded = endDate < now()
-  const remainingDays = (Math.max(0, Math.ceil(((((endDate - now()) / 1000) / 60) / 60) / 24))).toString()
+  const remainingDays = Math.max(0, Math.ceil((endDate - now()) / 1000 / 60 / 60 / 24)).toString()
 
   // Ratio in % of LP tokens that are staked in the MC, vs the total number in circulation
   const lpTokenRatio = new BigNumber(lpTokenBalanceMC).div(new BigNumber(lpTotalSupply))
@@ -115,16 +114,16 @@ const fetchFarm = async (farm: Farm): Promise<PublicFarmData> => {
   const [info, totalAllocPoint] =
     pid || pid === 0
       ? await multicall(masterchefABI, [
-        {
-          address: getMasterChefAddress(),
-          name: 'poolInfo',
-          params: [pid],
-        },
-        {
-          address: getMasterChefAddress(),
-          name: 'totalAllocPoint',
-        },
-      ])
+          {
+            address: getMasterChefAddress(),
+            name: 'poolInfo',
+            params: [pid],
+          },
+          {
+            address: getMasterChefAddress(),
+            name: 'totalAllocPoint',
+          },
+        ])
       : [null, null]
 
   const allocPoint = info ? new BigNumber(info.allocPoint?._hex) : BIG_ZERO
@@ -132,10 +131,10 @@ const fetchFarm = async (farm: Farm): Promise<PublicFarmData> => {
 
   return {
     totalDeposits: totalDeposits.toJSON(),
-    'rewardRate': new BigNumber(rewardRate).toJSON(),
-    'totalRewardRate': totalRewardRate.toJSON(),
-    'hasEnded': hasEnded,
-    'remainingDays': remainingDays,
+    rewardRate: new BigNumber(rewardRate).toJSON(),
+    totalRewardRate: totalRewardRate.toJSON(),
+    hasEnded: hasEnded,
+    remainingDays: remainingDays,
     tokenAmountMc: tokenAmountMc.toJSON(),
     quoteTokenAmountMc: quoteTokenAmountMc.toJSON(),
     tokenAmountTotal: tokenAmountTotal.toJSON(),

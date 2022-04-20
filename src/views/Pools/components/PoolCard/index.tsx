@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js'
 import React, { useContext, useEffect, useState } from 'react'
-import { CardBody, Flex, Text , Link, LinkExternal} from '@sparkpointio/sparkswap-uikit'
+import { CardBody, Flex, Text, Link, LinkExternal } from '@sparkpointio/sparkswap-uikit'
 import { ThemeContext } from 'styled-components'
 import UnlockButton from 'components/UnlockButton'
 import { useTranslation } from 'contexts/Localization'
@@ -8,7 +8,7 @@ import { BIG_ZERO } from 'utils/bigNumber'
 import { usePoolPrice } from 'hooks/price'
 import { getPoolApr } from 'utils/apr'
 import { Pool } from 'state/types'
-import { getBalanceNumber , formatNumber } from 'utils/formatBalance'
+import { getBalanceNumber, formatNumber } from 'utils/formatBalance'
 import { getPoolBlockInfo } from 'views/Pools/helpers'
 import { useBlock } from 'state/block/hooks'
 import { getBscScanLink } from 'utils'
@@ -17,7 +17,6 @@ import CardFooter from './CardFooter'
 import StyledCardHeader from './StyledCardHeader'
 import CardActions from './CardActions'
 
-
 const PoolCard: React.FC<{ pool: Pool; account: string }> = ({ pool, account }) => {
   const { sousId, stakingToken, earningToken, isFinished, userData, startBlock, endBlock, isComingSoon } = pool
   const { t } = useTranslation()
@@ -25,81 +24,90 @@ const PoolCard: React.FC<{ pool: Pool; account: string }> = ({ pool, account }) 
   const accountHasStakedBalance = stakedBalance.gt(0)
   const theme = useContext(ThemeContext)
 
-  const totalStaked = pool.totalStaked ? getBalanceNumber(new BigNumber(pool.totalStaked.toString()), stakingToken.decimals) : 0
+  const totalStaked = pool.totalStaked
+    ? getBalanceNumber(new BigNumber(pool.totalStaked.toString()), stakingToken.decimals)
+    : 0
 
-  const rewardPerBlock = pool?.tokenPerBlock ? getBalanceNumber(new BigNumber(pool.tokenPerBlock.toString()), earningToken.decimals) : 0
+  const rewardPerBlock = pool?.tokenPerBlock
+    ? getBalanceNumber(new BigNumber(pool.tokenPerBlock.toString()), earningToken.decimals)
+    : 0
 
-  const temp = new BigNumber(pool.tokenPerBlock).times( new BigNumber(userData.stakedBalance).div(pool.totalStaked)  )
+  const temp = new BigNumber(pool.tokenPerBlock).times(new BigNumber(userData.stakedBalance).div(pool.totalStaked))
   const rewardRate = pool?.tokenPerBlock ? getBalanceNumber(temp) : 0
 
   const { currentBlock } = useBlock()
 
   const { shouldShowBlockCountdown, blocksUntilStart, blocksRemaining, hasPoolStarted, blocksToDisplay } =
-  getPoolBlockInfo(pool, currentBlock)
+    getPoolBlockInfo(pool, currentBlock)
 
-  const {stakingPrice, rewardPrice} = usePoolPrice(stakingToken.address[56], earningToken.address[56])
+  const { stakingPrice, rewardPrice } = usePoolPrice(stakingToken.address[56], earningToken.address[56])
 
   const apr = getPoolApr(stakingPrice, rewardPrice, totalStaked, rewardPerBlock)
 
   // Countdown for days remaining
-  const blockSeconds = blocksRemaining * 3;
-  const date = Math.floor(blockSeconds / (3600*24));
-  const hours = Math.floor(blockSeconds % (3600*24) / 3600);
-  const minutes = Math.floor(blockSeconds % 3600 / 60);
+  const blockSeconds = blocksRemaining * 3
+  const date = Math.floor(blockSeconds / (3600 * 24))
+  const hours = Math.floor((blockSeconds % (3600 * 24)) / 3600)
+  const minutes = Math.floor((blockSeconds % 3600) / 60)
   // const seconds = Math.floor(blockSeconds % 60);
-  const daysRemaining = `${date}d : ${hours}h : ${minutes}m `;
+  const daysRemaining = `${date}d : ${hours}h : ${minutes}m `
 
   return (
-    <StyledCard
-      isFinished={isFinished && sousId !== 0}
-    >
-        <StyledCardHeader
-          isStaking={accountHasStakedBalance}
-          earningToken={earningToken}
-          stakingToken={stakingToken}
-          isFinished={isFinished && sousId !== 0}
-        />
-         <hr style={{width: '100%', border: 'none', backgroundColor: theme.colors.primary, height: '2px'}}/>
+    <StyledCard isFinished={isFinished && sousId !== 0}>
+      <StyledCardHeader
+        isStaking={accountHasStakedBalance}
+        earningToken={earningToken}
+        stakingToken={stakingToken}
+        isFinished={isFinished && sousId !== 0}
+      />
+      <hr style={{ width: '100%', border: 'none', backgroundColor: theme.colors.primary, height: '2px' }} />
 
-          <Flex justifyContent="space-between" style={{textAlign: 'left'}}>
-            {/* <Text>Remaining blocks</Text> */}
-            <Text>Remaining days</Text>
-            <Link external href={getBscScanLink(hasPoolStarted ? endBlock : startBlock, 'countdown')}>
-              {/* <Text>{!isComingSoon && `${ formatNumber(blocksRemaining, 0, 0) }`} {isComingSoon && '-'} blocks</Text> */}
-              <Text bold color={theme.colors.primary} >{!isComingSoon && `${ daysRemaining }`} {isComingSoon && '-'}</Text>
-            </Link>
-            
-          </Flex>
-          {/* {console.log(startBlock, 'countdown')} */}
-
-          {/* <AprRow pool={pool} stakingTokenPrice={stakingTokenPrice} /> */}
-          <Flex justifyContent="space-between" style={{textAlign: 'left'}}>
-            <Text>Total Deposit</Text>
-            <Text>{!isComingSoon && `${ formatNumber(totalStaked) }`} {isComingSoon && '-'} {stakingToken.symbol}</Text>
-          </Flex>
-          <Flex justifyContent="space-between" style={{textAlign: 'left'}}>
-              <Text>Reward per block</Text>
-              <Text>{!isComingSoon && rewardPerBlock} {isComingSoon && '-'}</Text>
-          </Flex>
-          <Flex justifyContent="space-between" style={{textAlign: 'left'}}>
-            <Text>APR</Text>
-            <Text>{(apr === 0 || apr === null ? "-- " : apr.toFixed(2))}%</Text>
-          </Flex>
-          <Flex justifyContent="space-between" style={{textAlign: 'left'}}>
-        <Text>{t('Your Rate')}</Text>
-        <Text>{!isComingSoon && formatNumber(rewardRate,2,10)} {isComingSoon && '-'} {pool.earningToken.symbol}/block</Text>
+      <Flex justifyContent="space-between" style={{ textAlign: 'left' }}>
+        {/* <Text>Remaining blocks</Text> */}
+        <Text>Remaining days</Text>
+        <Link external href={getBscScanLink(hasPoolStarted ? endBlock : startBlock, 'countdown')}>
+          {/* <Text>{!isComingSoon && `${ formatNumber(blocksRemaining, 0, 0) }`} {isComingSoon && '-'} blocks</Text> */}
+          <Text bold color={theme.colors.primary}>
+            {!isComingSoon && `${daysRemaining}`} {isComingSoon && '-'}
+          </Text>
+        </Link>
       </Flex>
-          <Flex mt="24px" flexDirection="column" marginTop="10px">
-            {account ? (
-              <CardActions pool={pool} stakedBalance={stakedBalance} />
-            ) : (
-              <>
-                <UnlockButton />
-              </>
-            )}
-          </Flex>
-          {/* <Text color="textSubtle" fontSize="14px">{t('This will only work on Binance Smart Chain')}</Text> */}
-        {/* <CardFooter pool={pool} account={account} /> */ }
+      {/* {console.log(startBlock, 'countdown')} */}
+
+      {/* <AprRow pool={pool} stakingTokenPrice={stakingTokenPrice} /> */}
+      <Flex justifyContent="space-between" style={{ textAlign: 'left' }}>
+        <Text>Total Deposit</Text>
+        <Text>
+          {!isComingSoon && `${formatNumber(totalStaked)}`} {isComingSoon && '-'} {stakingToken.symbol}
+        </Text>
+      </Flex>
+      <Flex justifyContent="space-between" style={{ textAlign: 'left' }}>
+        <Text>Reward per block</Text>
+        <Text>
+          {!isComingSoon && rewardPerBlock} {isComingSoon && '-'}
+        </Text>
+      </Flex>
+      <Flex justifyContent="space-between" style={{ textAlign: 'left' }}>
+        <Text>APR</Text>
+        <Text>{apr === 0 || apr === null ? '-- ' : apr.toFixed(2)}%</Text>
+      </Flex>
+      <Flex justifyContent="space-between" style={{ textAlign: 'left' }}>
+        <Text>{t('Your Rate')}</Text>
+        <Text>
+          {!isComingSoon && formatNumber(rewardRate, 2, 10)} {isComingSoon && '-'} {pool.earningToken.symbol}/block
+        </Text>
+      </Flex>
+      <Flex mt="24px" flexDirection="column" marginTop="10px">
+        {account ? (
+          <CardActions pool={pool} stakedBalance={stakedBalance} />
+        ) : (
+          <>
+            <UnlockButton />
+          </>
+        )}
+      </Flex>
+      {/* <Text color="textSubtle" fontSize="14px">{t('This will only work on Binance Smart Chain')}</Text> */}
+      {/* <CardFooter pool={pool} account={account} /> */}
     </StyledCard>
   )
 }
