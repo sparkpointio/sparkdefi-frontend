@@ -243,6 +243,20 @@ const pools: PoolConfig[] = [
     sortOrder: 999,
     isFinished: false,
   },
+  {
+    sousId: 19,
+    stakingToken: tokens.kgo,
+    earningToken: tokens.btcb,
+    contractAddress: {
+      97: '0x4B610f401EE15b9F4F3757DBFEeC9353073E0715',
+      56: '0x4B610f401EE15b9F4F3757DBFEeC9353073E0715',
+    },
+    poolCategory: PoolCategory.CORE,
+    harvest: true,
+    tokenPerBlock: '2314814814814',
+    sortOrder: 999,
+    isFinished: false,
+  },
   // Dummy Contract #1
   // {
   //   sousId: 4,
