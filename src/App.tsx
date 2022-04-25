@@ -142,7 +142,6 @@ const App: React.FC = () => {
               href: 'https://discord.com/invite/Sgc6yDEAAe',
             },
           ]}
-          title="SparkDeFi Staking 2022"
         />
       </div>
     </HashRouter>
