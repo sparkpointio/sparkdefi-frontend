@@ -425,9 +425,13 @@ const Farms: React.FC = () => {
           flexDirection={['column', null, 'row']}
           style={isMobile ? { flexDirection: 'column-reverse' } : { minHeight: '20vh', marginLeft: '-16px' }}
         >
-          <Flex flexDirection="column" mr={['8px', 0]} style={largeScreen? {justifyContent: 'space-around'} : {textAlign: 'center'}}>
-          <Text color="text" fontSize="60px" bold marginBottom="10px">
-              Farms <StyledHr style={largeScreen? {width: '25%'} : {width: '100%'}}/>
+          <Flex
+            flexDirection="column"
+            mr={['8px', 0]}
+            style={largeScreen ? { justifyContent: 'space-around' } : { textAlign: 'center' }}
+          >
+            <Text color="text" fontSize="60px" bold marginBottom="10px">
+              Farms <StyledHr style={largeScreen ? { width: '25%' } : { width: '100%' }} />
             </Text>
             <Text color="text" style={isMobile ? { fontSize: '17px' } : { fontSize: '27px' }}>
               Earn SRK, SFUEL and other tokens by staking LP tokens!
