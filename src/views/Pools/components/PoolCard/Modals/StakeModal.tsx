@@ -1,11 +1,13 @@
-import React, { useState } from 'react'
-import styled from 'styled-components'
+import React, { useState, useContext } from 'react'
+import styled, {ThemeContext} from 'styled-components'
 import { Button, Dropdown, Flex, Link, Modal, Text, useModal } from '@sparkpointio/sparkswap-uikit'
 import { MenuList, MenuItem, Menu, Box } from '@mui/material'
+import useMedia from 'use-media'
+import useMediaQuery from '@mui/material/useMediaQuery'
+import { useTheme } from '@mui/material/styles'
 import { useTranslation } from 'contexts/Localization'
 import { useSousUnstake } from 'hooks/useUnstake'
 import { ChevronDown, ChevronUp } from 'react-feather'
-import useTheme from 'hooks/useTheme'
 import useToast from 'hooks/useToast'
 import { useSousHarvest } from 'hooks/useHarvest'
 import BigNumber from 'bignumber.js'
@@ -50,7 +52,9 @@ const StakeModal: React.FC<StakeModalProps> = ({
   const { onReward } = useSousHarvest(sousId, isBnbPool)
   const { onUnstake } = useSousUnstake(sousId, false)
   const { t } = useTranslation()
-  const { theme } = useTheme()
+  const theme = useContext(ThemeContext)
+  const muitheme = useTheme()
+  const largeScreen = useMediaQuery(muitheme.breakpoints.up('md'))
   const [activeSelect, setActiveSelect] = useState(false)
   const { balance: earnedTokenBalance } = useTokenBalance(pool.earningToken.address[56])
   const { toastSuccess, toastError } = useToast()
@@ -127,8 +131,8 @@ const StakeModal: React.FC<StakeModalProps> = ({
 
   return (
     <Modal title="" onDismiss={onDismiss}>
-      <Flex flexDirection="column" style={{ marginTop: '-50px', width: '550px' }}>
-        <Text fontSize="20px" marginBottom="10px" marginLeft="10px">
+      <Flex flexDirection="column" >
+        <Text fontSize="20px" marginLeft="10px">
           Account Info
         </Text>
         <Text fontSize="15px" marginLeft="10px">
@@ -139,7 +143,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
         <StyledFlex marginTop="21px">
           <Flex flexDirection="column">
             <Text fontSize="24px">{formatNumber(totalStakingTokens, 2, 5)}</Text>
-            <Text color="textSubtle" marginBottom="24px">
+            <Text color="textSubtle" style={largeScreen? {marginBottom: '24px'} : {marginBottom: 'auto'}}>
               {pool.stakingToken.symbol} Tokens
             </Text>
             <Button
@@ -156,7 +160,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
           {pool.stakingToken.symbol !== pool.earningToken.symbol && (
             <Flex flexDirection="column">
               <Text fontSize="24px">{formatNumber(totalEarningTokens, 2, 5)}</Text>
-              <Text color="textSubtle" marginBottom="24px">
+              <Text color="textSubtle" style={largeScreen? {marginBottom: '24px'} : {marginBottom: 'auto'}}>
                 {pool.earningToken.symbol} Tokens
               </Text>
               <Button
@@ -171,7 +175,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
           )}
           <Flex flexDirection="column">
             <Text fontSize="24px">{formatNumber(totalStakedTokens, 2, 5)}</Text>
-            <Text color="textSubtle" marginBottom="24px">
+            <Text color="textSubtle" style={largeScreen? {marginBottom: '24px'} : {marginBottom: 'auto'}}>
               {pool.stakingToken.symbol} Staked
             </Text>
             <Button fullWidth onClick={onPresentStakeAction} disabled={pool.isDepositDisabled}>

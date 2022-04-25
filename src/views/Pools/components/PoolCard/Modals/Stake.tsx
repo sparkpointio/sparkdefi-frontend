@@ -35,7 +35,7 @@ const StyledLink = styled(Link)`
 `
 
 const ModalBody = styled(Flex)`
-  width: 450px;
+  width: auto;
   margin-top: -20px;
   padding: 20px;
 `
