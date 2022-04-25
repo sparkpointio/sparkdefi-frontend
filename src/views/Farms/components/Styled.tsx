@@ -19,7 +19,7 @@ const ActionDiv = styled.div`
   padding: 10px;
 `
 const ModalFooter = styled.div`
-  min-width: 720px;
+  max-width: 720px;
   display: flex;
   justify-content: space-between;
 `

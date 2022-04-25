@@ -16,6 +16,8 @@ import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
 import PageHeader from 'components/PageHeader'
 import { StyledHr } from 'views/Farms/components/Divider'
+import { useTheme } from '@mui/material/styles'
+import useMediaQuery from '@mui/material/useMediaQuery'
 import SearchInput from 'components/SearchInput'
 import Select, { OptionProps } from 'components/Select/Select'
 import { Pool } from 'state/types'
@@ -70,6 +72,9 @@ const Pools: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [sortOption, setSortOption] = useState('hot')
   const isMobile = useMedia({ maxWidth: 500 })
+  const muitheme = useTheme()
+  const largeScreen = useMediaQuery(muitheme.breakpoints.up('md'))
+
   const {
     userData: { cakeAtLastUserAction, userShares },
     fees: { performanceFee },
@@ -226,9 +231,13 @@ const Pools: React.FC = () => {
           flexDirection={['column', null, 'row']}
           style={isMobile ? { flexDirection: 'column-reverse' } : { minHeight: '20vh', marginLeft: '-12px' }}
         >
-          <Flex flexDirection="column" mr={['8px', 0]}>
+          <Flex
+            flexDirection="column"
+            mr={['8px', 0]}
+            style={largeScreen ? { justifyContent: 'space-around' } : { textAlign: 'center' }}
+          >
             <Text color="text" fontSize="60px" bold marginBottom="10px">
-              <span style={{ borderBottom: `2px solid ${theme.colors.primary}` }}>Pools</span>
+              Pools <StyledHr style={largeScreen ? { width: '25%' } : { width: '100%' }} />
             </Text>
             <Text color="text" style={isMobile ? { fontSize: '17px' } : { fontSize: '27px' }}>
               Earn SRK, SFUEL and other tokens by just staking!
@@ -237,7 +246,7 @@ const Pools: React.FC = () => {
           <Flex
             style={
               isMobile
-                ? { fontSize: '150px', margin: 'auto', marginTop: '20px', marginBottom: '20px' }
+                ? { fontSize: '150px', margin: '20px auto' }
                 : { fontSize: '240px', marginRight: '-137px', position: 'relative' }
             }
           >

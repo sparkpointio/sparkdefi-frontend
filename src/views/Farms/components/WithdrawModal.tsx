@@ -75,7 +75,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
           {pendingTx ? t('Pending Confirmation') : t('Confirm')}
         </Button>
       </ModalActions> */}
-      <Flex marginTop="-10px" style={{ width: '450px' }} alignItems="center" flexDirection="column">
+      <Flex marginTop="-10px" style={{ width: 'auto' }} alignItems="center" flexDirection="column">
         <Text>You will be claiming the reward amount of </Text>
         <Text fontSize="28px" bold>
           {earnings} {farm.quoteToken.symbol}

@@ -86,7 +86,6 @@ const Stake: React.FC<StakeModalInterface> = ({
           max={fullBalance}
           symbol={symbol}
           addLiquidityUrl={addLiquidityUrl}
-      
         />
       </Container>
       <StyledFlex justifyContent="space-between">

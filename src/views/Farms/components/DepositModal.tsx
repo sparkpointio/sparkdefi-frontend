@@ -8,6 +8,10 @@ import { useERC20, useLPStakingContract } from 'hooks/useContract'
 import useTokenBalance from 'hooks/useTokenBalance'
 import { useAppDispatch } from 'state'
 import { Farm } from 'state/types'
+import useMedia from 'use-media'
+import { useTheme } from '@mui/material/styles'
+import { Grid } from '@mui/material'
+import useMediaQuery from '@mui/material/useMediaQuery'
 import { fetchFarmUserDataAsync } from 'state/farms'
 import { getAddress } from 'utils/addressHelpers'
 import { getBalanceAmount } from 'utils/formatBalance'
@@ -57,6 +61,8 @@ const DepositModal: React.FC<DepositModalProps> = ({
   const formatLPTokenBalance = getBalanceAmount(new BigNumber(tokenBalance)).toFormat(6)
   const formatStakedTokenBalance = getBalanceAmount(new BigNumber(stakedBalance)).toFormat(6)
   const formatTokenEarnings = getBalanceAmount(new BigNumber(earnings)).toFormat(6)
+  const muitheme = useTheme()
+  const largeScreen = useMediaQuery(muitheme.breakpoints.up('md'))
 
   const [isApproved, setIsApproved] = useState(
     account && allowance && new BigNumber(allowance).isGreaterThanOrEqualTo(tokenBalance),
@@ -101,11 +107,15 @@ const DepositModal: React.FC<DepositModalProps> = ({
 
   return (
     <Modal title={t('Account Info')} onDismiss={onDismiss}>
+      
       <Text color="textSubtle" fontSize="14px" style={{ paddingBottom: '30px', marginTop: '-40px' }}>
         Staking, balances & earnings
       </Text>
-      <Container>
-        <DetailsCont>
+      
+      <Container style={largeScreen? { flexDirection: 'row' } : { flexDirection: 'column', minWidth: 'auto' }}>
+      {/* <Container> */}
+      
+        <DetailsCont style={largeScreen? {} : {width: 'auto'}}>
           <Text bold fontSize="24px">
             {formatTokenBalance ?? <Skeleton width={60} display="inline-block" />}
           </Text>
@@ -118,7 +128,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
             </Button>
           </ActionDiv>
         </DetailsCont>
-        <DetailsCont>
+        <DetailsCont style={largeScreen? {} : {width: 'auto'}}>
           <Text bold fontSize="24px">
             {formatLPTokenBalance ?? <Skeleton width={60} display="inline-block" />}
           </Text>
@@ -131,7 +141,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
             </Button>
           </ActionDiv>
         </DetailsCont>
-        <DetailsCont>
+        <DetailsCont style={largeScreen? {} : {width: 'auto'}}>
           <Text bold fontSize="24px">
             {formatStakedTokenBalance ?? <Skeleton width={60} display="inline-block" />}
           </Text>
@@ -150,21 +160,24 @@ const DepositModal: React.FC<DepositModalProps> = ({
             )}
           </ActionDiv>
         </DetailsCont>
+        
       </Container>
       <ModalHr />
+      <Grid>
       <ModalFooter>
         <DetailsCont>
           <Text bold fontSize="24px">
             {userRate}
           </Text>
-          <Text color="textSubtle" fontSize="14px">{`Your Rate ${farm.quoteToken.symbol}/week`}</Text>
+          <Text color="textSubtle" fontSize="14px" >{`Your Rate ${farm.quoteToken.symbol}/week`}</Text>
         </DetailsCont>
         <DetailsCont>
           <Text bold fontSize="24px">
             {formatTokenEarnings ?? <Skeleton width={60} display="inline-block" />}
           </Text>
-          <Text color="textSubtle" fontSize="14px">{`${farm.quoteToken.symbol} Token Earnings`}</Text>
+          <Text color="textSubtle" fontSize="14px" >{`${farm.quoteToken.symbol} Token Earnings`}</Text>
         </DetailsCont>
+        
         <DetailsCont
           style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
           onMouseEnter={() => setActiveSelect(true)}
@@ -175,6 +188,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
           </Button>
         </DetailsCont>
       </ModalFooter>
+      </Grid>
     </Modal>
   )
 }

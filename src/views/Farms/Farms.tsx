@@ -19,6 +19,9 @@ import { orderBy } from 'lodash'
 import isArchivedPid from 'utils/farmHelpers'
 import { latinise } from 'utils/latinise'
 import PageHeader from 'components/PageHeader'
+import { useTheme } from '@mui/material/styles'
+import useMediaQuery from '@mui/material/useMediaQuery'
+import { StyledHr } from 'views/Farms/components/Divider'
 import SearchInput from 'components/SearchInput'
 import Select, { OptionProps } from 'components/Select/Select'
 import FarmCard, { FarmWithStakedValue } from './components/FarmCard/FarmCard'
@@ -118,6 +121,8 @@ const Farms: React.FC = () => {
   const isInactive = pathname.includes('history')
   const isActive = !isInactive && !isArchived
   const isMobile = useMedia({ maxWidth: 500 })
+  const muitheme = useTheme()
+  const largeScreen = useMediaQuery(muitheme.breakpoints.up('md'))
   usePollFarmsData(isArchived)
 
   // Users with no wallet connected should see 0 as Earned amount
@@ -420,9 +425,13 @@ const Farms: React.FC = () => {
           flexDirection={['column', null, 'row']}
           style={isMobile ? { flexDirection: 'column-reverse' } : { minHeight: '20vh', marginLeft: '-16px' }}
         >
-          <Flex flexDirection="column" mr={['8px', 0]}>
+          <Flex
+            flexDirection="column"
+            mr={['8px', 0]}
+            style={largeScreen ? { justifyContent: 'space-around' } : { textAlign: 'center' }}
+          >
             <Text color="text" fontSize="60px" bold marginBottom="10px">
-              <span style={{ borderBottom: `2px solid ${theme.colors.primary}` }}>Farms</span>
+              Farms <StyledHr style={largeScreen ? { width: '25%' } : { width: '100%' }} />
             </Text>
             <Text color="text" style={isMobile ? { fontSize: '17px' } : { fontSize: '27px' }}>
               Earn SRK, SFUEL and other tokens by staking LP tokens!
