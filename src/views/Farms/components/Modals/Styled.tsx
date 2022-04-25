@@ -6,7 +6,7 @@ const Container = styled.div`
   margin-top: -30px;
   display: flex;
   flex-direction: column;
-  min-width: 500px;
+  min-width: auto;
 `
 const StyledFlex = styled(Flex)`
   padding: 10px 0px;
