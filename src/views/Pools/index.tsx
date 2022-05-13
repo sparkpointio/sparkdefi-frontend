@@ -209,7 +209,7 @@ const Pools: React.FC = () => {
 
   const cardLayout = (
     <CardLayout>
-      {poolsToShow().map((pool) =>
+      {poolsToShow().reverse().map((pool) =>
         pool.isAutoVault ? (
           <CakeVaultCard key="auto-cake" pool={pool} showStakedOnly={stakedOnly} />
         ) : (
