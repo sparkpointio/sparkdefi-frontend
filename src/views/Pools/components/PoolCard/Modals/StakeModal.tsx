@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import styled, {ThemeContext} from 'styled-components'
+import styled, { ThemeContext } from 'styled-components'
 import { Button, Dropdown, Flex, Link, Modal, Text, useModal } from '@sparkpointio/sparkswap-uikit'
 import { MenuList, MenuItem, Menu, Box } from '@mui/material'
 import useMedia from 'use-media'
@@ -131,7 +131,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
 
   return (
     <Modal title="" onDismiss={onDismiss}>
-      <Flex flexDirection="column" >
+      <Flex flexDirection="column">
         <Text fontSize="20px" marginLeft="10px">
           Account Info
         </Text>
@@ -143,7 +143,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
         <StyledFlex marginTop="21px">
           <Flex flexDirection="column">
             <Text fontSize="24px">{formatNumber(totalStakingTokens, 2, 5)}</Text>
-            <Text color="textSubtle" style={largeScreen? {marginBottom: '24px'} : {marginBottom: 'auto'}}>
+            <Text color="textSubtle" style={largeScreen ? { marginBottom: '24px' } : { marginBottom: 'auto' }}>
               {pool.stakingToken.symbol} Tokens
             </Text>
             <Button
@@ -160,7 +160,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
           {pool.stakingToken.symbol !== pool.earningToken.symbol && (
             <Flex flexDirection="column">
               <Text fontSize="24px">{formatNumber(totalEarningTokens, 2, 5)}</Text>
-              <Text color="textSubtle" style={largeScreen? {marginBottom: '24px'} : {marginBottom: 'auto'}}>
+              <Text color="textSubtle" style={largeScreen ? { marginBottom: '24px' } : { marginBottom: 'auto' }}>
                 {pool.earningToken.symbol} Tokens
               </Text>
               <Button
@@ -175,7 +175,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
           )}
           <Flex flexDirection="column">
             <Text fontSize="24px">{formatNumber(totalStakedTokens, 2, 5)}</Text>
-            <Text color="textSubtle" style={largeScreen? {marginBottom: '24px'} : {marginBottom: 'auto'}}>
+            <Text color="textSubtle" style={largeScreen ? { marginBottom: '24px' } : { marginBottom: 'auto' }}>
               {pool.stakingToken.symbol} Staked
             </Text>
             <Button fullWidth onClick={onPresentStakeAction} disabled={pool.isDepositDisabled}>

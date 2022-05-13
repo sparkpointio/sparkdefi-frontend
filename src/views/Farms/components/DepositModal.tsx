@@ -107,15 +107,14 @@ const DepositModal: React.FC<DepositModalProps> = ({
 
   return (
     <Modal title={t('Account Info')} onDismiss={onDismiss}>
-      
       <Text color="textSubtle" fontSize="14px" style={{ paddingBottom: '30px', marginTop: '-40px' }}>
         Staking, balances & earnings
       </Text>
-      
-      <Container style={largeScreen? { flexDirection: 'row' } : { flexDirection: 'column', minWidth: 'auto' }}>
-      {/* <Container> */}
-      
-        <DetailsCont style={largeScreen? {} : {width: 'auto'}}>
+
+      <Container style={largeScreen ? { flexDirection: 'row' } : { flexDirection: 'column', minWidth: 'auto' }}>
+        {/* <Container> */}
+
+        <DetailsCont style={largeScreen ? {} : { width: 'auto' }}>
           <Text bold fontSize="24px">
             {formatTokenBalance ?? <Skeleton width={60} display="inline-block" />}
           </Text>
@@ -128,7 +127,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
             </Button>
           </ActionDiv>
         </DetailsCont>
-        <DetailsCont style={largeScreen? {} : {width: 'auto'}}>
+        <DetailsCont style={largeScreen ? {} : { width: 'auto' }}>
           <Text bold fontSize="24px">
             {formatLPTokenBalance ?? <Skeleton width={60} display="inline-block" />}
           </Text>
@@ -141,7 +140,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
             </Button>
           </ActionDiv>
         </DetailsCont>
-        <DetailsCont style={largeScreen? {} : {width: 'auto'}}>
+        <DetailsCont style={largeScreen ? {} : { width: 'auto' }}>
           <Text bold fontSize="24px">
             {formatStakedTokenBalance ?? <Skeleton width={60} display="inline-block" />}
           </Text>
@@ -160,34 +159,33 @@ const DepositModal: React.FC<DepositModalProps> = ({
             )}
           </ActionDiv>
         </DetailsCont>
-        
       </Container>
       <ModalHr />
       <Grid>
-      <ModalFooter>
-        <DetailsCont>
-          <Text bold fontSize="24px">
-            {userRate}
-          </Text>
-          <Text color="textSubtle" fontSize="14px" >{`Your Rate ${farm.quoteToken.symbol}/week`}</Text>
-        </DetailsCont>
-        <DetailsCont>
-          <Text bold fontSize="24px">
-            {formatTokenEarnings ?? <Skeleton width={60} display="inline-block" />}
-          </Text>
-          <Text color="textSubtle" fontSize="14px" >{`${farm.quoteToken.symbol} Token Earnings`}</Text>
-        </DetailsCont>
-        
-        <DetailsCont
-          style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-          onMouseEnter={() => setActiveSelect(true)}
-          onMouseLeave={() => setActiveSelect(false)}
-        >
-          <Button fullWidth onClick={onPresentWithdraw}>
-            <Text>Claim & Withdraw</Text>
-          </Button>
-        </DetailsCont>
-      </ModalFooter>
+        <ModalFooter>
+          <DetailsCont>
+            <Text bold fontSize="24px">
+              {userRate}
+            </Text>
+            <Text color="textSubtle" fontSize="14px">{`Your Rate ${farm.quoteToken.symbol}/week`}</Text>
+          </DetailsCont>
+          <DetailsCont>
+            <Text bold fontSize="24px">
+              {formatTokenEarnings ?? <Skeleton width={60} display="inline-block" />}
+            </Text>
+            <Text color="textSubtle" fontSize="14px">{`${farm.quoteToken.symbol} Token Earnings`}</Text>
+          </DetailsCont>
+
+          <DetailsCont
+            style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+            onMouseEnter={() => setActiveSelect(true)}
+            onMouseLeave={() => setActiveSelect(false)}
+          >
+            <Button fullWidth onClick={onPresentWithdraw}>
+              <Text>Claim & Withdraw</Text>
+            </Button>
+          </DetailsCont>
+        </ModalFooter>
       </Grid>
     </Modal>
   )
