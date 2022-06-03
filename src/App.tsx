@@ -46,10 +46,8 @@ const App: React.FC = () => {
       <Menu>
         <SuspenseWithChunkError fallback={<PageLoader />}>
           <Switch>
-            {/* <Route path='/' exact>
-              <Pools />
-            </Route> */}
-            <Route path="/farms">
+            
+            {/* <Route path="/farms">
               <Farms />
             </Route>
             <Route path="/pools">
@@ -78,9 +76,9 @@ const App: React.FC = () => {
             </Route>
             <Route path="/prediction">
               <Predictions />
-            </Route>
+            </Route> */}
             {/* Redirect */}
-            <Route path="/staking">
+            {/* <Route path="/staking">
               <Redirect to="/pools" />
             </Route>
             <Route path="/syrup">
@@ -89,7 +87,13 @@ const App: React.FC = () => {
             <Route path="/nft">
               <Redirect to="/collectibles" />
             </Route>
-            <Route path="/" component={RedirectToPools} />
+            <Route path="/" component={RedirectToPools} /> */}
+
+            <Route component={() => {
+              window.location.href = 'https://app.sparkswap.finance/#/pools';
+              return null;
+            }} />
+
             {/* 404 */}
             <Route component={NotFound} />
           </Switch>
